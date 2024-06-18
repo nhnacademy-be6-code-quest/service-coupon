@@ -1,10 +1,7 @@
 package com.service.servicecoupon.domain.entity;
 
 import com.service.servicecoupon.domain.DiscountType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,11 +16,15 @@ public class CouponPolicy {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long couponPolicyId;
+    @Column(nullable = false)
     private long productId;
+    @Column(nullable = false)
     private String couponPolicyDescription;
     private DiscountType discountType;
     private long discountValue;
+    @Column(nullable = false)
     private long minPurchaseAmount;
+    @Column(nullable = false)
     private long maxDiscountAmount;
 
 }

@@ -22,6 +22,7 @@ public class Coupon {
     private long clientId;
     private Date issuedDate;
     private Date expirationDate;
+    @Column(nullable = false)
     private Date usedDate;
     private Status status;
 
