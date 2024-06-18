@@ -1,11 +1,11 @@
 package com.service.servicecoupon.domain.entity;
 
-import com.service.servicecoupon.domain.DiscountType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import com.service.servicecoupon.domain.DiscountType;
 
 @Entity
 @AllArgsConstructor
@@ -26,5 +26,4 @@ public class CouponPolicy {
     private long minPurchaseAmount;
     @Column(nullable = false)
     private long maxDiscountAmount;
-
 }

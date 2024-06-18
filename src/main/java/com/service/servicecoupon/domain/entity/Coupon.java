@@ -1,10 +1,10 @@
 package com.service.servicecoupon.domain.entity;
 
-import com.service.servicecoupon.domain.Status;
+import java.util.Date;
 import jakarta.persistence.*;
 import lombok.*;
+import com.service.servicecoupon.domain.Status;
 
-import java.util.Date;
 
 @Entity
 @AllArgsConstructor
@@ -25,5 +25,4 @@ public class Coupon {
     @Column(nullable = false)
     private Date usedDate;
     private Status status;
-
 }

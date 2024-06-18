@@ -1,11 +1,11 @@
 package com.service.servicecoupon.service;
 
-import com.service.servicecoupon.domain.entity.CouponPolicy;
-import com.service.servicecoupon.repository.CouponPolicyRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import com.service.servicecoupon.domain.entity.CouponPolicy;
+import com.service.servicecoupon.repository.CouponPolicyRepository;
 
-import java.util.List;
 
 @RequiredArgsConstructor
 @Service

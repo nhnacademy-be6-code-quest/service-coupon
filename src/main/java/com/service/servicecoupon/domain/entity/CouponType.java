@@ -1,14 +1,14 @@
 package com.service.servicecoupon.domain.entity;
 
-import com.service.servicecoupon.domain.CouponKind;
+import java.util.ArrayList;
+import java.util.List;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import com.service.servicecoupon.domain.CouponKind;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -21,5 +21,5 @@ public class CouponType {
     private long couponTypeId;
     private CouponKind couponKind;
     @OneToMany
-    private List<Coupon> coupons =new ArrayList<>();
+    private List<Coupon> coupons = new ArrayList<>();
 }
