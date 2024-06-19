@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import com.service.servicecoupon.domain.DiscountType;
 
+import java.util.List;
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -26,4 +28,6 @@ public class CouponPolicy {
     private long minPurchaseAmount;
     @Column(nullable = false)
     private long maxDiscountAmount;
+    @OneToMany
+    private List<Coupon> coupons;
 }
