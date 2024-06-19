@@ -11,7 +11,7 @@ import com.service.servicecoupon.domain.CouponKind;
 
 
 @Entity
-@AllArgsConstructor
+//@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
@@ -19,7 +19,7 @@ public class CouponType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long couponTypeId;
+    @Column(name="couponType")
     private CouponKind couponKind;
-    @OneToMany
-    private List<Coupon> coupons = new ArrayList<>();
+
 }

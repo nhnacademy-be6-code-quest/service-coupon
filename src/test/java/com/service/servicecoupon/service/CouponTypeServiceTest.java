@@ -1,5 +1,6 @@
 //package com.service.servicecoupon.service;
 //
+//import com.service.servicecoupon.domain.CouponKind;
 //import com.service.servicecoupon.domain.entity.Coupon;
 //import com.service.servicecoupon.domain.entity.CouponType;
 //import com.service.servicecoupon.repository.CouponTypeRepository;
@@ -27,59 +28,65 @@
 //    @Mock
 //    private CouponTypeRepository couponTypeRepository;
 //
-//    private CouponType couponType;
+//    private CouponType couponTypeId;
 //
 //    @BeforeEach
 //    public void setUp() {
-//        couponType = new CouponType();
-//        couponType.setCouponTypeId(1L);
+//        couponTypeId = new CouponType();
+//        couponTypeId.setCouponTypeId(1L);
+//        couponTypeId.setCouponKind(CouponKind.BOOKCOUPON);
 //    }
 //
 //    @Test
 //    public void testSaveCoupon() {
 //        // Given
-//        when(couponTypeRepository.save(any())).thenReturn(couponType);
+//        when(couponTypeRepository.save(any())).thenReturn(couponTypeId);
 //
 //        // When
-//        CouponType savedCoupon = couponTypeService.save(couponType);
+//        CouponType savedCoupon = couponTypeService.save(couponTypeId);
 //
 //        // Then
-//        assertEquals(couponType, savedCoupon);
+//        assertEquals(couponTypeId, savedCoupon);
 //    }
 //
 //    @Test
 //    public void testFindCouponById() {
 //        // Given
 //        long couponTypeId = 1L;
-//        when(couponTypeRepository.findById(couponTypeId)).thenReturn(Optional.of(couponType));
+//        when(couponTypeRepository.findById(couponTypeId)).thenReturn(Optional.of(couponTypeId));
 //
 //        // When
 //        CouponType foundCouponType = couponTypeService.findById(couponTypeId);
 //
 //        // Then
-//        assertEquals(couponType, foundCouponType);
+//        assertEquals(couponTypeId, foundCouponType);
 //    }
 //
 //    @Test
 //    public void testFindAllCoupon() {
 //        // Given
-//        List<CouponType> coupons = new ArrayList<>();
-//        coupons.add(couponType);
-//        when(couponTypeRepository.findAll()).thenReturn(coupons);
+//        List<Coupon> sampleCoupon=new ArrayList<>();
+//        List<CouponType> couponTypeLists = new ArrayList<>();
+//        CouponType couponType2=new CouponType(2L,CouponKind.DISCOUNTCOUPON,sampleCoupon);
+//        couponTypeLists.add(couponTypeId);
+//        couponTypeLists.add(couponType2);
+//
+//        when(couponTypeRepository.findAll()).thenReturn(couponTypeLists);
 //
 //        // When
-//        couponTypeService.save(couponType);
+//        couponTypeService.save(couponTypeId);
+//        couponTypeService.save(couponType2);
 //        List<CouponType> couponTypeList = couponTypeService.findAllCouponType();
 //
 //        // Then
-//        Assertions.assertThat(couponTypeList.size()).isEqualTo(1);
+//        Assertions.assertThat(couponTypeList.size()).isEqualTo(2);
 //    }
 //
 //    @Test
 //    public void testDeleteCoupon() {
 //        long couponTypeId = 1L;
 //
-//        couponTypeService.save(couponType);
+//        couponTypeService.save(couponTypeId);
 //
 //        // When
 //        couponTypeService.deleteCouponType(couponTypeId);

@@ -18,8 +18,8 @@ public class CouponPolicy {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long couponPolicyId;
-    @Column(nullable = false)
-    private long productId;
+    private Long productId;
+    private Long productCategoryId;
     @Column(nullable = false)
     private String couponPolicyDescription;
     private DiscountType discountType;
@@ -28,6 +28,5 @@ public class CouponPolicy {
     private long minPurchaseAmount;
     @Column(nullable = false)
     private long maxDiscountAmount;
-    @OneToMany
-    private List<Coupon> coupons;
+
 }
