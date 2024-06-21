@@ -13,17 +13,20 @@ public class CouponTypeService {
 
     private final CouponTypeRepository couponTypeRepository;
 
-    public CouponType save(CouponType couponType){
-        return couponTypeRepository.save(couponType);
-    }
-    public CouponType findById(long id){
-        return couponTypeRepository.findById(id).orElse(null);
-    }
     public List<CouponType> findAllCouponType(){
         return couponTypeRepository.findAll();
-    }
-    public void deleteCouponType(long id){
-        couponTypeRepository.deleteById(id);
-    }
 
+    }
 }
+//    public CouponType save(CouponType couponType){
+//        return couponTypeRepository.save(couponType);
+//    }
+//    public CouponType findById(long id){
+//        return couponTypeRepository.findById(id).orElse(null);
+//    }
+//
+//    public void deleteCouponType(long id){
+//        couponTypeRepository.deleteById(id);
+//    }
+
+

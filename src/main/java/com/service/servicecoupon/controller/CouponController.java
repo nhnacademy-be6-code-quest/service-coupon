@@ -1,14 +1,14 @@
 package com.service.servicecoupon.controller;
 
-import com.service.servicecoupon.domain.Status;
-import com.service.servicecoupon.domain.entity.Coupon;
-import com.service.servicecoupon.domain.request.CouponRequest;
-import com.service.servicecoupon.domain.response.CouponResponse;
+
+import com.service.servicecoupon.domain.request.CouponRequestDto;
+import com.service.servicecoupon.domain.response.CouponResponseDto;
 import com.service.servicecoupon.service.CouponService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -19,19 +19,20 @@ public class CouponController {
 
 
     @GetMapping("/coupon/{clientId}")
-    public List<Coupon> couponFind(@PathVariable long clientId){
+    public List<CouponResponseDto> couponFind(@PathVariable long clientId) {
         return couponService.findByClientId(clientId);
     }
 
-    @PostMapping("/admin/coupon/register")
-    public Coupon saveCoupon( @RequestBody CouponRequest couponRequest){
-        return couponService.save(couponRequest);
+    @PostMapping("/admin/coupon/register/{couponPolicyId}")
+    public ResponseEntity<CouponRequestDto> saveCoupon(@PathVariable long couponPolicyId,@RequestBody CouponRequestDto couponRequest) {
+        couponService.save(couponRequest,couponPolicyId);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
-
-
-    @PutMapping("/")
-    public Coupon updateCoupon(@PathVariable long couponId){
-        return couponService.updateCoupon(couponId);
-    }
-
 }
+
+//    @PutMapping("/")
+//    public Coupon updateCoupon(@PathVariable long couponId){
+//        return couponService.updateCoupon(couponId);
+//    }
+//
+//}
