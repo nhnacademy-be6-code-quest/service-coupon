@@ -15,17 +15,17 @@ import org.springframework.web.bind.annotation.*;
 public class CouponPolicyController {
     private final CouponPolicyService couponPolicyService;
 
-    @GetMapping("/admin/coupon/policy/{couponPolicyId}")
+    @GetMapping("/api/coupon/policy/{couponPolicyId}")
     public CouponPolicyResponseDto findCouponPolicy(@PathVariable long couponPolicyId){
         return couponPolicyService.getPolicy(couponPolicyId);
     }
 
-    @GetMapping("/admin/coupon/policy")
+    @GetMapping("/api/coupon/policy")
     public Page<CouponPolicyResponseDto> findAllCouponPolicy(Pageable pageable){
         return couponPolicyService.getPolicies(pageable);
     }
 
-    @PostMapping("/admin/coupon/policy/register")
+    @PostMapping("/api/coupon/policy/register")
     public ResponseEntity<CouponPolicyRequestDto> saveCouponPolicy(@RequestBody CouponPolicyRequestDto couponPolicyRequestDto){
        couponPolicyService.save(couponPolicyRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(couponPolicyRequestDto);

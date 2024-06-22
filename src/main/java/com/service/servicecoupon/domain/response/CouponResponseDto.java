@@ -16,8 +16,8 @@ import java.time.LocalDateTime;
 @Builder
 public class CouponResponseDto {
     private long couponId;
-    private CouponType couponType;
-    private CouponPolicy couponPolicy;
+    private CouponTypeResponseDto couponType;
+    private CouponPolicyResponseDto couponPolicy;
     private LocalDateTime issuedDate;
     private long clientId;
     private LocalDateTime expirationDate;

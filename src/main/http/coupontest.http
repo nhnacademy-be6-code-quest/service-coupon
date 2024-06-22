@@ -1,5 +1,5 @@
 ### GET request to example server
-GET localhost:8006/coupon/123
+GET localhost:8006/api/coupon/1
 
 ### Post request
 POST localhost:8006/admin/coupon/register/1

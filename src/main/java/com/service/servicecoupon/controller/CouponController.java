@@ -19,12 +19,12 @@ public class CouponController {
     private final CouponService couponService;
 
 
-    @GetMapping("/coupon/{clientId}")
+    @GetMapping("/api/coupon/{clientId}")
     public List<CouponResponseDto> couponFind(@PathVariable long clientId) {
         return couponService.findByClientId(clientId);
     }
 
-    @PostMapping("/admin/coupon/register/{couponPolicyId}")
+    @PostMapping("/api/coupon/register/{couponPolicyId}")
     public ResponseEntity<CouponRequestDto> saveCoupon(@PathVariable long couponPolicyId,@RequestBody CouponRequestDto couponRequest) {
         couponService.save(couponRequest,couponPolicyId);
         return new ResponseEntity<>(HttpStatus.CREATED);

@@ -14,7 +14,7 @@ import java.util.List;
 public class CouponTypeController {
     private final CouponTypeService couponTypeService;
 
-    @GetMapping("/admin/coupon/type")
+    @GetMapping("/api/coupon/type")
     public List<CouponType> findAllType(){
         return couponTypeService.findAllCouponType();
     }

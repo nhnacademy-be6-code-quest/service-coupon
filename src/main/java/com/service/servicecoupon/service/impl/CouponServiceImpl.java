@@ -5,7 +5,9 @@ import com.service.servicecoupon.domain.entity.CouponPolicy;
 import com.service.servicecoupon.domain.entity.CouponType;
 
 import com.service.servicecoupon.domain.request.CouponRequestDto;
+import com.service.servicecoupon.domain.response.CouponPolicyResponseDto;
 import com.service.servicecoupon.domain.response.CouponResponseDto;
+import com.service.servicecoupon.domain.response.CouponTypeResponseDto;
 import com.service.servicecoupon.repository.CouponPolicyRepository;
 import com.service.servicecoupon.repository.CouponRepository;
 import com.service.servicecoupon.repository.CouponTypeRepository;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RequiredArgsConstructor
@@ -44,8 +47,20 @@ public class CouponServiceImpl implements CouponService{
 
     @Override
     public List<CouponResponseDto> findByClientId(long clientId){
-        List<CouponResponseDto> coupons = couponRepository.findByClientId(clientId);
-        return coupons != null ? coupons : new ArrayList<>();
+        List<Coupon> coupons = couponRepository.findByClientId(clientId);
+
+        return coupons.stream()
+                .map(coupon ->  CouponResponseDto.builder()
+                        .couponId(coupon.getCouponId())
+                        .couponType(new CouponTypeResponseDto(coupon.getCouponType().getCouponTypeId(),coupon.getCouponType().getCouponKind()))
+                        .couponPolicy(new CouponPolicyResponseDto(coupon.getCouponPolicy()))
+                        .issuedDate(coupon.getIssuedDate())
+                        .clientId(coupon.getClientId())
+                        .expirationDate(coupon.getExpirationDate())
+                        .usedDate(coupon.getUsedDate())
+                        .status(coupon.getStatus())
+                        .build())
+                .collect(Collectors.toList());
     }
 }
 

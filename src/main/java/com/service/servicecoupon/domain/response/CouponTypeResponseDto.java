@@ -1,6 +1,14 @@
 package com.service.servicecoupon.domain.response;
 
 import com.service.servicecoupon.domain.CouponKind;
+import com.service.servicecoupon.domain.entity.CouponType;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-public record CouponTypeResponseDto(long couponTypeId, CouponKind couponKind) {
+@Getter
+@AllArgsConstructor
+public class CouponTypeResponseDto {
+    long couponTypeId;
+    CouponKind couponKind;
+
 }
