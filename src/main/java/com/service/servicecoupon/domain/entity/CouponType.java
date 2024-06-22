@@ -11,10 +11,9 @@ import com.service.servicecoupon.domain.CouponKind;
 
 
 @Entity
-//@AllArgsConstructor
+@AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@Setter
 public class CouponType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

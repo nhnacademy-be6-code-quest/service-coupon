@@ -29,10 +29,3 @@ public class CouponController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }
-
-//    @PutMapping("/")
-//    public Coupon updateCoupon(@PathVariable long couponId){
-//        return couponService.updateCoupon(couponId);
-//    }
-//
-//}

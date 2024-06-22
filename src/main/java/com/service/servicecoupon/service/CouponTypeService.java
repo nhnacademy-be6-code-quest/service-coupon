@@ -18,15 +18,5 @@ public class CouponTypeService {
 
     }
 }
-//    public CouponType save(CouponType couponType){
-//        return couponTypeRepository.save(couponType);
-//    }
-//    public CouponType findById(long id){
-//        return couponTypeRepository.findById(id).orElse(null);
-//    }
-//
-//    public void deleteCouponType(long id){
-//        couponTypeRepository.deleteById(id);
-//    }
 
 
