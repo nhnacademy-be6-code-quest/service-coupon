@@ -3,6 +3,7 @@ package com.service.servicecoupon.service;
 import java.util.Optional;
 
 import com.service.servicecoupon.domain.request.CouponPolicyRequestDto;
+import com.service.servicecoupon.service.impl.CouponPolicyServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ExtendWith(MockitoExtension.class)
 public class CouponPolicyServiceTest {
     @InjectMocks
-    private CouponPolicyService couponPolicyService;
+    private CouponPolicyServiceImpl couponPolicyService;
     @Mock
     private CouponPolicyRepository couponPolicyRepository;
 

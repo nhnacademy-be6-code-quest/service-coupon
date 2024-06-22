@@ -1,6 +1,5 @@
 package com.service.servicecoupon.controller;
 
-import com.service.servicecoupon.domain.entity.CouponPolicy;
 import com.service.servicecoupon.domain.request.CouponPolicyRequestDto;
 import com.service.servicecoupon.domain.response.CouponPolicyResponseDto;
 import com.service.servicecoupon.service.CouponPolicyService;

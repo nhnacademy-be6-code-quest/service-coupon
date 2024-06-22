@@ -10,6 +10,7 @@ import com.service.servicecoupon.domain.response.CouponResponseDto;
 import com.service.servicecoupon.repository.CouponPolicyRepository;
 import com.service.servicecoupon.repository.CouponRepository;
 import com.service.servicecoupon.repository.CouponTypeRepository;
+import com.service.servicecoupon.service.impl.CouponServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,10 +29,10 @@ import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class CouponServiceTest {
+public class CouponServiceImplTest {
 
     @InjectMocks
-    private CouponService couponService;
+    private CouponServiceImpl couponService;
 
     @Mock
     private CouponTypeRepository couponTypeRepository;

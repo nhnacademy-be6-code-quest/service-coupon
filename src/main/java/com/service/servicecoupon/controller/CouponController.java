@@ -4,6 +4,7 @@ package com.service.servicecoupon.controller;
 import com.service.servicecoupon.domain.request.CouponRequestDto;
 import com.service.servicecoupon.domain.response.CouponResponseDto;
 import com.service.servicecoupon.service.CouponService;
+import com.service.servicecoupon.service.impl.CouponServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
