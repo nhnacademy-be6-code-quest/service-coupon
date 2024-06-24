@@ -19,7 +19,7 @@ public class CouponPolicy {
     private Long productId;
     private Long productCategoryId;
     @Column(nullable = false)
-    private String couponPolicyDescription;
+    private String PolicyDescription;
     private DiscountType discountType;
     private long discountValue;
     @Column(nullable = false)

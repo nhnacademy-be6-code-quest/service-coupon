@@ -5,6 +5,7 @@ import com.service.servicecoupon.domain.request.CouponPolicyRequestDto;
 import com.service.servicecoupon.domain.response.CouponPolicyResponseDto;
 import com.service.servicecoupon.repository.CouponPolicyRepository;
 import com.service.servicecoupon.service.CouponPolicyService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,11 +18,12 @@ public class CouponPolicyServiceImpl implements CouponPolicyService {
     private final CouponPolicyRepository couponPolicyRepository;
 
     @Override
+    @Transactional
     public void save(CouponPolicyRequestDto couponPolicyRequestDto){
         CouponPolicy couponPolicy=new CouponPolicy();
         couponPolicy.setProductId(couponPolicyRequestDto.productId());
         couponPolicy.setProductCategoryId(couponPolicyRequestDto.productCategoryId());
-        couponPolicy.setCouponPolicyDescription(couponPolicyRequestDto.couponPolicyDescription());
+        couponPolicy.setPolicyDescription(couponPolicyRequestDto.PolicyDescription());
         couponPolicy.setDiscountType(couponPolicyRequestDto.discountType());
         couponPolicy.setDiscountValue(couponPolicyRequestDto.discountValue());
         couponPolicy.setMinPurchaseAmount(couponPolicyRequestDto.minPurchaseAmount());

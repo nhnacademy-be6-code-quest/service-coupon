@@ -17,7 +17,7 @@ public class CouponPolicyResponseDto {
     private long couponPolicyId;
     private Long productId;
     private Long productCategoryId;
-    private String couponPolicyDescription;
+    private String PolicyDescription;
     private DiscountType discountType;
     private long discountValue;
     private long minPurchaseAmount;
@@ -27,7 +27,7 @@ public class CouponPolicyResponseDto {
         this(couponPolicy.getCouponPolicyId(),
                 couponPolicy.getCouponPolicyId(),
                 couponPolicy.getProductCategoryId(),
-                couponPolicy.getCouponPolicyDescription(),
+                couponPolicy.getPolicyDescription(),
                 couponPolicy.getDiscountType(),
                 couponPolicy.getDiscountValue(),
                 couponPolicy.getMinPurchaseAmount(),
