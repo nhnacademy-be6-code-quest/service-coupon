@@ -1,5 +1,6 @@
-package com.service.servicecoupon.controller;
+package com.service.servicecoupon.controller.impl;
 
+import com.service.servicecoupon.controller.CouponPolicyController;
 import com.service.servicecoupon.domain.request.CouponPolicyRequestDto;
 import com.service.servicecoupon.domain.response.CouponPolicyResponseDto;
 import com.service.servicecoupon.service.CouponPolicyService;
@@ -12,19 +13,22 @@ import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
-public class CouponPolicyControllerImpl {
+public class CouponPolicyControllerImpl implements CouponPolicyController {
     private final CouponPolicyService couponPolicyService;
 
+    @Override
     @GetMapping("/api/coupon/policy/{couponPolicyId}")
     public CouponPolicyResponseDto findCouponPolicy(@PathVariable long couponPolicyId){
         return couponPolicyService.getPolicy(couponPolicyId);
     }
 
+    @Override
     @GetMapping("/api/coupon/policy")
     public Page<CouponPolicyResponseDto> findAllCouponPolicy(Pageable pageable){
         return couponPolicyService.getPolicies(pageable);
     }
 
+    @Override
     @PostMapping("/api/coupon/policy/register")
     public ResponseEntity<CouponPolicyRequestDto> saveCouponPolicy(@RequestBody CouponPolicyRequestDto couponPolicyRequestDto){
        couponPolicyService.save(couponPolicyRequestDto);

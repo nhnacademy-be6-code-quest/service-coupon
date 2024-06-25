@@ -15,7 +15,12 @@ Content-Type: application/json
 }
 
 ### put Test
-PUT localhost:8006/api/coupon/update/1
+PUT localhost:8006/api/coupon/update
+Content-Type: application/json
+
+{
+  "couponId": 2
+}
 
 
 
