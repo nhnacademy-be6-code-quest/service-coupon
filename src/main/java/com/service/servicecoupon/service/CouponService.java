@@ -15,5 +15,7 @@ public interface CouponService {
 
     void payWelcomeCoupon(long clientId);
 
+    void refundCoupon(long couponId);
+
 
 }

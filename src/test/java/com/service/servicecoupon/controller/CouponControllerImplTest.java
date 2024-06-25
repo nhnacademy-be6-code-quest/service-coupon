@@ -28,14 +28,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(CouponController.class)
-public class CouponControllerTest {
+@WebMvcTest(CouponControllerImpl.class)
+public class CouponControllerImplTest {
 
     @MockBean
     private CouponServiceImpl couponService;
 
     @InjectMocks
-    private CouponController couponController;
+    private CouponControllerImpl couponControllerImpl;
 
     private MockMvc mockMvc;
     @Autowired
@@ -43,7 +43,7 @@ public class CouponControllerTest {
 
     @BeforeEach
     public void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(couponController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(couponControllerImpl).build();
         objectMapper = new ObjectMapper();
     }
 

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
-public class CouponPolicyController {
+public class CouponPolicyControllerImpl {
     private final CouponPolicyService couponPolicyService;
 
     @GetMapping("/api/coupon/policy/{couponPolicyId}")

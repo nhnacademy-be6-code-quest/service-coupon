@@ -81,5 +81,14 @@ public class CouponServiceImpl implements CouponService{
         Coupon coupon = new Coupon(clientId, couponType, couponPolicy,LocalDateTime.now().plusDays(30), Status.AVAILABLE);
         couponRepository.save(coupon);
     }
+
+    @Override
+    public void refundCoupon(long couponId){
+        Coupon coupon = couponRepository.findById(couponId).orElse(null);
+        coupon.setUsedDate(null);
+        coupon.setStatus(Status.AVAILABLE);
+
+        couponRepository.save(coupon);
+    }
 }
 
