@@ -17,12 +17,6 @@ public class CouponPolicyControllerImpl implements CouponPolicyController {
     private final CouponPolicyService couponPolicyService;
 
     @Override
-    @GetMapping("/api/coupon/policy/{couponPolicyId}")
-    public CouponPolicyResponseDto findCouponPolicy(@PathVariable long couponPolicyId){
-        return couponPolicyService.getPolicy(couponPolicyId);
-    }
-
-    @Override
     @GetMapping("/api/coupon/policy")
     public Page<CouponPolicyResponseDto> findAllCouponPolicy(Pageable pageable){
         return couponPolicyService.getPolicies(pageable);

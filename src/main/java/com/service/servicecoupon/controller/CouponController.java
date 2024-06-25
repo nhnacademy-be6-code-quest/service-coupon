@@ -22,7 +22,7 @@ public interface CouponController {
                     )
             }
     )
-    @GetMapping("/api/coupon/{clientId}")
+    @GetMapping("/api/coupon/{clientId}") //TODO clientId 삭제예정 (headder로 받을예정)
     List<CouponResponseDto> couponFind(
             @Parameter(description = "쿠폰을 조회하는 회원의 아이디")
             @PathVariable long clientId);
