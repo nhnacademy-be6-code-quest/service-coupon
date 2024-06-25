@@ -1,5 +1,8 @@
 package com.service.servicecoupon.service.impl;
 
+import com.service.servicecoupon.domain.CouponKind;
+import com.service.servicecoupon.domain.DiscountType;
+import com.service.servicecoupon.domain.Status;
 import com.service.servicecoupon.domain.entity.Coupon;
 import com.service.servicecoupon.domain.entity.CouponPolicy;
 import com.service.servicecoupon.domain.entity.CouponType;
@@ -12,8 +15,11 @@ import com.service.servicecoupon.repository.CouponPolicyRepository;
 import com.service.servicecoupon.repository.CouponRepository;
 import com.service.servicecoupon.repository.CouponTypeRepository;
 import com.service.servicecoupon.service.CouponService;
+import com.service.servicecoupon.service.CouponTypeService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -34,13 +40,10 @@ public class CouponServiceImpl implements CouponService{
 
     @Override
     public void save(CouponRequestDto couponRequest, long couponPolicyId){
-        LocalDateTime now = LocalDateTime.now();
-
         CouponType couponType = couponTypeRepository.findById(couponRequest.couponTypeId()
         ).orElseThrow();
         CouponPolicy couponPolicy = couponPolicyRepository.findById(couponPolicyId).orElseThrow();
         Coupon coupon=new Coupon(couponRequest.clientId(),couponType,couponPolicy,couponRequest.expirationDate(),couponRequest.status());
-        coupon.setIssuedDate(now);
 
        couponRepository.save(coupon);
     }
@@ -61,6 +64,22 @@ public class CouponServiceImpl implements CouponService{
                         .status(coupon.getStatus())
                         .build())
                 .collect(Collectors.toList());
+    }
+    @Override
+    @Transactional
+    public void update(long couponId){
+        Coupon coupon = couponRepository.findById(couponId).orElse(null);
+        coupon.setUsedDate(LocalDateTime.now());
+        coupon.setStatus(Status.USED);
+        couponRepository.save(coupon);
+    }
+
+    @Override
+    public void payWelcomeCoupon(long clientId){
+        CouponPolicy couponPolicy = couponPolicyRepository.findById(1L).orElse(null);
+        CouponType couponType = couponTypeRepository.findById(1L).orElse(null);
+        Coupon coupon = new Coupon(clientId, couponType, couponPolicy,LocalDateTime.now().plusDays(30), Status.AVAILABLE);
+        couponRepository.save(coupon);
     }
 }
 

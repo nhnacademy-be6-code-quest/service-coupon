@@ -6,5 +6,5 @@ import com.service.servicecoupon.domain.response.CouponTypeResponseDto;
 
 import java.time.LocalDateTime;
 
-public record CouponRequestDto(long couponTypeId, long couponPolicyId, long clientId, LocalDateTime issuedDate, LocalDateTime expirationDate, Status status) {
+public record CouponRequestDto(long couponTypeId, long couponPolicyId, long clientId, LocalDateTime expirationDate, Status status) {
 }

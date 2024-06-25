@@ -11,5 +11,9 @@ public interface CouponService {
 
     List<CouponResponseDto> findByClientId(long clientId);
 
+    void update(long couponId);
+
+    void payWelcomeCoupon(long clientId);
+
 
 }

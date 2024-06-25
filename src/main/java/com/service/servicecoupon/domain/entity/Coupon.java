@@ -39,6 +39,7 @@ public class Coupon {
         this.couponType=couponType;
         this.couponPolicy=couponPolicy;
         this.clientId=clientId;
+        this.issuedDate=LocalDateTime.now();
         this.expirationDate=expirationDate;
         this.status=status;
     }
