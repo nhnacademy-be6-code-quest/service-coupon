@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -22,10 +23,10 @@ public interface CouponController {
                     )
             }
     )
-    @GetMapping("/api/coupon/{clientId}") //TODO clientId 삭제예정 (headder로 받을예정)
+    @GetMapping("/api/coupon") //TODO clientId 삭제예정 (headder로 받을예정)
     List<CouponResponseDto> couponFind(
             @Parameter(description = "쿠폰을 조회하는 회원의 아이디")
-            @PathVariable long clientId);
+            @RequestHeader HttpHeaders headers);
 
     @Operation(
             summary = "쿠폰 지급",
@@ -73,4 +74,18 @@ public interface CouponController {
     ResponseEntity<String> payWelcomeCoupon(
             @Parameter(description = "회원아이디")
             @PathVariable long clientId);
+
+    @Operation(
+            summary = "쿠폰 변경",
+            description = " Payment - 결제 취소시 쿠폰 상태 변경",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "성공 여부 반환"
+                    )
+            }
+    )
+    ResponseEntity<String> refundCoupon(
+            @Parameter(description = "쿠폰아이디")
+            long couponId);
 }

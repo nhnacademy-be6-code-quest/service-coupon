@@ -6,6 +6,7 @@ import com.service.servicecoupon.domain.request.CouponRequestDto;
 import com.service.servicecoupon.domain.response.CouponResponseDto;
 import com.service.servicecoupon.service.CouponService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,13 +16,14 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 public class CouponControllerImpl implements CouponController {
+    private static final String ID_HEADER = "X-User-Id";
 
     private final CouponService couponService;
 
     @Override
-    @GetMapping("/api/coupon/{clientId}")
-    public List<CouponResponseDto> couponFind(@PathVariable long clientId) {
-        return couponService.findByClientId(clientId);
+    @GetMapping("/api/coupon")
+    public List<CouponResponseDto> couponFind(@RequestHeader HttpHeaders httpHeaders) {
+        return couponService.findByClientId(Long.valueOf(httpHeaders.getFirst(ID_HEADER)));
     }
     @Override
     @PostMapping("/api/coupon/register/{couponPolicyId}")
@@ -50,12 +52,14 @@ public class CouponControllerImpl implements CouponController {
         }
     }
 
-    //@PutMapping("/api/coupon/refund")
-    //public ResponseEntity<CouponResponseDto> refundCoupon(long couponId){
-        //
-
-    //}
-
-
-
+    @Override
+    @PutMapping("/api/coupon/refund")
+    public ResponseEntity<String> refundCoupon(long couponId){
+        try {
+            couponService.refundCoupon(couponId);
+            return new ResponseEntity<>("success", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("fail", HttpStatus.BAD_REQUEST);
+        }
+    }
 }

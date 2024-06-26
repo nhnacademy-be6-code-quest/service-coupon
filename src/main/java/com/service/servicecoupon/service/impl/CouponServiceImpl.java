@@ -19,8 +19,10 @@ import com.service.servicecoupon.service.CouponTypeService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -49,8 +51,8 @@ public class CouponServiceImpl implements CouponService{
     }
 
     @Override
-    public List<CouponResponseDto> findByClientId(long clientId){
-        List<Coupon> coupons = couponRepository.findByClientId(clientId);
+    public List<CouponResponseDto> findByClientId(long id){
+        List<Coupon> coupons = couponRepository.findByClientId(id);
 
         return coupons.stream()
                 .map(coupon ->  CouponResponseDto.builder()

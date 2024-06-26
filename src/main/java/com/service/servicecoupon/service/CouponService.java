@@ -9,7 +9,7 @@ public interface CouponService {
 
     void save(CouponRequestDto couponRequest, long couponPolicyId);
 
-    List<CouponResponseDto> findByClientId(long clientId);
+    List<CouponResponseDto> findByClientId(long ClientId);
 
     void update(long couponId);
 
