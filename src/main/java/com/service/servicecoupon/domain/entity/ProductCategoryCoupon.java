@@ -1,17 +1,26 @@
 package com.service.servicecoupon.domain.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Entity
+@NoArgsConstructor
+@Getter
 public class ProductCategoryCoupon {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long productCategoryCouponId;
-    private long productId;
-    @ManyToOne
-    @JoinColumn(name = "productCategoryCoupons")
-    private CouponPolicy couponPolicy;
+    private long productCategoryId;
+    @OneToOne
+    @JoinColumn(name = "couponPolicyId")
+    private CouponPolicy categoryPolicy;
 
+
+    public ProductCategoryCoupon(long productCategoryId, CouponPolicy categoryPolicy) {
+        this.productCategoryId = productCategoryId;
+        this.categoryPolicy = categoryPolicy;
+    }
 }

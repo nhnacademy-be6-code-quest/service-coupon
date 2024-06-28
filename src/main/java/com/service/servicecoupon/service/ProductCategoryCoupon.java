@@ -1,2 +1,5 @@
-package com.service.servicecoupon.service;public interface ProductCategoryCoupon {
+package com.service.servicecoupon.service;
+
+public interface ProductCategoryCoupon {
+
 }

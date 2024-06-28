@@ -38,14 +38,6 @@ public class Coupon {
     private LocalDateTime usedDate;
     private Status status;
 
-    /**
-     *
-     * @param clientId
-     * @param couponType
-     * @param couponPolicy
-     * @param expirationDate
-     * @param status
-     */
 
     public Coupon(Long clientId,CouponType couponType,CouponPolicy couponPolicy,LocalDateTime expirationDate,Status status){
         this.couponType=couponType;

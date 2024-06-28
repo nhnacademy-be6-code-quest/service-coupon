@@ -1,2 +1,4 @@
-package com.service.servicecoupon.service.impl;public class ProductCategoryCouponService {
+package com.service.servicecoupon.service.impl;
+
+public class ProductCategoryCouponServiceImpl {
 }

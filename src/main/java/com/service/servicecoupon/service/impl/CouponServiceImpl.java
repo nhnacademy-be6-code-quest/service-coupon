@@ -1,44 +1,30 @@
 package com.service.servicecoupon.service.impl;
 
-import com.service.servicecoupon.domain.CouponKind;
-import com.service.servicecoupon.domain.DiscountType;
 import com.service.servicecoupon.domain.Status;
-import com.service.servicecoupon.domain.entity.Coupon;
-import com.service.servicecoupon.domain.entity.CouponPolicy;
-import com.service.servicecoupon.domain.entity.CouponType;
-
+import com.service.servicecoupon.domain.entity.*;
 import com.service.servicecoupon.domain.request.CouponRequestDto;
-import com.service.servicecoupon.domain.response.CouponPolicyResponseDto;
-import com.service.servicecoupon.domain.response.CouponResponseDto;
-import com.service.servicecoupon.domain.response.CouponTypeResponseDto;
-import com.service.servicecoupon.repository.CouponPolicyRepository;
-import com.service.servicecoupon.repository.CouponRepository;
-import com.service.servicecoupon.repository.CouponTypeRepository;
+import com.service.servicecoupon.domain.response.*;
+import com.service.servicecoupon.repository.*;
 import com.service.servicecoupon.service.CouponService;
-import com.service.servicecoupon.service.CouponTypeService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class CouponServiceImpl implements CouponService{
-    @Autowired
     private final CouponRepository couponRepository;
-    @Autowired
     private final CouponTypeRepository couponTypeRepository;
-    @Autowired
     private final CouponPolicyRepository couponPolicyRepository;
+    private final ProductCouponRepository productCouponRepository;
+    private final ProductCategoryCouponRepository productCategoryCouponRepository;
 
     @Override
     public void save(CouponRequestDto couponRequest, long couponPolicyId){
@@ -51,22 +37,43 @@ public class CouponServiceImpl implements CouponService{
     }
 
     @Override
-    public List<CouponResponseDto> findByClientId(long id){
-        List<Coupon> coupons = couponRepository.findByClientId(id);
+    public List<CouponResponseDto> findByClientId(long clientId){
+        List<Coupon> coupons = couponRepository.findByClientId(clientId);
+
 
         return coupons.stream()
-                .map(coupon ->  CouponResponseDto.builder()
-                        .couponId(coupon.getCouponId())
-                        .couponType(new CouponTypeResponseDto(coupon.getCouponType().getCouponTypeId(),coupon.getCouponType().getCouponKind()))
-                        .couponPolicy(new CouponPolicyResponseDto(coupon.getCouponPolicy()))
-                        .issuedDate(coupon.getIssuedDate())
-                        .clientId(coupon.getClientId())
-                        .expirationDate(coupon.getExpirationDate())
-                        .usedDate(coupon.getUsedDate())
-                        .status(coupon.getStatus())
-                        .build())
+                .map(coupon -> {
+                    CouponResponseDto couponResponseDto = CouponResponseDto.builder()
+                            .couponId(coupon.getCouponId())
+                            .couponType(new CouponTypeResponseDto(coupon.getCouponType().getCouponTypeId(), coupon.getCouponType().getCouponKind()))
+                            .couponPolicy(new CouponPolicyResponseDto(coupon.getCouponPolicy()))
+                            .issuedDate(coupon.getIssuedDate())
+                            .clientId(coupon.getClientId())
+                            .expirationDate(coupon.getExpirationDate())
+                            .usedDate(coupon.getUsedDate())
+                            .status(coupon.getStatus())
+                            .build();
+
+
+                    // 상품 쿠폰 정보 설정 (예시)
+                    ProductCoupon productCoupon = productCouponRepository.findByProductPolicy_CouponPolicyId(coupon.getCouponPolicy().getCouponPolicyId());
+                    if (productCoupon != null) {
+                        ProductCouponResponseDto productCouponResponseDto = new ProductCouponResponseDto(productCoupon.getProductId());
+                        couponResponseDto.getCouponPolicy().setProductCouponResponseDto(productCouponResponseDto);
+                    }
+
+                    ProductCategoryCoupon productCategoryCoupon = productCategoryCouponRepository.findByCategoryPolicy_CouponPolicyId(coupon.getCouponPolicy().getCouponPolicyId());
+
+                    if (productCategoryCoupon != null) {
+                        ProductCategoryCouponResponseDto productCategoryCouponResponseDto = new ProductCategoryCouponResponseDto(productCategoryCoupon.getProductCategoryId());
+                        couponResponseDto.getCouponPolicy().setProductCategoryCouponResponseDto(productCategoryCouponResponseDto);
+                    }
+                    return couponResponseDto;
+                })
                 .collect(Collectors.toList());
+
     }
+
     @Override
     @Transactional
     public void update(long couponId){

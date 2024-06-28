@@ -1,7 +1,7 @@
 package com.service.servicecoupon.controller.impl;
 
 import com.service.servicecoupon.controller.CouponPolicyController;
-import com.service.servicecoupon.domain.request.CouponPolicyRequestDto;
+import com.service.servicecoupon.domain.request.CouponPolicyRegisterRequestDto;
 import com.service.servicecoupon.domain.response.CouponPolicyResponseDto;
 import com.service.servicecoupon.service.CouponPolicyService;
 import lombok.RequiredArgsConstructor;
@@ -24,9 +24,9 @@ public class CouponPolicyControllerImpl implements CouponPolicyController {
 
     @Override
     @PostMapping("/api/coupon/policy/register")
-    public ResponseEntity<CouponPolicyRequestDto> saveCouponPolicy(@RequestBody CouponPolicyRequestDto couponPolicyRequestDto){
-       couponPolicyService.save(couponPolicyRequestDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(couponPolicyRequestDto);
+    public ResponseEntity<CouponPolicyRegisterRequestDto> saveCouponPolicy(@RequestBody CouponPolicyRegisterRequestDto couponPolicyRegisterRequestDto){
+       couponPolicyService.save(couponPolicyRegisterRequestDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(couponPolicyRegisterRequestDto);
     }
 }
 

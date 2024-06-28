@@ -19,17 +19,12 @@ public class CouponPolicy {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long couponPolicyId;
     @Column(nullable = false)
-    private String PolicyDescription;
+    private String couponPolicyDescription;
     private DiscountType discountType;
     private long discountValue;
     @Column(nullable = false)
     private long minPurchaseAmount;
     @Column(nullable = false)
     private long maxDiscountAmount;
-    @OneToMany
-    @JoinColumn(name = "product_coupon_id")
-    private List<ProductCoupon> productCouponList;
-    @OneToMany
-    @JoinColumn(name ="product_category_coupon_id")
-    private List<ProductCategoryCoupon> productCategoryCoupons;
+
 }

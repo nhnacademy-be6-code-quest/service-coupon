@@ -1,6 +1,6 @@
 package com.service.servicecoupon.controller;
 
-import com.service.servicecoupon.domain.request.CouponPolicyRequestDto;
+import com.service.servicecoupon.domain.request.CouponPolicyRegisterRequestDto;
 import com.service.servicecoupon.domain.response.CouponPolicyResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -40,7 +40,7 @@ public interface CouponPolicyController {
             }
     )
     @PostMapping("/api/coupon/policy/register")
-    ResponseEntity<CouponPolicyRequestDto> saveCouponPolicy(
+    ResponseEntity<CouponPolicyRegisterRequestDto> saveCouponPolicy(
             @Parameter(description = "쿠폰 정책 정보")
-            @RequestBody CouponPolicyRequestDto couponPolicyRequestDto);
+            @RequestBody CouponPolicyRegisterRequestDto couponPolicyRegisterRequestDto);
 }

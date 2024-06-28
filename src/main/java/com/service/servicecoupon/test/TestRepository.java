@@ -1,2 +1,4 @@
-package com.service.servicecoupon.test;public interface TestRepository {
+package com.service.servicecoupon.test;
+
+public interface TestRepository {
 }
