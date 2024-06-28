@@ -23,7 +23,7 @@ public class CouponControllerImpl implements CouponController {
     @Override
     @GetMapping("/api/coupon")
     public List<CouponResponseDto> couponFind(@RequestHeader HttpHeaders httpHeaders) {
-        return couponService.findByClientId(Long.valueOf(httpHeaders.getFirst(ID_HEADER)));
+        return couponService.findByClientId(Long.parseLong(httpHeaders.getFirst(ID_HEADER)));
     }
     @Override
     @PostMapping("/api/coupon/register/{couponPolicyId}")

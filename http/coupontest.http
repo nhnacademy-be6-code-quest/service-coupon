@@ -1,14 +1,14 @@
 ### GET request to example server
-GET localhost:8006/api/coupon/1
+GET localhost:8006/api/coupon
+X-User-Id:1
 
 ### Post request
-POST localhost:8006/api/coupon/register/1
+POST localhost:8006/api/coupon/register/3
 Content-Type: application/json
 
 {
   "clientId": 1,
   "expirationDate": "2024-06-05T15:55:08",
-  "couponPolicyId": 1,
   "couponTypeId": 1,
   "status": "AVAILABLE"
 
@@ -26,3 +26,11 @@ Content-Type: application/json
 
 ###POST
 POST localhost:8006/api/client/welcome/1
+
+###put
+PUT localhost:8006/api/coupon/refund?couponId=1
+
+### get
+GET localhost:8006/api/coupon/policy
+
+

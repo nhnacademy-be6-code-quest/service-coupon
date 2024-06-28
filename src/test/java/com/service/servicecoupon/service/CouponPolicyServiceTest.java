@@ -2,7 +2,7 @@
 //
 //import java.util.Optional;
 //
-//import com.service.servicecoupon.domain.request.CouponPolicyRequestDto;
+//import com.service.servicecoupon.domain.request.CouponPolicyRegisterRequestDto;
 //import com.service.servicecoupon.service.impl.CouponPolicyServiceImpl;
 //import org.junit.jupiter.api.BeforeEach;
 //import org.junit.jupiter.api.Test;
@@ -28,7 +28,7 @@
 //    private CouponPolicyRepository couponPolicyRepository;
 //
 //    private CouponPolicy couponPolicy;
-//    private CouponPolicyRequestDto couponPolicyRequestDto;
+//    private CouponPolicyRegisterRequestDto couponPolicyRequestDto;
 //
 //    @BeforeEach
 //    public void setUp() {
@@ -40,7 +40,7 @@
 //        couponPolicy.setMinPurchaseAmount(0);
 //        couponPolicy.setMaxDiscountAmount(10000);
 //
-//        couponPolicyRequestDto = new CouponPolicyRequestDto(1L, 1L, "description", DiscountType.AMOUNTDISCOUNT, 0, 10000, 10000);
+//        couponPolicyRequestDto = new CouponPolicyRegisterRequestDto(1L, 1L, "description", DiscountType.AMOUNTDISCOUNT, 0, 10000, 10000);
 //    }
 //
 //    @Test
