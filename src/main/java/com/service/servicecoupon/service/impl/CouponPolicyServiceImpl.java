@@ -32,12 +32,13 @@ public class CouponPolicyServiceImpl implements CouponPolicyService {
         long id = couponPolicyRegisterRequestDto.id();
         String typeName = couponPolicyRegisterRequestDto.typeName();
         
-        CouponPolicy couponPolicy=new CouponPolicy();
-        couponPolicy.setCouponPolicyDescription(couponPolicyRegisterRequestDto.couponPolicyDescription());
-        couponPolicy.setDiscountType(couponPolicyRegisterRequestDto.discountType());
-        couponPolicy.setDiscountValue(couponPolicyRegisterRequestDto.discountValue());
-        couponPolicy.setMinPurchaseAmount(couponPolicyRegisterRequestDto.minPurchaseAmount());
-        couponPolicy.setMaxDiscountAmount(couponPolicyRegisterRequestDto.maxDiscountAmount());
+        CouponPolicy couponPolicy= CouponPolicy.builder()
+                .couponPolicyDescription(couponPolicyRegisterRequestDto.couponPolicyDescription())
+                .discountType(couponPolicyRegisterRequestDto.discountType())
+                .discountValue(couponPolicyRegisterRequestDto.discountValue())
+                .minPurchaseAmount(couponPolicyRegisterRequestDto.minPurchaseAmount())
+                .maxDiscountAmount(couponPolicyRegisterRequestDto.maxDiscountAmount())
+                .build();
 
         if (typeName != null) {
             if (typeName.equals("상품")) {
