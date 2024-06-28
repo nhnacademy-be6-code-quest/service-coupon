@@ -10,6 +10,6 @@ public class ProductCoupon {
     private long productCouponId;
     private long productCategoryId;
     @ManyToOne
-    @JoinColumn(name = "coupon_policy_id")
+    @JoinColumn(name = "productCouponList")
     private CouponPolicy couponPolicy;
 }

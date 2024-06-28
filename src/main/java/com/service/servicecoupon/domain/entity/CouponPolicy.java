@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,5 +26,10 @@ public class CouponPolicy {
     private long minPurchaseAmount;
     @Column(nullable = false)
     private long maxDiscountAmount;
-
+    @OneToMany
+    @JoinColumn(name = "product_coupon_id")
+    private List<ProductCoupon> productCouponList;
+    @OneToMany
+    @JoinColumn(name ="product_category_coupon_id")
+    private List<ProductCategoryCoupon> productCategoryCoupons;
 }
