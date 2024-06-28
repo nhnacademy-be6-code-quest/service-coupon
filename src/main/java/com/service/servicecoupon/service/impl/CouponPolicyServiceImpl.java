@@ -21,8 +21,6 @@ public class CouponPolicyServiceImpl implements CouponPolicyService {
     @Transactional
     public void save(CouponPolicyRequestDto couponPolicyRequestDto){
         CouponPolicy couponPolicy=new CouponPolicy();
-        couponPolicy.setProductId(couponPolicyRequestDto.productId());
-        couponPolicy.setProductCategoryId(couponPolicyRequestDto.productCategoryId());
         couponPolicy.setPolicyDescription(couponPolicyRequestDto.PolicyDescription());
         couponPolicy.setDiscountType(couponPolicyRequestDto.discountType());
         couponPolicy.setDiscountValue(couponPolicyRequestDto.discountValue());

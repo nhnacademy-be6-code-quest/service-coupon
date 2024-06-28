@@ -16,8 +16,6 @@ public class CouponPolicy {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long couponPolicyId;
-    private Long productId;
-    private Long productCategoryId;
     @Column(nullable = false)
     private String PolicyDescription;
     private DiscountType discountType;

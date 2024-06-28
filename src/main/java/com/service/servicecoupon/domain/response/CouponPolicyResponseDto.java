@@ -15,8 +15,6 @@ import lombok.NoArgsConstructor;
 @Getter
 public class CouponPolicyResponseDto {
     private long couponPolicyId;
-    private Long productId;
-    private Long productCategoryId;
     private String PolicyDescription;
     private DiscountType discountType;
     private long discountValue;
@@ -25,8 +23,6 @@ public class CouponPolicyResponseDto {
 
     public CouponPolicyResponseDto(CouponPolicy couponPolicy){
         this(couponPolicy.getCouponPolicyId(),
-                couponPolicy.getCouponPolicyId(),
-                couponPolicy.getProductCategoryId(),
                 couponPolicy.getPolicyDescription(),
                 couponPolicy.getDiscountType(),
                 couponPolicy.getDiscountValue(),
