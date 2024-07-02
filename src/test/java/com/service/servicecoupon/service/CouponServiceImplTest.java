@@ -47,7 +47,6 @@ public class CouponServiceImplTest {
     public void setUp() {
         CouponType couponTypeId = new CouponType(1L, CouponKind.BOOK);
         CouponPolicy couponPolicyId = new CouponPolicy();
-        couponPolicyId.setCouponPolicyId(1L);
         coupon = new Coupon();
         coupon.setCouponId(1L);
         coupon.setCouponType(couponTypeId);
@@ -76,7 +75,7 @@ public class CouponServiceImplTest {
     }
 
 
-//    @Test
+//    @JsonString
 //    void testFindByClientId_whenCouponsExist() {
 //        long clientId = 1L;
 //        List<CouponResponseDto> mockCoupons = Arrays.asList(new CouponResponseDto(), new CouponResponseDto());

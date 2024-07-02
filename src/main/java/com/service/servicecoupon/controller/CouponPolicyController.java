@@ -1,7 +1,7 @@
 package com.service.servicecoupon.controller;
 
 import com.service.servicecoupon.domain.request.CouponPolicyRegisterRequestDto;
-import com.service.servicecoupon.domain.response.CouponPolicyResponseDto;
+import com.service.servicecoupon.domain.response.CouponPolicyListResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Tag(name = "CouponPolicy", description = "쿠폰 정책 API")
 public interface CouponPolicyController {
@@ -27,7 +28,10 @@ public interface CouponPolicyController {
     )
 
     @GetMapping("/api/coupon/policy")
-    Page<CouponPolicyResponseDto> findAllCouponPolicy(Pageable pageable); //TODO 변경예정
+    ResponseEntity<Page<CouponPolicyListResponseDto>> findAllCouponPolicy(
+            @RequestParam int page,
+            @RequestParam int size
+    ); //TODO 변경예정
 
     @Operation(
             summary = "쿠폰 정책 등록",

@@ -5,7 +5,7 @@
 //import com.service.servicecoupon.domain.request.CouponPolicyRegisterRequestDto;
 //import com.service.servicecoupon.service.impl.CouponPolicyServiceImpl;
 //import org.junit.jupiter.api.BeforeEach;
-//import org.junit.jupiter.api.Test;
+//import org.junit.jupiter.api.JsonString;
 //import org.junit.jupiter.api.extension.ExtendWith;
 //import org.mockito.InjectMocks;
 //import org.mockito.Mock;
@@ -43,7 +43,7 @@
 //        couponPolicyRequestDto = new CouponPolicyRegisterRequestDto(1L, 1L, "description", DiscountType.AMOUNTDISCOUNT, 0, 10000, 10000);
 //    }
 //
-//    @Test
+//    @JsonString
 //    public void testSaveCoupon() {
 //        // Given
 //        when(couponPolicyRepository.save(any(CouponPolicy.class))).thenReturn(couponPolicy);
@@ -55,7 +55,7 @@
 //        verify(couponPolicyRepository, times(1)).save(any(CouponPolicy.class));
 //    }
 //
-//    @Test
+//    @JsonString
 //    public void testFindCouponById() {
 //        // Given
 //        long couponPolicyId = 1L;

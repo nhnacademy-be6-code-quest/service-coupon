@@ -9,8 +9,8 @@ import java.util.List;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
 @Builder
+@Getter
 public class CouponPolicy {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

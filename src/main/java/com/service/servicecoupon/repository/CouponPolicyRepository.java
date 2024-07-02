@@ -7,5 +7,5 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CouponPolicyRepository extends JpaRepository<CouponPolicy,Long> {
-    Page<CouponPolicy> findAll(Pageable pageable);
+
 }

@@ -31,9 +31,11 @@ public class CouponServiceImpl implements CouponService{
         CouponType couponType = couponTypeRepository.findById(couponRequest.couponTypeId()
         ).orElseThrow();
         CouponPolicy couponPolicy = couponPolicyRepository.findById(couponPolicyId).orElseThrow();
-        Coupon coupon=new Coupon(couponRequest.clientId(),couponType,couponPolicy,couponRequest.expirationDate(),couponRequest.status());
-
-       couponRepository.save(coupon);
+        List<Long> clientIds = couponRequest.clientId();
+        for (Long clientId : clientIds){
+            Coupon coupon=new Coupon(clientId,couponType,couponPolicy,couponRequest.expirationDate(),couponRequest.status());
+            couponRepository.save(coupon);
+        }
     }
 
     @Override

@@ -14,9 +14,7 @@ import com.service.servicecoupon.domain.Status;
 @NoArgsConstructor
 @Getter
 @Setter
-/**
- *
- */
+
 public class Coupon {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

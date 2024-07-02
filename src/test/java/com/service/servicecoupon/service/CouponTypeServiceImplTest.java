@@ -8,7 +8,7 @@
 //import com.service.servicecoupon.repository.CouponTypeRepository;
 //import com.service.servicecoupon.service.impl.CouponTypeServiceImpl;
 //import org.junit.jupiter.api.BeforeEach;
-//import org.junit.jupiter.api.Test;
+//import org.junit.jupiter.api.JsonString;
 //import org.junit.jupiter.api.extension.ExtendWith;
 //import org.mockito.InjectMocks;
 //import org.mockito.Mock;
@@ -35,7 +35,7 @@
 //        couponTypes = Arrays.asList(couponType1, couponType2);
 //    }
 //
-//    @Test
+//    @JsonString
 //    public void testFindAllCouponType() {
 //        // Given
 //        when(couponTypeRepository.findAll()).thenReturn(couponTypes);

@@ -1,12 +1,15 @@
 
 ###GET
-GET localhost:8006/api/coupon/policy
+GET localhost:8006/api/coupon/policy?page=0&size=6
+
+###GET
+GET https://localhost:8080/api/coupon/policy
 ###POST
 POST localhost:8006/api/coupon/policy/register
 Content-Type: application/json
 
 {
-  "couponPolicyDescription": "description",
+  "PolicyDescription": "description",
   "discountType": "AMOUNTDISCOUNT",
   "discountValue": 10000,
   "minPurchaseAmount": 0,
@@ -14,3 +17,28 @@ Content-Type: application/json
   "id": 1,
   "typeName": "카테고리"
 }
+
+
+###POST
+POST localhost:8006/api/coupon/policy/register
+Content-Type: application/json
+
+{
+  "page": {
+    "contents": [
+      {
+        "id" : "1",
+        "password" : "pa"
+      },
+      {
+        "id" : "2",
+        "password" : "pa"
+      }
+    ],
+    "size" : "5",
+    "count" : "2"
+  }
+}
+
+page : contents : id
+page : contents : password

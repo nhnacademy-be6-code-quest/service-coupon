@@ -8,7 +8,7 @@
 //import com.service.servicecoupon.domain.response.CouponResponseDto;
 //import com.service.servicecoupon.service.impl.CouponServiceImpl;
 //import org.junit.jupiter.api.BeforeEach;
-//import org.junit.jupiter.api.Test;
+//import org.junit.jupiter.api.JsonString;
 //import org.mockito.InjectMocks;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -48,7 +48,7 @@
 //        objectMapper = new ObjectMapper();
 //    }
 //
-//    @Test
+//    @JsonString
 //    public void testCouponFind() throws Exception {
 //        long clientId = 1L;
 //
@@ -80,7 +80,7 @@
 //                .andExpect(content().json(objectMapper.writeValueAsString(coupons)));
 //    }
 //
-//    @Test
+//    @JsonString
 //    public void testSaveCoupon() throws Exception {
 //        long couponPolicyId = 1L;
 //        CouponRequestDto couponRequest = new CouponRequestDto(1L, 1L, 1L, LocalDateTime.now(), LocalDateTime.now(), Status.USED);
