@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,9 +25,11 @@ public interface CouponController {
             }
     )
     @GetMapping("/api/coupon")
-    List<CouponResponseDto> couponFind(
+    Page<CouponResponseDto> couponFind(
             @Parameter(description = "쿠폰을 조회하는 회원의 아이디")
-            @RequestHeader HttpHeaders httpHeaders);
+            @RequestHeader HttpHeaders httpHeaders,
+            @RequestParam(name = "page") int page,
+            @RequestParam(name = "size") int size);
 
     @Operation(
             summary = "쿠폰 지급",

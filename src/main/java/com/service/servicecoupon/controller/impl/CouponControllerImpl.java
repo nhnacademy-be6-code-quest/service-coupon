@@ -6,6 +6,7 @@ import com.service.servicecoupon.domain.request.CouponRequestDto;
 import com.service.servicecoupon.domain.response.CouponResponseDto;
 import com.service.servicecoupon.service.CouponService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +23,10 @@ public class CouponControllerImpl implements CouponController {
 
     @Override
     @GetMapping("/api/coupon")
-    public List<CouponResponseDto> couponFind(@RequestHeader HttpHeaders httpHeaders) {
-        return couponService.findByClientId(Long.parseLong(httpHeaders.getFirst(ID_HEADER)));
+    public Page<CouponResponseDto> couponFind(@RequestHeader HttpHeaders httpHeaders,
+                                              @RequestParam(name = "page") int page,
+                                              @RequestParam(name = "size") int size) {
+        return couponService.findByClientId(Long.parseLong(httpHeaders.getFirst(ID_HEADER)), page, size);
     }
     @Override
     @PostMapping("/api/coupon/register/{couponPolicyId}")

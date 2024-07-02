@@ -7,26 +7,22 @@ import com.service.servicecoupon.service.CouponPolicyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RequiredArgsConstructor
 @RestController
 @Slf4j
-public class CouponPolicyControllerImpl  {
+public class CouponPolicyControllerImpl implements CouponPolicyController{
     private final CouponPolicyService couponPolicyService;
 
 //    @Override
     @GetMapping("/api/coupon/policy")
-    public Page<CouponPolicyListResponseDto> findAllCouponPolicy(
+    public ResponseEntity<Page<CouponPolicyListResponseDto>> findAllCouponPolicy(
             @RequestParam(name = "page") int page,
             @RequestParam(name = "size") int size){
-        return couponPolicyService.getPolicies(page, size);
+        return ResponseEntity.ok(couponPolicyService.getPolicies(page, size));
 
     }
 

@@ -1,5 +1,5 @@
 ### GET request to example server
-GET localhost:8006/api/coupon
+GET localhost:8006/api/coupon?page=0&size=5
 X-User-Id:26
 
 ### Post request
