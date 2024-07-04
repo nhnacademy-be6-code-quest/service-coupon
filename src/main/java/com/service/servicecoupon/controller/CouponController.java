@@ -1,6 +1,7 @@
 package com.service.servicecoupon.controller;
 
 import com.service.servicecoupon.domain.request.CouponRequestDto;
+import com.service.servicecoupon.domain.response.CouponOrderResponseDto;
 import com.service.servicecoupon.domain.response.CouponResponseDto;
 import com.service.servicecoupon.exception.ClientNotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -15,9 +16,11 @@ import java.util.List;
 
 @Tag(name = "Coupon", description = "쿠폰 관련 API")
 public interface CouponController {
+
+
     @Operation(
             summary = "쿠폰 조회",
-            description = "MyPage, Payment - 사용자 쿠폰조회",
+            description = "Order - 사용자 쿠폰조회",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
@@ -26,15 +29,13 @@ public interface CouponController {
             }
     )
     @GetMapping("/api/coupon")
-    Page<CouponResponseDto> couponFind(
+    List<CouponOrderResponseDto> couponFind(
             @Parameter(description = "쿠폰을 조회하는 회원의 아이디")
-            @RequestHeader HttpHeaders httpHeaders,
-            @RequestParam(name = "page") int page,
-            @RequestParam(name = "size") int size);
+            @RequestHeader HttpHeaders httpHeaders);
 
-    @Operation(
-            summary = "쿠폰 지급",
-            description = "AdminPage - 사용자에게 쿠폰지급",
+        @Operation(
+            summary = "쿠폰 조회",
+            description = "MyPage - 사용자 쿠폰조회",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
@@ -42,6 +43,23 @@ public interface CouponController {
                     )
             }
     )
+//    @GetMapping("/api/coupon")
+//    Page<CouponResponseDto> couponFind(
+//            @Parameter(description = "쿠폰을 조회하는 회원의 아이디")
+//            @RequestHeader HttpHeaders httpHeaders,
+//            @RequestParam(name = "page") int page,
+//            @RequestParam(name = "size") int size);
+//
+//    @Operation(
+//            summary = "쿠폰 지급",
+//            description = "AdminPage - 사용자에게 쿠폰지급",
+//            responses = {
+//                    @ApiResponse(
+//                            responseCode = "200",
+//                            description = "쿠폰 정보 반환"
+//                    )
+//            }
+//    )
     @PostMapping("/api/coupon/register/{couponPolicyId}")
    ResponseEntity<CouponRequestDto> saveCoupon(
             @Parameter(description = "쿠폰정책 아이디")

@@ -3,6 +3,7 @@ package com.service.servicecoupon.controller.impl;
 
 import com.service.servicecoupon.controller.CouponController;
 import com.service.servicecoupon.domain.request.CouponRequestDto;
+import com.service.servicecoupon.domain.response.CouponOrderResponseDto;
 import com.service.servicecoupon.domain.response.CouponResponseDto;
 import com.service.servicecoupon.exception.ClientNotFoundException;
 import com.service.servicecoupon.service.CouponService;
@@ -23,11 +24,15 @@ public class CouponControllerImpl implements CouponController {
 
     @Override
     @GetMapping("/api/coupon")
-    public Page<CouponResponseDto> couponFind(@RequestHeader HttpHeaders httpHeaders,
-                                              @RequestParam(name = "page") int page,
-                                              @RequestParam(name = "size") int size) {
-        return couponService.findByClientId(httpHeaders, page, size);
+    public List<CouponOrderResponseDto> couponFind(@RequestHeader HttpHeaders httpHeaders) {
+        return couponService.findClientCoupon(httpHeaders);
     }
+
+//    @Override
+//    public Page<CouponResponseDto> couponFind(HttpHeaders httpHeaders, int page, int size) {
+//        return null;
+//    }
+
     @Override
     @PostMapping("/api/coupon/register/{couponPolicyId}")
     public ResponseEntity<CouponRequestDto> saveCoupon(@PathVariable long couponPolicyId, @RequestBody CouponRequestDto couponRequest) {

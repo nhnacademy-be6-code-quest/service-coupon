@@ -19,24 +19,6 @@ import java.util.stream.Collectors;
 public class CouponPolicyResponseDto {
 
     private long couponPolicyId;
-    private String couponPolicyDescription;
-    private DiscountType discountType;
-    private long discountValue;
-    private long minPurchaseAmount;
-    private long maxDiscountAmount;
-    @Setter
-    private  ProductCategoryCouponResponseDto productCategoryCouponResponseDto;
-    @Setter
-    private  ProductCouponResponseDto productCouponResponseDto;
 
-    public CouponPolicyResponseDto(CouponPolicy couponPolicy) {
-        this.couponPolicyId = couponPolicy.getCouponPolicyId();
-        this.couponPolicyDescription = couponPolicy.getCouponPolicyDescription();
-        this.discountType = couponPolicy.getDiscountType();
-        this.discountValue = couponPolicy.getDiscountValue();
-        this.minPurchaseAmount = couponPolicy.getMinPurchaseAmount();
-        this.maxDiscountAmount = couponPolicy.getMaxDiscountAmount();
-
-    }
 
     }

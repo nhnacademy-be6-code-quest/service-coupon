@@ -1,24 +1,30 @@
 package com.service.servicecoupon.service.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.service.servicecoupon.config.SignUpClientMessageDto;
 import com.service.servicecoupon.domain.CouponKind;
 import com.service.servicecoupon.domain.Status;
 import com.service.servicecoupon.domain.entity.*;
 import com.service.servicecoupon.domain.request.CouponRequestDto;
 import com.service.servicecoupon.domain.response.*;
 import com.service.servicecoupon.exception.ClientNotFoundException;
+import com.service.servicecoupon.exception.RabbitMessageConvertException;
 import com.service.servicecoupon.repository.*;
 import com.service.servicecoupon.service.CouponService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.annotation.RabbitListeners;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RequiredArgsConstructor
@@ -47,41 +53,55 @@ public class CouponServiceImpl implements CouponService{
 
     @Override
     public Page<CouponResponseDto> findByClientId(HttpHeaders httpHeaders, int page, int size) {
+        return null;
+    }
+
+    @Override
+    public List<CouponOrderResponseDto> findClientCoupon(HttpHeaders httpHeaders) {
+        CouponOrderResponseDto.ProductCoupon productCouponResponseDto = new CouponOrderResponseDto.ProductCoupon();
+        CouponOrderResponseDto.CategoryCoupon productCategory = new CouponOrderResponseDto.CategoryCoupon();
+
         if (httpHeaders.getFirst(ID_HEADER) == null){
             throw new ClientNotFoundException("clientId is null");
         }
-        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "expirationDate"));
-        Page<Coupon> coupons = couponRepository.findByClientId(Long.parseLong(httpHeaders.getFirst(ID_HEADER)), pageRequest);
+        List<Coupon> coupons = couponRepository.findAvailableCouponsByClientId(Long.parseLong(httpHeaders.getFirst(ID_HEADER)));
 
-        return coupons.map(coupon -> {
-            CouponResponseDto couponResponseDto = CouponResponseDto.builder()
-                    .couponId(coupon.getCouponId())
-                    .couponType(new CouponTypeResponseDto(coupon.getCouponType().getCouponTypeId(), coupon.getCouponType().getCouponKind()))
-                    .couponPolicy(new CouponPolicyResponseDto(coupon.getCouponPolicy()))
-                    .issuedDate(coupon.getIssuedDate())
-                    .clientId(coupon.getClientId())
-                    .expirationDate(coupon.getExpirationDate())
-                    .usedDate(coupon.getUsedDate())
-                    .status(coupon.getStatus())
-                    .build();
+        return coupons.stream().map(coupon -> {
+            CouponOrderResponseDto couponOrderResponseDto = new CouponOrderResponseDto();
+            CouponOrderResponseDto.CouponPolicy couponPolicyDto = new CouponOrderResponseDto.CouponPolicy();
+            CouponPolicy couponPolicy = coupon.getCouponPolicy();
+
+            couponOrderResponseDto.setCouponId(coupon.getCouponId());
+            couponPolicyDto.setCouponPolicyDescription(couponPolicy.getCouponPolicyDescription());
+            couponPolicyDto.setDiscountType(String.valueOf(couponPolicy.getDiscountType()));
+            couponPolicyDto.setDiscountValue(couponPolicy.getDiscountValue());
+            couponPolicyDto.setMinPurchaseAmount(couponPolicy.getMinPurchaseAmount());
+            couponPolicyDto.setMaxDiscountAmount(couponPolicy.getMaxDiscountAmount());
+            couponOrderResponseDto.setCouponPolicy(couponPolicyDto);
 
             // 상품 쿠폰 정보 설정
-            ProductCoupon productCoupon = productCouponRepository.findByProductPolicy_CouponPolicyId(coupon.getCouponPolicy().getCouponPolicyId());
+            ProductCoupon productCoupon = productCouponRepository.findByProductPolicy_CouponPolicyId(couponPolicy.getCouponPolicyId());
             if (productCoupon != null) {
-                ProductCouponResponseDto productCouponResponseDto = new ProductCouponResponseDto(productCoupon.getProductId());
-                couponResponseDto.getCouponPolicy().setProductCouponResponseDto(productCouponResponseDto);
+                productCouponResponseDto.setProductId(productCoupon.getProductId());
+                couponOrderResponseDto.setProductCoupon(productCouponResponseDto);
+                couponOrderResponseDto.setCategoryCoupon(null);
             }
-
+            else{
+                couponOrderResponseDto.setProductCoupon(null);
+            }
             // 카테고리 쿠폰 정보 설정
-            ProductCategoryCoupon productCategoryCoupon = productCategoryCouponRepository.findByCategoryPolicy_CouponPolicyId(coupon.getCouponPolicy().getCouponPolicyId());
+            ProductCategoryCoupon productCategoryCoupon = productCategoryCouponRepository.findByCategoryPolicy_CouponPolicyId(couponPolicy.getCouponPolicyId());
             if (productCategoryCoupon != null) {
-                ProductCategoryCouponResponseDto productCategoryCouponResponseDto = new ProductCategoryCouponResponseDto(productCategoryCoupon.getProductCategoryId());
-                couponResponseDto.getCouponPolicy().setProductCategoryCouponResponseDto(productCategoryCouponResponseDto);
+                productCategory.setProductCategoryId(productCategoryCoupon.getProductCategoryId());
+                couponOrderResponseDto.setCategoryCoupon(productCategory);
+                couponOrderResponseDto.setProductCoupon(null);
+            }
+           else{
+                couponOrderResponseDto.setCategoryCoupon(null);
             }
 
-            return couponResponseDto;
-        });
-
+            return couponOrderResponseDto;
+        }).collect(Collectors.toList());
     }
 
 
@@ -96,12 +116,25 @@ public class CouponServiceImpl implements CouponService{
     }
 
     @Override
-    public void payWelcomeCoupon(long clientId){
-        CouponPolicy couponPolicy = couponPolicyRepository.findById(1L).orElse(null);
-        CouponType couponType = couponTypeRepository.findByCouponKind(CouponKind.WELCOME);
-        Coupon coupon = new Coupon(clientId, couponType, couponPolicy,LocalDate.now().plusDays(30), Status.AVAILABLE);
-        couponRepository.save(coupon);
+    public void payWelcomeCoupon(long clientId) {
+
     }
+
+//    @Override
+//    @RabbitListeners(queues = "code-quest.client.register.queue")
+//    public void payWelcomeCoupon(String message){
+//        log.error("message{}",message);
+//        SignUpClientMessageDto signUpClientMessageDto;
+//        try{
+//            signUpClientMessageDto = objectMapper.readValue(message, SignUpClientMessageDto.class);
+//        } catch(IOException e) {
+//            throw new RabbitMessageConvertException("회원가입 유저의 메세지 변환에 실패했습니다.")
+//        }
+//        CouponPolicy couponPolicy = couponPolicyRepository.findById(1L).orElse(null);
+//        CouponType couponType = couponTypeRepository.findByCouponKind(CouponKind.WELCOME);
+//        Coupon coupon = new Coupon(clientId, couponType, couponPolicy,LocalDate.now().plusDays(30), Status.AVAILABLE);
+//        couponRepository.save(coupon);
+//    }
 
     @Override
     public void refundCoupon(long couponId){
