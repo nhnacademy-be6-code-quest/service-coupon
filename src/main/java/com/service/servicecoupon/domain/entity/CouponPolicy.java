@@ -9,7 +9,6 @@ import java.util.List;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Getter
 public class CouponPolicy {
     @Id
@@ -24,4 +23,12 @@ public class CouponPolicy {
     @Column(nullable = false)
     private long maxDiscountAmount;
 
+    @Builder
+    public CouponPolicy(String couponPolicyDescription, DiscountType discountType, long discountValue, long minPurchaseAmount, long maxDiscountAmount) {
+        this.couponPolicyDescription = couponPolicyDescription;
+        this.discountType = discountType;
+        this.discountValue = discountValue;
+        this.minPurchaseAmount = minPurchaseAmount;
+        this.maxDiscountAmount = maxDiscountAmount;
+    }
 }

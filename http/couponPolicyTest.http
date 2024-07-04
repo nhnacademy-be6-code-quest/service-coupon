@@ -1,6 +1,6 @@
 
 ###GET
-GET localhost:8006/api/coupon/policy?page=0&size=6
+GET localhost:8006/api/coupon/policy?page=0&size=3
 
 ###GET
 GET https://localhost:8080/api/coupon/policy
@@ -9,13 +9,13 @@ POST localhost:8006/api/coupon/policy/register
 Content-Type: application/json
 
 {
-  "PolicyDescription": "description",
-  "discountType": "AMOUNTDISCOUNT",
+  "couponPolicyDescription": "상품",
+  "discountType": "PERCENTAGEDISCOUNT",
   "discountValue": 10000,
   "minPurchaseAmount": 0,
   "maxDiscountAmount": 10000,
-  "id": 1,
-  "typeName": "카테고리"
+  "id": 3,
+  "typeName": "상품"
 }
 
 

@@ -47,15 +47,12 @@ public class CouponPolicyServiceImpl implements CouponPolicyService {
                 ProductCategoryCoupon productCategoryCoupon = new ProductCategoryCoupon(id, couponPolicy);
                 productCategoryCouponRepository.save(productCategoryCoupon);
             }
-            //TODO NULL 처리는 어떻게 할것인가?
+
         }
 
     }
 
-    @Override
-    public CouponPolicy findById(long couponPolicyId) {
-        return couponPolicyRepository.findById(couponPolicyId).orElse(null);
-    }
+
 
     @Transactional(readOnly = true)
     @Override

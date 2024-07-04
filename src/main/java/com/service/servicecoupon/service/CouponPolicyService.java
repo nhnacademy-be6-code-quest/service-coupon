@@ -11,10 +11,9 @@ import org.springframework.http.ResponseEntity;
 public interface CouponPolicyService {
     void save(CouponPolicyRegisterRequestDto couponPolicyRegisterRequestDt);
 
-    CouponPolicy findById(long couponPolicyId);
+
 
     Page<CouponPolicyListResponseDto> getPolicies(int page, int size);
 
 
- //   CouponPolicyResponseDto getPolicy(long couponPolicyId);
 }

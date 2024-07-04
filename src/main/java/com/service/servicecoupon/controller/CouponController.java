@@ -2,6 +2,7 @@ package com.service.servicecoupon.controller;
 
 import com.service.servicecoupon.domain.request.CouponRequestDto;
 import com.service.servicecoupon.domain.response.CouponResponseDto;
+import com.service.servicecoupon.exception.ClientNotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -91,4 +92,8 @@ public interface CouponController {
     ResponseEntity<String> refundCoupon(
             @Parameter(description = "쿠폰아이디")
             long couponId);
+
+
+    @ExceptionHandler(ClientNotFoundException.class)
+    ResponseEntity<String> handleException(ClientNotFoundException e);
 }

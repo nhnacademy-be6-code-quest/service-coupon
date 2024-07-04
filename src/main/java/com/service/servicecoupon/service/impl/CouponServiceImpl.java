@@ -1,9 +1,11 @@
 package com.service.servicecoupon.service.impl;
 
+import com.service.servicecoupon.domain.CouponKind;
 import com.service.servicecoupon.domain.Status;
 import com.service.servicecoupon.domain.entity.*;
 import com.service.servicecoupon.domain.request.CouponRequestDto;
 import com.service.servicecoupon.domain.response.*;
+import com.service.servicecoupon.exception.ClientNotFoundException;
 import com.service.servicecoupon.repository.*;
 import com.service.servicecoupon.service.CouponService;
 import jakarta.transaction.Transactional;
@@ -12,11 +14,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @RequiredArgsConstructor
@@ -29,6 +31,7 @@ public class CouponServiceImpl implements CouponService{
     private final CouponPolicyRepository couponPolicyRepository;
     private final ProductCouponRepository productCouponRepository;
     private final ProductCategoryCouponRepository productCategoryCouponRepository;
+    private static final String ID_HEADER = "X-User-Id";
 
     @Override
     public void save(CouponRequestDto couponRequest, long couponPolicyId){
@@ -43,9 +46,12 @@ public class CouponServiceImpl implements CouponService{
     }
 
     @Override
-    public Page<CouponResponseDto> findByClientId(long clientId, int page, int size) {
+    public Page<CouponResponseDto> findByClientId(HttpHeaders httpHeaders, int page, int size) {
+        if (httpHeaders.getFirst(ID_HEADER) == null){
+            throw new ClientNotFoundException("clientId is null");
+        }
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "expirationDate"));
-        Page<Coupon> coupons = couponRepository.findByClientId(clientId, pageRequest);
+        Page<Coupon> coupons = couponRepository.findByClientId(Long.parseLong(httpHeaders.getFirst(ID_HEADER)), pageRequest);
 
         return coupons.map(coupon -> {
             CouponResponseDto couponResponseDto = CouponResponseDto.builder()
@@ -84,7 +90,7 @@ public class CouponServiceImpl implements CouponService{
     @Transactional
     public void update(long couponId){
         Coupon coupon = couponRepository.findById(couponId).orElse(null);
-        coupon.setUsedDate(LocalDateTime.now());
+        coupon.setUsedDate(LocalDate.now());
         coupon.setStatus(Status.USED);
         couponRepository.save(coupon);
     }
@@ -92,8 +98,8 @@ public class CouponServiceImpl implements CouponService{
     @Override
     public void payWelcomeCoupon(long clientId){
         CouponPolicy couponPolicy = couponPolicyRepository.findById(1L).orElse(null);
-        CouponType couponType = couponTypeRepository.findById(1L).orElse(null);
-        Coupon coupon = new Coupon(clientId, couponType, couponPolicy,LocalDateTime.now().plusDays(30), Status.AVAILABLE);
+        CouponType couponType = couponTypeRepository.findByCouponKind(CouponKind.WELCOME);
+        Coupon coupon = new Coupon(clientId, couponType, couponPolicy,LocalDate.now().plusDays(30), Status.AVAILABLE);
         couponRepository.save(coupon);
     }
 

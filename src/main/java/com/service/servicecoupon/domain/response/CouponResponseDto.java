@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -18,9 +19,9 @@ public class CouponResponseDto {
     private long couponId;
     private CouponTypeResponseDto couponType;
     private CouponPolicyResponseDto couponPolicy;
-    private LocalDateTime issuedDate;
+    private LocalDate issuedDate;
     private long clientId;
-    private LocalDateTime expirationDate;
-    private LocalDateTime usedDate;
+    private LocalDate expirationDate;
+    private LocalDate usedDate;
     private Status status;
 }

@@ -1,5 +1,6 @@
 package com.service.servicecoupon.domain.entity;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -27,21 +28,21 @@ public class Coupon {
     private CouponPolicy couponPolicy;
     private long clientId;
     @Column(columnDefinition = "DATETIME")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime issuedDate;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate issuedDate;
     @Column(columnDefinition = "DATETIME")
-    private LocalDateTime expirationDate;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDate expirationDate;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(columnDefinition = "DATETIME")
-    private LocalDateTime usedDate;
+    private LocalDate usedDate;
     private Status status;
 
-
-    public Coupon(Long clientId,CouponType couponType,CouponPolicy couponPolicy,LocalDateTime expirationDate,Status status){
+    @Builder
+    public Coupon(Long clientId,CouponType couponType,CouponPolicy couponPolicy,LocalDate expirationDate,Status status){
         this.couponType=couponType;
         this.couponPolicy=couponPolicy;
         this.clientId=clientId;
-        this.issuedDate=LocalDateTime.now();
+        this.issuedDate=LocalDate.now();
         this.expirationDate=expirationDate;
         this.status=status;
     }

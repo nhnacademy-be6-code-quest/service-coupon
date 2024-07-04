@@ -4,6 +4,7 @@ package com.service.servicecoupon.controller.impl;
 import com.service.servicecoupon.controller.CouponController;
 import com.service.servicecoupon.domain.request.CouponRequestDto;
 import com.service.servicecoupon.domain.response.CouponResponseDto;
+import com.service.servicecoupon.exception.ClientNotFoundException;
 import com.service.servicecoupon.service.CouponService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -17,7 +18,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 public class CouponControllerImpl implements CouponController {
-    private static final String ID_HEADER = "X-User-Id";
 
     private final CouponService couponService;
 
@@ -26,7 +26,7 @@ public class CouponControllerImpl implements CouponController {
     public Page<CouponResponseDto> couponFind(@RequestHeader HttpHeaders httpHeaders,
                                               @RequestParam(name = "page") int page,
                                               @RequestParam(name = "size") int size) {
-        return couponService.findByClientId(Long.parseLong(httpHeaders.getFirst(ID_HEADER)), page, size);
+        return couponService.findByClientId(httpHeaders, page, size);
     }
     @Override
     @PostMapping("/api/coupon/register/{couponPolicyId}")
@@ -64,5 +64,11 @@ public class CouponControllerImpl implements CouponController {
         } catch (Exception e) {
             return new ResponseEntity<>("fail", HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @Override
+    @ExceptionHandler(ClientNotFoundException.class)
+    public ResponseEntity<String> handleException(ClientNotFoundException e) {
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 }

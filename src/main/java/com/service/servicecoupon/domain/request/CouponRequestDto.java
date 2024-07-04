@@ -5,6 +5,7 @@ import com.service.servicecoupon.domain.Status;
 import com.service.servicecoupon.domain.response.CouponPolicyResponseDto;
 import com.service.servicecoupon.domain.response.CouponTypeResponseDto;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -12,7 +13,7 @@ public record CouponRequestDto(
         long couponTypeId,
         long couponPolicyId,
         List<Long> clientId,
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-        LocalDateTime expirationDate,
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+        LocalDate expirationDate,
         Status status) {
 }
