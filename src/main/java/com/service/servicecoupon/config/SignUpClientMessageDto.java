@@ -1,10 +1,16 @@
 package com.service.servicecoupon.config;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import java.io.Serializable;
+
+@Setter
 @Getter
 @NoArgsConstructor
-public class SignUpClientMessageDto {
-    long clientId;
+@AllArgsConstructor
+public class SignUpClientMessageDto implements Serializable {
+    private long clientId;
 }

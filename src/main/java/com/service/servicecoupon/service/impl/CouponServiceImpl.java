@@ -3,6 +3,7 @@ package com.service.servicecoupon.service.impl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.service.servicecoupon.config.SignUpClientMessageDto;
 import com.service.servicecoupon.domain.CouponKind;
+import com.service.servicecoupon.domain.DiscountType;
 import com.service.servicecoupon.domain.Status;
 import com.service.servicecoupon.domain.entity.*;
 import com.service.servicecoupon.domain.request.CouponRequestDto;
@@ -14,6 +15,7 @@ import com.service.servicecoupon.service.CouponService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.annotation.RabbitListeners;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -32,6 +34,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class CouponServiceImpl implements CouponService{
 
+    private final ObjectMapper objectMapper;
     private final CouponRepository couponRepository;
     private final CouponTypeRepository couponTypeRepository;
     private final CouponPolicyRepository couponPolicyRepository;
@@ -115,26 +118,44 @@ public class CouponServiceImpl implements CouponService{
         couponRepository.save(coupon);
     }
 
-    @Override
-    public void payWelcomeCoupon(long clientId) {
 
-    }
-
-//    @Override
-//    @RabbitListeners(queues = "code-quest.client.register.queue")
-//    public void payWelcomeCoupon(String message){
-//        log.error("message{}",message);
-//        SignUpClientMessageDto signUpClientMessageDto;
-//        try{
-//            signUpClientMessageDto = objectMapper.readValue(message, SignUpClientMessageDto.class);
-//        } catch(IOException e) {
-//            throw new RabbitMessageConvertException("회원가입 유저의 메세지 변환에 실패했습니다.")
+//            clientLoginMessageDto = objectMapper.readValue(message , ClientLoginMessageDto.class);
+//        } catch (IOException e) {
+//            throw new RabbitMessageConvertException("Failed to convert message to ClientLoginMessageDto");
 //        }
-//        CouponPolicy couponPolicy = couponPolicyRepository.findById(1L).orElse(null);
-//        CouponType couponType = couponTypeRepository.findByCouponKind(CouponKind.WELCOME);
-//        Coupon coupon = new Coupon(clientId, couponType, couponPolicy,LocalDate.now().plusDays(30), Status.AVAILABLE);
-//        couponRepository.save(coupon);
+//        Client client = clientRepository.findById(clientLoginMessageDto.getClientId()).orElse(null);
+//        if (client == null || client.isDeleted()) {
+//            throw new NotFoundClientException("Not found : " + clientLoginMessageDto.getClientId());
+//        }
+//        log.info("success update login");
+//        client.setLastLoginDate(clientLoginMessageDto.getLastLoginDate());
+//        clientRepository.save(client);
 //    }
+
+    @Override
+    @RabbitListener(queues = "${rabbit.login.queue.name}")
+    public void payWelcomeCoupon(String message){
+        log.error("message{}",message);
+        SignUpClientMessageDto signUpClientMessageDto = new SignUpClientMessageDto();
+        try{
+            signUpClientMessageDto = objectMapper.readValue(message, SignUpClientMessageDto.class);
+        } catch(IOException e) {
+//            throw new RabbitMessageConvertException("회원가입 유저의 메세지 변환에 실패했습니다.");
+            System.out.println("1");
+        }
+        CouponPolicy couponPolicy = CouponPolicy.builder()
+                .couponPolicyDescription("50,000 이상 구매 시 10,000 할인 쿠폰")
+                .discountValue(10000)
+                .maxDiscountAmount(10000)
+                .minPurchaseAmount(50000)
+                .discountType(DiscountType.AMOUNTDISCOUNT)
+                .build();
+
+        couponPolicyRepository.save(couponPolicy);
+        CouponType couponType = couponTypeRepository.findByCouponKind(CouponKind.WELCOME);
+        Coupon coupon = new Coupon(signUpClientMessageDto.getClientId(), couponType, couponPolicy,LocalDate.now().plusDays(30), Status.AVAILABLE);
+        couponRepository.save(coupon);
+    }
 
     @Override
     public void refundCoupon(long couponId){

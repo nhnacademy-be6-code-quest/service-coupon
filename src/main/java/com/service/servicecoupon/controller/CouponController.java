@@ -92,21 +92,7 @@ public interface CouponController {
                     )
             }
     )
-    @PostMapping("/api/client/welcome/{clientId}")
-    ResponseEntity<String> payWelcomeCoupon(
-            @Parameter(description = "회원아이디")
-            @PathVariable long clientId);
 
-    @Operation(
-            summary = "쿠폰 변경",
-            description = " Payment - 결제 취소시 쿠폰 상태 변경",
-            responses = {
-                    @ApiResponse(
-                            responseCode = "200",
-                            description = "성공 여부 반환"
-                    )
-            }
-    )
     ResponseEntity<String> refundCoupon(
             @Parameter(description = "쿠폰아이디")
             long couponId);

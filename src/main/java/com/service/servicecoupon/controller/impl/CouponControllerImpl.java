@@ -49,16 +49,7 @@ public class CouponControllerImpl implements CouponController {
             return new ResponseEntity<>("fail", HttpStatus.BAD_REQUEST);
         }
     }
-    @Override
-    @PostMapping("/api/client/welcome/{clientId}")
-    public ResponseEntity<String> payWelcomeCoupon(@PathVariable long clientId){
-        try {
-            couponService.payWelcomeCoupon(clientId);
-            return new ResponseEntity<>("success", HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>("fail", HttpStatus.BAD_REQUEST);
-        }
-    }
+
 
     @Override
     @PutMapping("/api/coupon/refund")

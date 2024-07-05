@@ -18,7 +18,7 @@ public interface CouponService {
 
     void update(long couponId);
 
-    void payWelcomeCoupon(long clientId);
+    void payWelcomeCoupon(String message);
 
     void refundCoupon(long couponId);
 
