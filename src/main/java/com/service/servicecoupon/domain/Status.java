@@ -1,26 +1,41 @@
 package com.service.servicecoupon.domain;
 
 public enum Status {
-    USED(0),
-    AVAILABLE(1),
-    UNAVAILABLE(2);
+    USED(0, "사용완료"),
+    AVAILABLE(1, "사용 가능"),
+    UNAVAILABLE(2, "사용 불가");
 
-    private final int value;
+    private final int code;
+    private final String value;
 
-    Status(int value) {
+    Status(int code, String value) {
+        this.code = code;
         this.value = value;
     }
 
-    public int getValue() {
+    public int getCode() {
+        return code;
+    }
+
+    public String getValue() {
         return value;
     }
 
-    public static Status fromValue(int value) {
-        for (Status status : Status.values()) {
-            if (status.value == value) {
-                return status;
+    public static Status fromCode(int code) {
+        for (Status type : Status.values()) {
+            if (type.code == code) {
+                return type;
             }
         }
-        throw new IllegalArgumentException("Invalid Status value: " + value);
+        throw new IllegalArgumentException("Invalid DiscountType code: " + code);
+    }
+
+    public static Status fromValue(String value) {
+        for (Status type : Status.values()) {
+            if (type.value.equals(value)) {
+                return type;
+            }
+        }
+        throw new IllegalArgumentException("Invalid DiscountType value: " + value);
     }
 }

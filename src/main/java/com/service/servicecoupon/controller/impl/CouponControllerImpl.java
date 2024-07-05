@@ -3,8 +3,8 @@ package com.service.servicecoupon.controller.impl;
 
 import com.service.servicecoupon.controller.CouponController;
 import com.service.servicecoupon.domain.request.CouponRequestDto;
+import com.service.servicecoupon.domain.response.CouponMyPageResponseDto;
 import com.service.servicecoupon.domain.response.CouponOrderResponseDto;
-import com.service.servicecoupon.domain.response.CouponResponseDto;
 import com.service.servicecoupon.exception.ClientNotFoundException;
 import com.service.servicecoupon.service.CouponService;
 import lombok.RequiredArgsConstructor;
@@ -28,10 +28,11 @@ public class CouponControllerImpl implements CouponController {
         return couponService.findClientCoupon(httpHeaders);
     }
 
-//    @Override
-//    public Page<CouponResponseDto> couponFind(HttpHeaders httpHeaders, int page, int size) {
-//        return null;
-//    }
+    @Override
+    @GetMapping("/api/myPage/coupon")
+    public ResponseEntity<Page<CouponMyPageResponseDto>> findMyPageCoupons(@RequestHeader HttpHeaders httpHeaders,@RequestParam int page,@RequestParam int size) {
+        return ResponseEntity.ok(couponService.findByClientId(httpHeaders, page, size));
+    }
 
     @Override
     @PostMapping("/api/coupon/register/{couponPolicyId}")

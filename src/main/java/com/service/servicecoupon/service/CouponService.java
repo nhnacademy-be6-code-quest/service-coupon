@@ -2,7 +2,7 @@ package com.service.servicecoupon.service;
 
 import com.service.servicecoupon.domain.request.CouponRequestDto;
 import com.service.servicecoupon.domain.response.CouponOrderResponseDto;
-import com.service.servicecoupon.domain.response.CouponResponseDto;
+import com.service.servicecoupon.domain.response.CouponMyPageResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 
@@ -14,7 +14,7 @@ public interface CouponService {
 
     List<CouponOrderResponseDto> findClientCoupon(HttpHeaders httpHeaders);
 
-        Page<CouponResponseDto> findByClientId(HttpHeaders httpHeaders, int page, int size);
+    Page<CouponMyPageResponseDto> findByClientId(HttpHeaders httpHeaders, int page, int size);
 
     void update(long couponId);
 

@@ -1,8 +1,9 @@
 package com.service.servicecoupon.domain.response;
 
 
-import com.service.servicecoupon.domain.DiscountType;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 
 @Getter
