@@ -1,4 +1,4 @@
-package com.service.servicecoupon.domain.response;
+package com.service.servicecoupon.dto.response;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

@@ -1,6 +1,5 @@
 ### GET request to example server
 GET localhost:8006/api/coupon
-X-User-Id: 181
 
 ### Post request
 POST localhost:8006/api/coupon/register/3
@@ -28,7 +27,7 @@ Content-Type: application/json
 POST localhost:8006/api/client/welcome/1
 
 ###put
-PUT localhost:8006/api/coupon/refund?couponId=1
+PUT localhost:8006/api/coupon/refund?couponId=27
 
 ### get
 GET localhost:8006/api/coupon/policy

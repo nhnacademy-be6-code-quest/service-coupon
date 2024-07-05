@@ -1,12 +1,13 @@
-package com.service.servicecoupon.domain.response;
+package com.service.servicecoupon.dto.response;
 
-import com.service.servicecoupon.domain.CouponKind;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @NoArgsConstructor
 @Setter
-public class CouponMyPageResponseDto {
+public class CouponMyPageCouponIssuedResponseDto {
     String issuedDate;
     String expirationDate;
     String status;

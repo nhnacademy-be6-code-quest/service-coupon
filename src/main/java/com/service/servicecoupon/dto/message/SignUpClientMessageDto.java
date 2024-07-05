@@ -1,4 +1,4 @@
-package com.service.servicecoupon.config;
+package com.service.servicecoupon.dto.message;
 
 
 import lombok.Getter;

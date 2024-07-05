@@ -3,8 +3,8 @@ package com.service.servicecoupon.service.impl;
 import com.service.servicecoupon.domain.entity.CouponPolicy;
 import com.service.servicecoupon.domain.entity.ProductCategoryCoupon;
 import com.service.servicecoupon.domain.entity.ProductCoupon;
-import com.service.servicecoupon.domain.request.CouponPolicyRegisterRequestDto;
-import com.service.servicecoupon.domain.response.CouponPolicyListResponseDto;
+import com.service.servicecoupon.dto.request.CouponPolicyRegisterRequestDto;
+import com.service.servicecoupon.dto.response.CouponPolicyListResponseDto;
 import com.service.servicecoupon.repository.CouponPolicyRepository;
 import com.service.servicecoupon.repository.ProductCategoryCouponRepository;
 import com.service.servicecoupon.repository.ProductCouponRepository;
@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 public class CouponPolicyServiceImpl implements CouponPolicyService {
+
     private final CouponPolicyRepository couponPolicyRepository;
     private final ProductCouponRepository productCouponRepository;
     private final ProductCategoryCouponRepository productCategoryCouponRepository;
@@ -32,19 +33,20 @@ public class CouponPolicyServiceImpl implements CouponPolicyService {
         String typeName = couponPolicyRegisterRequestDto.typeName();
 
         CouponPolicy couponPolicy = CouponPolicy.builder()
-                .couponPolicyDescription(couponPolicyRegisterRequestDto.couponPolicyDescription())
-                .discountType(couponPolicyRegisterRequestDto.discountType())
-                .discountValue(couponPolicyRegisterRequestDto.discountValue())
-                .minPurchaseAmount(couponPolicyRegisterRequestDto.minPurchaseAmount())
-                .maxDiscountAmount(couponPolicyRegisterRequestDto.maxDiscountAmount())
-                .build();
+            .couponPolicyDescription(couponPolicyRegisterRequestDto.couponPolicyDescription())
+            .discountType(couponPolicyRegisterRequestDto.discountType())
+            .discountValue(couponPolicyRegisterRequestDto.discountValue())
+            .minPurchaseAmount(couponPolicyRegisterRequestDto.minPurchaseAmount())
+            .maxDiscountAmount(couponPolicyRegisterRequestDto.maxDiscountAmount())
+            .build();
         couponPolicyRepository.save(couponPolicy);
         if (typeName != null) {
             if (typeName.equals("상품")) {
                 ProductCoupon productCoupon = new ProductCoupon(id, couponPolicy);
                 productCouponRepository.save(productCoupon);
             } else if (typeName.equals("카테고리")) {
-                ProductCategoryCoupon productCategoryCoupon = new ProductCategoryCoupon(id, couponPolicy);
+                ProductCategoryCoupon productCategoryCoupon = new ProductCategoryCoupon(id,
+                    couponPolicy);
                 productCategoryCouponRepository.save(productCategoryCoupon);
             }
 
@@ -52,26 +54,19 @@ public class CouponPolicyServiceImpl implements CouponPolicyService {
 
     }
 
-
-
     @Transactional(readOnly = true)
     @Override
     public Page<CouponPolicyListResponseDto> getPolicies(int page, int size) {
-        PageRequest pageRequest = PageRequest.of(page, size, Sort.by("couponPolicyId").descending());
+        PageRequest pageRequest = PageRequest.of(page, size,
+            Sort.by("couponPolicyId").descending());
 
-     return couponPolicyRepository.findAll(pageRequest).map(couponPolicy -> CouponPolicyListResponseDto.builder()
-                     .couponPolicyId(couponPolicy.getCouponPolicyId())
-                     .couponPolicyDescription(couponPolicy.getCouponPolicyDescription())
-                     .discountType(couponPolicy.getDiscountType())
-                     .discountValue(couponPolicy.getDiscountValue())
-             .minPurchaseAmount(couponPolicy.getMinPurchaseAmount())
-             .maxDiscountAmount(couponPolicy.getMaxDiscountAmount())
-             .build());
+        Page<CouponPolicy> couponPolicies = couponPolicyRepository.findAll(pageRequest);
+        return couponPolicies.map(couponPolicy -> new CouponPolicyListResponseDto(
+            couponPolicy.getCouponPolicyId(), couponPolicy.getCouponPolicyDescription(),
+            couponPolicy.getDiscountType().name(), couponPolicy.getDiscountValue(),
+            couponPolicy.getMinPurchaseAmount(),
+            couponPolicy.getMaxDiscountAmount()));
     }
-
-
-
-
 
 
 }

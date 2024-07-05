@@ -4,14 +4,14 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.util.AntPathMatcher;
-import org.springframework.web.filter.OncePerRequestFilter;
-
 import java.io.IOException;
+import java.net.URI;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Set;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.AntPathMatcher;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 @Slf4j
 public class HeaderFilter extends OncePerRequestFilter {
@@ -20,16 +20,16 @@ public class HeaderFilter extends OncePerRequestFilter {
     private final String[] requiredRole;
     private final AntPathMatcher pathMatcher;
 
-    public HeaderFilter(String requiredPath, String requiredMethod) {
+    public HeaderFilter(URI requiredPath, String requiredMethod) {
         this.requiredRole = new String[0];
-        this.requiredPath = requiredPath;
+        this.requiredPath = requiredPath.getPath();
         this.requiredMethod = requiredMethod;
         this.pathMatcher = new AntPathMatcher();
     }
 
-    public HeaderFilter(String requiredPath, String requiredMethod, String... requiredRole) {
+    public HeaderFilter(URI requiredPath, String requiredMethod, String... requiredRole) {
         this.requiredRole = requiredRole;
-        this.requiredPath = requiredPath;
+        this.requiredPath = requiredPath.getPath();
         this.requiredMethod = requiredMethod;
         this.pathMatcher = new AntPathMatcher();
     }
@@ -46,7 +46,7 @@ public class HeaderFilter extends OncePerRequestFilter {
             }
 
             if (!isContainRole(getHeaderValues(request, "X-User-Role"))) {
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Role header is missing or invalid");
+                response.sendError(HttpServletResponse.SC_FORBIDDEN, "Role header is missing or invalid");
                 return;
             }
         }

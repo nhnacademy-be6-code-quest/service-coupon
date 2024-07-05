@@ -1,6 +1,6 @@
 package com.service.servicecoupon.controller;
 
-import com.service.servicecoupon.domain.response.CouponTypeResponseDto;
+import com.service.servicecoupon.dto.response.CouponTypeResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;

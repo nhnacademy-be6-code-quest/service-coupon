@@ -2,7 +2,6 @@ package com.service.servicecoupon.service;
 
 import com.service.servicecoupon.client.BirthDayUserClient;
 import com.service.servicecoupon.domain.CouponKind;
-import com.service.servicecoupon.domain.DiscountType;
 import com.service.servicecoupon.domain.Status;
 import com.service.servicecoupon.domain.entity.Coupon;
 import com.service.servicecoupon.domain.entity.CouponPolicy;
@@ -11,13 +10,12 @@ import com.service.servicecoupon.exception.CouponPolicyNotFoundException;
 import com.service.servicecoupon.repository.CouponPolicyRepository;
 import com.service.servicecoupon.repository.CouponRepository;
 import com.service.servicecoupon.repository.CouponTypeRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
@@ -60,12 +58,15 @@ public class SchedulerService {
 
     }
 
-    //now() 하루에 12시에 돌면서 같으면 만료일  사용불가로
     @Scheduled(cron = " 0 0 0 * * * ")
     public void run() {
         LocalDate now = LocalDate.now();
         List<Coupon> coupons = couponRepository.findByExpirationDateBefore(now);
-        coupons.forEach((row -> row.setStatus(Status.UNAVAILABLE)));
+        coupons.forEach((coupon -> {
+            if (coupon.getStatus() != Status.USED) {
+                coupon.setStatus(Status.UNAVAILABLE);
+            }
+        }));
 
         couponRepository.saveAll(coupons);
     }

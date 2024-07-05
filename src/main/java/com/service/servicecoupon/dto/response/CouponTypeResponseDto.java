@@ -1,7 +1,6 @@
-package com.service.servicecoupon.domain.response;
+package com.service.servicecoupon.dto.response;
 
 import com.service.servicecoupon.domain.CouponKind;
-import com.service.servicecoupon.domain.entity.CouponType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

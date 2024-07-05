@@ -5,7 +5,7 @@ import com.service.servicecoupon.domain.Status;
 import com.service.servicecoupon.domain.entity.Coupon;
 import com.service.servicecoupon.domain.entity.CouponPolicy;
 import com.service.servicecoupon.domain.entity.CouponType;
-import com.service.servicecoupon.domain.request.CouponRequestDto;
+import com.service.servicecoupon.dto.request.CouponRequestDto;
 import com.service.servicecoupon.repository.CouponPolicyRepository;
 import com.service.servicecoupon.repository.CouponRepository;
 import com.service.servicecoupon.repository.CouponTypeRepository;
