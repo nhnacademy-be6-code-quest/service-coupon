@@ -32,7 +32,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(req -> req.anyRequest().permitAll())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
-            .addFilterBefore(new HeaderFilter(URI.create("/api/coupon/policy"), HttpMethod.GET.name(), ADMIN_ROLE), UsernamePasswordAuthenticationFilter.class);
+            //.addFilterBefore(new HeaderFilter(URI.create("/api/coupon/policy"), HttpMethod.GET.name(), ADMIN_ROLE), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
