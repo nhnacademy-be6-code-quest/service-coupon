@@ -1,6 +1,10 @@
 ### GET request to example server
 GET localhost:8006/api/coupon
+X-User-Id:181
 
+### GET mypage
+GET localhost:8006/api/coupon/myPage?page=0&size=1
+X-User-Id:181
 ### Post request
 POST localhost:8006/api/coupon/register/3
 Content-Type: application/json

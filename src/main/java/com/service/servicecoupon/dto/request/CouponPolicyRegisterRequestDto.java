@@ -17,7 +17,7 @@ public record CouponPolicyRegisterRequestDto(
     @NotNull
     @Min(message = "0 보다  커야됩니다.", value = 0)
     long maxDiscountAmount,
-    long id,
+    Long id,
     String typeName
 ) {
 

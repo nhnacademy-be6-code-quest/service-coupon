@@ -44,7 +44,9 @@ public class CouponPolicyServiceImpl implements CouponPolicyService {
             if (typeName.equals("상품")) {
                 ProductCoupon productCoupon = new ProductCoupon(id, couponPolicy);
                 productCouponRepository.save(productCoupon);
-            } else if (typeName.equals("카테고리")) {
+
+            }
+            if (typeName.equals("카테고리")) {
                 ProductCategoryCoupon productCategoryCoupon = new ProductCategoryCoupon(id,
                     couponPolicy);
                 productCategoryCouponRepository.save(productCategoryCoupon);
@@ -63,7 +65,7 @@ public class CouponPolicyServiceImpl implements CouponPolicyService {
         Page<CouponPolicy> couponPolicies = couponPolicyRepository.findAll(pageRequest);
         return couponPolicies.map(couponPolicy -> new CouponPolicyListResponseDto(
             couponPolicy.getCouponPolicyId(), couponPolicy.getCouponPolicyDescription(),
-            couponPolicy.getDiscountType().name(), couponPolicy.getDiscountValue(),
+            couponPolicy.getDiscountType().getValue(), couponPolicy.getDiscountValue(),
             couponPolicy.getMinPurchaseAmount(),
             couponPolicy.getMaxDiscountAmount()));
     }

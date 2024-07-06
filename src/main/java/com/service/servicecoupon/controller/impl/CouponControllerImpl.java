@@ -3,14 +3,15 @@ package com.service.servicecoupon.controller.impl;
 
 import com.service.servicecoupon.controller.CouponController;
 import com.service.servicecoupon.dto.request.CouponRequestDto;
-import com.service.servicecoupon.dto.response.CouponMyPageCouponIssuedResponseDto;
+import com.service.servicecoupon.dto.response.CouponAdminPageCouponResponseDto;
+import com.service.servicecoupon.dto.response.CouponMyPageCouponResponseDto;
 import com.service.servicecoupon.dto.response.CouponOrderResponseDto;
 import com.service.servicecoupon.dto.response.PaymentCompletedCouponResponseDto;
 import com.service.servicecoupon.dto.response.RefundCouponResponseDto;
 import com.service.servicecoupon.exception.ClientNotFoundException;
 import com.service.servicecoupon.exception.CouponNotFoundException;
 import com.service.servicecoupon.exception.CouponPolicyNotFoundException;
-import com.service.servicecoupon.exception.CouponTypeNotFound;
+import com.service.servicecoupon.exception.CouponTypeNotFoundException;
 import com.service.servicecoupon.service.CouponService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +37,7 @@ public class CouponControllerImpl implements CouponController {
 
     @Override
     @GetMapping("/api/coupon/myPage")
-    public ResponseEntity<Page<CouponMyPageCouponIssuedResponseDto>> findMyPageCoupons(
+    public ResponseEntity<Page<CouponMyPageCouponResponseDto>> findMyPageCoupons(
         @RequestHeader HttpHeaders httpHeaders, @RequestParam int page, @RequestParam int size) {
         return ResponseEntity.ok(couponService.findByClientId(httpHeaders, page, size));
     }
@@ -51,7 +52,7 @@ public class CouponControllerImpl implements CouponController {
 
     @Override
     @PutMapping("/api/coupon/payment")
-    public ResponseEntity<String> UseCoupon(
+    public ResponseEntity<String> paymentUsedCoupon(
         @RequestBody PaymentCompletedCouponResponseDto paymentCompletedCouponResponseDto) {
         try {
             couponService.paymentCompletedCoupon(paymentCompletedCouponResponseDto);
@@ -59,6 +60,12 @@ public class CouponControllerImpl implements CouponController {
         } catch (Exception e) {
             return new ResponseEntity<>("fail", HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @Override
+    @GetMapping("/api/coupon/adminPage")
+    public ResponseEntity<Page<CouponAdminPageCouponResponseDto>> findUserCoupons (@RequestParam int page, @RequestParam int size){
+        return ResponseEntity.ok(couponService.findByAllCoupon(page,size));
     }
 
 
@@ -95,8 +102,8 @@ public class CouponControllerImpl implements CouponController {
     }
 
     @Override
-    @ExceptionHandler(CouponTypeNotFound.class)
-    public ResponseEntity<String> handleCouponTypeNotFound(CouponTypeNotFound e) {
+    @ExceptionHandler(CouponTypeNotFoundException.class)
+    public ResponseEntity<String> handleCouponTypeNotFound(CouponTypeNotFoundException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
     }
 }

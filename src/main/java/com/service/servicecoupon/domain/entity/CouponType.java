@@ -1,13 +1,14 @@
 package com.service.servicecoupon.domain.entity;
 
-import java.util.ArrayList;
-import java.util.List;
-import jakarta.persistence.*;
+import com.service.servicecoupon.domain.CouponKind;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import com.service.servicecoupon.domain.CouponKind;
 
 
 @Entity

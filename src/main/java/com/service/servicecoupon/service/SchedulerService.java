@@ -25,14 +25,13 @@ public class SchedulerService {
     private final BirthDayUserClient birthDayUserClient;
     private final CouponTypeRepository couponTypeRepository;
     private final CouponPolicyRepository couponPolicyRepository;
-    //private static final int CHUNK_SIZE = 1000;
-    //TODO 청크사이즈 제한 고민
+
 
 
     @Scheduled(cron = " 0 0 0 1 * * ")
     public void birthCoupon() {
         CouponType couponType = couponTypeRepository.findByCouponKind(CouponKind.BIRTHDAY);
-        CouponPolicy couponPolicy = couponPolicyRepository.findTopByCouponPolicyDescriptionContainingOrderByIdDesc(
+        CouponPolicy couponPolicy = couponPolicyRepository.findTop1ByCouponPolicyDescriptionContainingOrderByCouponPolicyIdDesc(
             "생일");
         if (couponPolicy == null) {
             throw new CouponPolicyNotFoundException("쿠폰 정책을 찾을수 없습니다.");
@@ -57,6 +56,7 @@ public class SchedulerService {
         }));
 
     }
+
 
     @Scheduled(cron = " 0 0 0 * * * ")
     public void run() {

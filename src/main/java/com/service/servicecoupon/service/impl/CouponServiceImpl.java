@@ -10,14 +10,16 @@ import com.service.servicecoupon.domain.entity.CouponType;
 import com.service.servicecoupon.domain.entity.ProductCategoryCoupon;
 import com.service.servicecoupon.domain.entity.ProductCoupon;
 import com.service.servicecoupon.dto.request.CouponRequestDto;
-import com.service.servicecoupon.dto.response.CouponMyPageCouponIssuedResponseDto;
+import com.service.servicecoupon.dto.response.CouponAdminPageCouponResponseDto;
+import com.service.servicecoupon.dto.response.CouponMyPageCouponResponseDto;
 import com.service.servicecoupon.dto.response.CouponOrderResponseDto;
 import com.service.servicecoupon.dto.response.PaymentCompletedCouponResponseDto;
 import com.service.servicecoupon.dto.response.RefundCouponResponseDto;
 import com.service.servicecoupon.exception.ClientNotFoundException;
 import com.service.servicecoupon.exception.CouponNotFoundException;
 import com.service.servicecoupon.exception.CouponPolicyNotFoundException;
-import com.service.servicecoupon.exception.CouponTypeNotFound;
+
+import com.service.servicecoupon.exception.CouponTypeNotFoundException;
 import com.service.servicecoupon.exception.RabbitMessageConvertException;
 import com.service.servicecoupon.repository.CouponPolicyRepository;
 import com.service.servicecoupon.repository.CouponRepository;
@@ -56,11 +58,11 @@ public class CouponServiceImpl implements CouponService {
     private final ProductCategoryCouponRepository productCategoryCouponRepository;
     private static final String ID_HEADER = "X-User-Id";
 
-    @Transactional(rollbackFor = {CouponTypeNotFound.class, CouponPolicyNotFoundException.class})
+    @Transactional(rollbackFor = {CouponTypeNotFoundException.class, CouponPolicyNotFoundException.class})
     @Override
     public void save(CouponRequestDto couponRequest, long couponPolicyId) {
         CouponType couponType = couponTypeRepository.findById(couponRequest.couponTypeId()
-        ).orElseThrow(() -> new CouponTypeNotFound("쿠폰 타입을 찾을수 없습니다."));
+        ).orElseThrow(() -> new CouponTypeNotFoundException("쿠폰 타입을 찾을수 없습니다."));
         CouponPolicy couponPolicy = couponPolicyRepository.findById(couponPolicyId)
             .orElseThrow(() -> new CouponPolicyNotFoundException("쿠폰 정책을 찾을수 없습니다."));
         List<Long> clientIds = couponRequest.clientId();
@@ -73,21 +75,22 @@ public class CouponServiceImpl implements CouponService {
 
     @Transactional(readOnly = true)
     @Override
-    public Page<CouponMyPageCouponIssuedResponseDto> findByClientId(HttpHeaders httpHeaders, int page,
+    public Page<CouponMyPageCouponResponseDto> findByClientId(HttpHeaders httpHeaders,
+        int page,
         int size) {
         PageRequest pageRequest = PageRequest.of(page, size,
-            Sort.by(Sort.Direction.DESC, "issuedDate"));
+            Sort.by(Sort.Direction.DESC, "couponId"));
         long clientId = NumberUtils.toLong(httpHeaders.getFirst(ID_HEADER), -1L);
         Page<Coupon> coupons = couponRepository.findByClientId(clientId, pageRequest);
 
         return coupons.map(coupon -> {
-            CouponMyPageCouponIssuedResponseDto couponMyPageCouponIssuedResponseDto = new CouponMyPageCouponIssuedResponseDto();
+            CouponMyPageCouponResponseDto couponMyPageCouponResponseDto = new CouponMyPageCouponResponseDto();
             CouponPolicy couponPolicy = coupon.getCouponPolicy();
             CouponType couponType = coupon.getCouponType();
-            CouponMyPageCouponIssuedResponseDto.CouponPolicy couponPolicyDto = new CouponMyPageCouponIssuedResponseDto.CouponPolicy();
-            CouponMyPageCouponIssuedResponseDto.CouponType couponTypeDto = new CouponMyPageCouponIssuedResponseDto.CouponType();
+            CouponMyPageCouponResponseDto.CouponPolicy couponPolicyDto = new CouponMyPageCouponResponseDto.CouponPolicy();
 
-            couponTypeDto.setCouponKind(couponType.getCouponKind().getValue());
+            couponMyPageCouponResponseDto.setCouponKind(
+                couponType.getCouponKind().getValue());
 
             couponPolicyDto.setCouponPolicyDescription(couponPolicy.getCouponPolicyDescription());
             couponPolicyDto.setDiscountValue(couponPolicy.getDiscountValue());
@@ -95,13 +98,50 @@ public class CouponServiceImpl implements CouponService {
             couponPolicyDto.setMaxDiscountAmount(couponPolicy.getMaxDiscountAmount());
             couponPolicyDto.setDiscountType(couponPolicy.getDiscountType().getValue());
 
-            couponMyPageCouponIssuedResponseDto.setStatus(coupon.getStatus().getValue());
-            couponMyPageCouponIssuedResponseDto.setIssuedDate(String.valueOf(coupon.getIssuedDate()));
-            couponMyPageCouponIssuedResponseDto.setExpirationDate(String.valueOf(coupon.getExpirationDate()));
-            couponMyPageCouponIssuedResponseDto.setCouponType(couponTypeDto);
-            couponMyPageCouponIssuedResponseDto.setCouponPolicy(couponPolicyDto);
+            couponMyPageCouponResponseDto.setUsedDate(String.valueOf(coupon.getUsedDate()));
+            couponMyPageCouponResponseDto.setStatus(coupon.getStatus().getValue());
+            couponMyPageCouponResponseDto.setIssuedDate(
+                String.valueOf(coupon.getIssuedDate()));
+            couponMyPageCouponResponseDto.setExpirationDate(
+                String.valueOf(coupon.getExpirationDate()));
+            couponMyPageCouponResponseDto.setCouponPolicy(couponPolicyDto);
 
-            return couponMyPageCouponIssuedResponseDto;
+            return couponMyPageCouponResponseDto;
+        });
+
+
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Page<CouponAdminPageCouponResponseDto> findByAllCoupon(int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page, size,
+            Sort.by(Sort.Direction.DESC, "couponId"));
+        Page<Coupon> coupons = couponRepository.findAll(pageRequest);
+
+        return coupons.map(coupon -> {
+            CouponAdminPageCouponResponseDto couponAdminPageCouponResponseDto = new CouponAdminPageCouponResponseDto();
+            CouponPolicy couponPolicy = coupon.getCouponPolicy();
+            CouponType couponType = coupon.getCouponType();
+            CouponAdminPageCouponResponseDto.CouponPolicy couponPolicyDto = new CouponAdminPageCouponResponseDto.CouponPolicy();
+
+            couponAdminPageCouponResponseDto.setCouponKind(couponType.getCouponKind().getValue());
+
+            couponPolicyDto.setCouponPolicyDescription(couponPolicy.getCouponPolicyDescription());
+            couponPolicyDto.setDiscountValue(couponPolicy.getDiscountValue());
+            couponPolicyDto.setMinPurchaseAmount(couponPolicy.getMinPurchaseAmount());
+            couponPolicyDto.setMaxDiscountAmount(couponPolicy.getMaxDiscountAmount());
+            couponPolicyDto.setDiscountType(couponPolicy.getDiscountType().getValue());
+
+            couponAdminPageCouponResponseDto.setUsedDate(String.valueOf(coupon.getUsedDate()));
+            couponAdminPageCouponResponseDto.setStatus(coupon.getStatus().getValue());
+            couponAdminPageCouponResponseDto.setIssuedDate(
+                String.valueOf(coupon.getIssuedDate()));
+            couponAdminPageCouponResponseDto.setExpirationDate(
+                String.valueOf(coupon.getExpirationDate()));
+            couponAdminPageCouponResponseDto.setCouponPolicy(couponPolicyDto);
+
+            return couponAdminPageCouponResponseDto;
         });
 
 
@@ -159,7 +199,8 @@ public class CouponServiceImpl implements CouponService {
 
     @Transactional(rollbackFor = {CouponPolicyNotFoundException.class})
     @Override
-    public void paymentCompletedCoupon(PaymentCompletedCouponResponseDto paymentCompletedCouponResponseDto) {
+    public void paymentCompletedCoupon(
+        PaymentCompletedCouponResponseDto paymentCompletedCouponResponseDto) {
         Coupon coupon = couponRepository.findById(paymentCompletedCouponResponseDto.getCouponId())
             .orElseThrow(() -> new CouponNotFoundException("쿠폰이 존재하지 않습니다.'"));
         Objects.requireNonNull(coupon).setUsedDate(LocalDate.now());
@@ -177,7 +218,7 @@ public class CouponServiceImpl implements CouponService {
         } catch (IOException e) {
             throw new RabbitMessageConvertException("회원가입 유저의 메세지 변환에 실패했습니다.");
         }
-        CouponPolicy couponPolicy = couponPolicyRepository.findTopByCouponPolicyDescriptionContainingOrderByIdDesc(
+        CouponPolicy couponPolicy = couponPolicyRepository.findTop1ByCouponPolicyDescriptionContainingOrderByCouponPolicyIdDesc(
             "생일");
         if (couponPolicy == null) {
             throw new CouponPolicyNotFoundException("쿠폰정책을 찾을수 없습니다.");
@@ -195,7 +236,7 @@ public class CouponServiceImpl implements CouponService {
 
         Coupon coupon = couponRepository.findById(refundCouponResponseDto.getCouponId())
             .orElseThrow(() -> new CouponNotFoundException("쿠폰이 존재하지 않습니다."));
-        if (coupon.getStatus().equals(Status.UNAVAILABLE) || coupon.getStatus().equals(Status.USED)) {
+        if (coupon.getStatus().equals(Status.UNAVAILABLE)) {
             return;
         }
         Objects.requireNonNull(coupon).setUsedDate(null);
@@ -203,5 +244,7 @@ public class CouponServiceImpl implements CouponService {
 
         couponRepository.save(coupon);
     }
+
+
 }
 
