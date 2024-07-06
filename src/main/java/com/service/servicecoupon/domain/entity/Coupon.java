@@ -32,13 +32,10 @@ public class Coupon {
     @JoinColumn(name="couponPolicyId")
     private CouponPolicy couponPolicy;
     private long clientId;
-    @Column(columnDefinition = "DATETIME")
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate issuedDate;
-    @Column(columnDefinition = "DATETIME")
     private LocalDate expirationDate;
     @JsonFormat(pattern = "yyyy-MM-dd")
-    @Column(columnDefinition = "DATETIME")
     @Setter
     private LocalDate usedDate;
     @Setter

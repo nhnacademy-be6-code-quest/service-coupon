@@ -37,6 +37,7 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import org.assertj.core.api.Assertions;
@@ -112,7 +113,7 @@ class CouponServiceImplTest {
                     1000),
                 LocalDate.now().plusDays(10), Status.AVAILABLE);
 setField(coupon1,"couponId",1L);
-        Page<Coupon> clientPage = new PageImpl<>(List.of(coupon1));
+        Page<Coupon> clientPage = new PageImpl<>(Collections.singletonList(coupon1));
         when(couponRepository.findAll(any(PageRequest.class))).thenReturn(clientPage);
 
 

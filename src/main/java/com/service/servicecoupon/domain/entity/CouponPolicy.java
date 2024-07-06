@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,10 +23,14 @@ public class CouponPolicy {
     @Column(nullable = false)
     private String couponPolicyDescription;
     private DiscountType discountType;
+    @Column(nullable = false)
+    @Min(0)
     private long discountValue;
     @Column(nullable = false)
+    @Min(0)
     private long minPurchaseAmount;
     @Column(nullable = false)
+    @Min(0)
     private long maxDiscountAmount;
 
     @Builder
