@@ -65,7 +65,7 @@ public class CouponPolicyServiceImpl implements CouponPolicyService {
         Page<CouponPolicy> couponPolicies = couponPolicyRepository.findAll(pageRequest);
         return couponPolicies.map(couponPolicy -> new CouponPolicyListResponseDto(
             couponPolicy.getCouponPolicyId(), couponPolicy.getCouponPolicyDescription(),
-            couponPolicy.getDiscountType().getValue(), couponPolicy.getDiscountValue(),
+            couponPolicy.getDiscountType().name(), couponPolicy.getDiscountValue(),
             couponPolicy.getMinPurchaseAmount(),
             couponPolicy.getMaxDiscountAmount()));
     }

@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: com.service.servicecoupon.service.CouponServiceImplTest
--------------------------------------------------------------------------------
-Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.265 s -- in com.service.servicecoupon.service.CouponServiceImplTest
