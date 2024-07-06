@@ -30,7 +30,7 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable)
             .headers(h -> h.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
             .authorizeHttpRequests(req -> req.anyRequest().permitAll())
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
             //.addFilterBefore(new HeaderFilter(URI.create("/api/coupon/policy"), HttpMethod.GET.name(), ADMIN_ROLE), UsernamePasswordAuthenticationFilter.class);
 
