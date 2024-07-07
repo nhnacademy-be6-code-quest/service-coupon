@@ -2,7 +2,7 @@ package com.service.servicecoupon.controller.impl;
 
 
 import com.service.servicecoupon.controller.CouponController;
-import com.service.servicecoupon.dto.request.CouponRequestDto;
+import com.service.servicecoupon.dto.request.CouponRegisterRequestDto;
 import com.service.servicecoupon.dto.response.CouponAdminPageCouponResponseDto;
 import com.service.servicecoupon.dto.response.CouponMyPageCouponResponseDto;
 import com.service.servicecoupon.dto.response.CouponOrderResponseDto;
@@ -44,8 +44,8 @@ public class CouponControllerImpl implements CouponController {
 
     @Override
     @PostMapping("/api/coupon/register/{couponPolicyId}")
-    public ResponseEntity<CouponRequestDto> saveCoupon(@Valid @PathVariable long couponPolicyId,
-        @RequestBody CouponRequestDto couponRequest) {
+    public ResponseEntity<CouponRegisterRequestDto> saveCoupon(@Valid @PathVariable long couponPolicyId,
+        @RequestBody CouponRegisterRequestDto couponRequest) {
         couponService.save(couponRequest, couponPolicyId);
         return ResponseEntity.status(HttpStatus.CREATED).body(couponRequest);
     }
