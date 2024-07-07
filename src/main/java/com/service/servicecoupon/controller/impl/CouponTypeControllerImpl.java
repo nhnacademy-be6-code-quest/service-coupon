@@ -1,7 +1,7 @@
 package com.service.servicecoupon.controller.impl;
 
 import com.service.servicecoupon.controller.CouponTypeController;
-import com.service.servicecoupon.domain.response.CouponTypeResponseDto;
+import com.service.servicecoupon.dto.response.CouponTypeResponseDto;
 import com.service.servicecoupon.service.CouponTypeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;

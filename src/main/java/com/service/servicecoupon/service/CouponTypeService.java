@@ -1,7 +1,6 @@
 package com.service.servicecoupon.service;
 
-import com.service.servicecoupon.domain.entity.CouponType;
-import com.service.servicecoupon.domain.response.CouponTypeResponseDto;
+import com.service.servicecoupon.dto.response.CouponTypeResponseDto;
 
 import java.util.List;
 

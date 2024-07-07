@@ -1,18 +1,44 @@
+
 ###GET
-GET localhost:8006/admin/coupon/policy/1
+GET localhost:8006/api/coupon/policy?page=0&size=3
+
 ###GET
-GET localhost:8006/admin/coupon/policy
+GET https://localhost:8080/api/coupon/policy
 ###POST
-POST localhost:8006/admin/coupon/policy/register
+POST localhost:8006/api/coupon/policy/register
 Content-Type: application/json
 
 {
-  "productId": null,
-  "productCategoryId": null,
-  "couponPolicyDescription": "description",
-  "discountType": "AMOUNTDISCOUNT",
+  "couponPolicyDescription": "상품",
+  "discountType": "PERCENTAGEDISCOUNT",
   "discountValue": 10000,
   "minPurchaseAmount": 0,
-  "maxDiscountAmount": 10000
-
+  "maxDiscountAmount": 10000,
+  "id": 3,
+  "typeName": "상품"
 }
+
+
+###POST
+POST localhost:8006/api/coupon/policy/register
+Content-Type: application/json
+
+{
+  "page": {
+    "contents": [
+      {
+        "id" : "1",
+        "password" : "pa"
+      },
+      {
+        "id" : "2",
+        "password" : "pa"
+      }
+    ],
+    "size" : "5",
+    "count" : "2"
+  }
+}
+
+page : contents : id
+page : contents : password
