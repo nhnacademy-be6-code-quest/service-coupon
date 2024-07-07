@@ -105,7 +105,7 @@ class CouponPolicyServiceTest {
             resultPage.getContent().getFirst().getCouponPolicyId());
         assertEquals(couponPolicy.getCouponPolicyDescription(),
             resultPage.getContent().getFirst().getCouponPolicyDescription());
-        assertEquals(couponPolicy.getDiscountType().name(),
+        assertEquals(couponPolicy.getDiscountType().getValue(),
             resultPage.getContent().getFirst().getDiscountType());
         assertEquals(couponPolicy.getDiscountValue(),
             resultPage.getContent().getFirst().getDiscountValue());
