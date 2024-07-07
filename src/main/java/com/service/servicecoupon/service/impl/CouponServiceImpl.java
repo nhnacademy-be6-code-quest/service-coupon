@@ -80,9 +80,7 @@ public class CouponServiceImpl implements CouponService {
         int size) {
         PageRequest pageRequest = PageRequest.of(page, size,
             Sort.by(Sort.Direction.DESC, "couponId"));
-        long clientId = 26L;
-
-            //NumberUtils.toLong(httpHeaders.getFirst(ID_HEADER), -1L);
+        long clientId = NumberUtils.toLong(httpHeaders.getFirst(ID_HEADER), -1L);
         Page<Coupon> coupons = couponRepository.findByClientId(clientId, pageRequest);
 
         return coupons.map(coupon -> {
