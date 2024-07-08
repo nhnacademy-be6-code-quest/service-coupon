@@ -3,6 +3,7 @@ package com.service.servicecoupon.controller.impl;
 import com.service.servicecoupon.controller.CouponPolicyController;
 import com.service.servicecoupon.dto.request.CouponPolicyRegisterRequestDto;
 import com.service.servicecoupon.dto.response.CouponPolicyListResponseDto;
+import com.service.servicecoupon.dto.response.CouponProvideTypeResponseDto;
 import com.service.servicecoupon.service.CouponPolicyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +34,11 @@ public class CouponPolicyControllerImpl implements CouponPolicyController {
         @RequestBody CouponPolicyRegisterRequestDto couponPolicyRegisterRequestDto) {
         couponPolicyService.save(couponPolicyRegisterRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(couponPolicyRegisterRequestDto);
+    }
+
+    @GetMapping("/api/coupon/policy/type")
+    public CouponProvideTypeResponseDto findCouponType(long couponPolicyId){
+        return couponPolicyService.findType(couponPolicyId);
     }
 }
 

@@ -9,21 +9,15 @@ class CouponPolicyListResponseDtoTest {
     @Test
     void testCouponPolicyListResponseDto() {
 
-        CouponPolicyListResponseDto dto = new CouponPolicyListResponseDto(
-            1L,
-            "Birthday Discount",
-            "AMOUNTDISCOUNT",
-            1000L,
-            5000L,
-            2000L
-        );
-
+        CouponPolicyListResponseDto dto = new CouponPolicyListResponseDto();
+            dto.setCouponPolicyId(1L);
+            dto.setCouponPolicyDescription("Birthday Discount");
+            dto.setDiscountType("AMOUNTDISCOUNT");
+            dto.setDiscountValue(1000L);
         assertEquals(1L, dto.getCouponPolicyId());
         assertEquals("Birthday Discount", dto.getCouponPolicyDescription());
         assertEquals("AMOUNTDISCOUNT", dto.getDiscountType());
         assertEquals(1000L, dto.getDiscountValue());
-        assertEquals(5000L, dto.getMinPurchaseAmount());
-        assertEquals(2000L, dto.getMaxDiscountAmount());
     }
 
 }

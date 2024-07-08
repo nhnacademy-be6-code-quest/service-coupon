@@ -9,7 +9,7 @@ import com.service.servicecoupon.domain.entity.CouponPolicy;
 import com.service.servicecoupon.domain.entity.CouponType;
 import com.service.servicecoupon.domain.entity.ProductCategoryCoupon;
 import com.service.servicecoupon.domain.entity.ProductCoupon;
-import com.service.servicecoupon.dto.request.CouponRequestDto;
+import com.service.servicecoupon.dto.request.CouponRegisterRequestDto;
 import com.service.servicecoupon.dto.response.CouponAdminPageCouponResponseDto;
 import com.service.servicecoupon.dto.response.CouponMyPageCouponResponseDto;
 import com.service.servicecoupon.dto.response.CouponOrderResponseDto;
@@ -60,7 +60,7 @@ public class CouponServiceImpl implements CouponService {
 
     @Transactional(rollbackFor = {CouponTypeNotFoundException.class, CouponPolicyNotFoundException.class})
     @Override
-    public void save(CouponRequestDto couponRequest, long couponPolicyId) {
+    public void save(CouponRegisterRequestDto couponRequest, long couponPolicyId) {
         CouponType couponType = couponTypeRepository.findById(couponRequest.couponTypeId()
         ).orElseThrow(() -> new CouponTypeNotFoundException("쿠폰 타입을 찾을수 없습니다."));
         CouponPolicy couponPolicy = couponPolicyRepository.findById(couponPolicyId)

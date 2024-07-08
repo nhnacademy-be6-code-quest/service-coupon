@@ -1,6 +1,6 @@
 package com.service.servicecoupon.service;
 
-import com.service.servicecoupon.dto.request.CouponRequestDto;
+import com.service.servicecoupon.dto.request.CouponRegisterRequestDto;
 import com.service.servicecoupon.dto.response.CouponAdminPageCouponResponseDto;
 import com.service.servicecoupon.dto.response.CouponOrderResponseDto;
 import com.service.servicecoupon.dto.response.CouponMyPageCouponResponseDto;
@@ -13,7 +13,7 @@ import java.util.List;
 
 public interface CouponService {
 
-    void save(CouponRequestDto couponRequest, long couponPolicyId);
+    void save(CouponRegisterRequestDto couponRequest, long couponPolicyId);
 
     List<CouponOrderResponseDto> findClientCoupon(HttpHeaders httpHeaders);
 

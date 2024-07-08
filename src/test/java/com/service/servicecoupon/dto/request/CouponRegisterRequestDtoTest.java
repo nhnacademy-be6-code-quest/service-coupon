@@ -14,18 +14,18 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
-class CouponRequestDtoTest {
+class CouponRegisterRequestDtoTest {
 
     private final Validator validator;
 
-    public CouponRequestDtoTest() {
+    public CouponRegisterRequestDtoTest() {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         validator = factory.getValidator();
     }
 
     @Test
     void testValidCouponRequestDto() {
-        CouponRequestDto dto = new CouponRequestDto(
+        CouponRegisterRequestDto dto = new CouponRegisterRequestDto(
             1L,
             2L,
             List.of(1L, 2L, 3L),
@@ -33,13 +33,13 @@ class CouponRequestDtoTest {
             Status.AVAILABLE
         );
 
-        Set<ConstraintViolation<CouponRequestDto>> violations = validator.validate(dto);
+        Set<ConstraintViolation<CouponRegisterRequestDto>> violations = validator.validate(dto);
         assertEquals(0, violations.size());
     }
 
     @Test
     void testInvalidCouponRequestDto() {
-        CouponRequestDto dto = new CouponRequestDto(
+        CouponRegisterRequestDto dto = new CouponRegisterRequestDto(
             1L,
             2L,
             null,  // clientId is null
@@ -47,7 +47,7 @@ class CouponRequestDtoTest {
             null   // status is null
         );
 
-        Set<ConstraintViolation<CouponRequestDto>> violations = validator.validate(dto);
+        Set<ConstraintViolation<CouponRegisterRequestDto>> violations = validator.validate(dto);
         assertEquals(3, violations.size());
     }
 
@@ -59,7 +59,7 @@ class CouponRequestDtoTest {
         LocalDate expirationDate = LocalDate.of(2023, 12, 31);
         Status status = Status.UNAVAILABLE;
 
-        CouponRequestDto dto = new CouponRequestDto(
+        CouponRegisterRequestDto dto = new CouponRegisterRequestDto(
             couponTypeId,
             couponPolicyId,
             clientId,

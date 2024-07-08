@@ -21,7 +21,7 @@ import com.service.servicecoupon.domain.entity.Coupon;
 import com.service.servicecoupon.domain.entity.CouponPolicy;
 import com.service.servicecoupon.domain.entity.CouponType;
 import com.service.servicecoupon.dto.message.SignUpClientMessageDto;
-import com.service.servicecoupon.dto.request.CouponRequestDto;
+import com.service.servicecoupon.dto.request.CouponRegisterRequestDto;
 import com.service.servicecoupon.dto.response.CouponAdminPageCouponResponseDto;
 import com.service.servicecoupon.dto.response.CouponMyPageCouponResponseDto;
 import com.service.servicecoupon.dto.response.CouponOrderResponseDto;
@@ -85,7 +85,7 @@ class CouponServiceImplTest {
         List<Long> clients = new ArrayList<>();
         long client = 1L;
         clients.add(client);
-        CouponRequestDto requestDto = new CouponRequestDto(1L, 1L, clients, LocalDate.now(),
+        CouponRegisterRequestDto requestDto = new CouponRegisterRequestDto(1L, 1L, clients, LocalDate.now(),
             Status.AVAILABLE);
 
         CouponType couponType = new CouponType(1L, CouponKind.BIRTHDAY);

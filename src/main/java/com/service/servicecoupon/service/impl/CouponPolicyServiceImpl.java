@@ -5,6 +5,7 @@ import com.service.servicecoupon.domain.entity.ProductCategoryCoupon;
 import com.service.servicecoupon.domain.entity.ProductCoupon;
 import com.service.servicecoupon.dto.request.CouponPolicyRegisterRequestDto;
 import com.service.servicecoupon.dto.response.CouponPolicyListResponseDto;
+import com.service.servicecoupon.dto.response.CouponProvideTypeResponseDto;
 import com.service.servicecoupon.repository.CouponPolicyRepository;
 import com.service.servicecoupon.repository.ProductCategoryCouponRepository;
 import com.service.servicecoupon.repository.ProductCouponRepository;
@@ -63,11 +64,29 @@ public class CouponPolicyServiceImpl implements CouponPolicyService {
             Sort.by("couponPolicyId").descending());
 
         Page<CouponPolicy> couponPolicies = couponPolicyRepository.findAll(pageRequest);
-        return couponPolicies.map(couponPolicy -> new CouponPolicyListResponseDto(
-            couponPolicy.getCouponPolicyId(), couponPolicy.getCouponPolicyDescription(),
-            couponPolicy.getDiscountType().name(), couponPolicy.getDiscountValue(),
-            couponPolicy.getMinPurchaseAmount(),
-            couponPolicy.getMaxDiscountAmount()));
+        return couponPolicies.map(couponPolicy -> {
+            CouponPolicyListResponseDto dto = new CouponPolicyListResponseDto();
+            dto.setCouponPolicyId(couponPolicy.getCouponPolicyId());
+            dto.setCouponPolicyDescription(couponPolicy.getCouponPolicyDescription());
+            dto.setDiscountType(couponPolicy.getDiscountType().getValue());
+            dto.setDiscountValue(couponPolicy.getDiscountValue());
+            return dto;
+        });
+    }
+
+    public CouponProvideTypeResponseDto findType(long couponPolicyId){
+        ProductCoupon product = productCouponRepository.findByProductPolicy_CouponPolicyId(couponPolicyId);
+        ProductCategoryCoupon categoryCoupon = productCategoryCouponRepository.findByCategoryPolicy_CouponPolicyId(couponPolicyId);
+        CouponProvideTypeResponseDto dto = new CouponProvideTypeResponseDto();
+        if (product != null) {
+            dto.setName("상품");
+        } else if (categoryCoupon != null) {
+            dto.setName("카테고리");
+        }
+        else{
+            dto.setName("전체");
+        }
+        return dto;
     }
 
 

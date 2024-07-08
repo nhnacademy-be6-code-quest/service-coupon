@@ -1,6 +1,6 @@
 package com.service.servicecoupon.controller;
 
-import com.service.servicecoupon.dto.request.CouponRequestDto;
+import com.service.servicecoupon.dto.request.CouponRegisterRequestDto;
 import com.service.servicecoupon.dto.response.CouponAdminPageCouponResponseDto;
 import com.service.servicecoupon.dto.response.CouponMyPageCouponResponseDto;
 import com.service.servicecoupon.dto.response.CouponOrderResponseDto;
@@ -70,11 +70,11 @@ public interface CouponController {
         }
     )
     @PostMapping("/api/coupon/register/{couponPolicyId}")
-    ResponseEntity<CouponRequestDto> saveCoupon(
+    ResponseEntity<CouponRegisterRequestDto> saveCoupon(
         @Parameter(description = "쿠폰정책 아이디")
         @PathVariable long couponPolicyId,
         @Parameter(description = "쿠폰 정보")
-        @RequestBody CouponRequestDto couponRequest);
+        @RequestBody CouponRegisterRequestDto couponRequest);
 
     @Operation(
         summary = "쿠폰 상태 변경",
