@@ -30,7 +30,12 @@ public class CouponPolicyServiceImpl implements CouponPolicyService {
     @Override
     public void save(CouponPolicyRegisterRequestDto couponPolicyRegisterRequestDto) {
 
-        long id = couponPolicyRegisterRequestDto.id();
+        long id;
+        if (couponPolicyRegisterRequestDto.id() == null) {
+            id = -1L;
+        } else {
+            id = couponPolicyRegisterRequestDto.id();
+        }
         String typeName = couponPolicyRegisterRequestDto.typeName();
 
         CouponPolicy couponPolicy = CouponPolicy.builder()
@@ -74,16 +79,18 @@ public class CouponPolicyServiceImpl implements CouponPolicyService {
         });
     }
 
-    public CouponProvideTypeResponseDto findType(long couponPolicyId){
-        ProductCoupon product = productCouponRepository.findByProductPolicy_CouponPolicyId(couponPolicyId);
-        ProductCategoryCoupon categoryCoupon = productCategoryCouponRepository.findByCategoryPolicy_CouponPolicyId(couponPolicyId);
+    public CouponProvideTypeResponseDto findType(
+        long couponPolicyId) {
+        ProductCoupon product = productCouponRepository.findByProductPolicy_CouponPolicyId(
+            couponPolicyId);
+        ProductCategoryCoupon categoryCoupon = productCategoryCouponRepository.findByCategoryPolicy_CouponPolicyId(
+            couponPolicyId);
         CouponProvideTypeResponseDto dto = new CouponProvideTypeResponseDto();
         if (product != null) {
             dto.setName("상품");
         } else if (categoryCoupon != null) {
             dto.setName("카테고리");
-        }
-        else{
+        } else {
             dto.setName("전체");
         }
         return dto;

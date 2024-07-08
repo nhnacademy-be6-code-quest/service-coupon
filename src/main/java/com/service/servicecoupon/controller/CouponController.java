@@ -36,7 +36,7 @@ public interface CouponController {
         }
     )
     @GetMapping("/api/coupon")
-    List<CouponOrderResponseDto> couponFind(
+    List<CouponOrderResponseDto> findClientCoupon(
         @Parameter(description = "쿠폰을 조회하는 회원의 아이디")
         @RequestHeader HttpHeaders httpHeaders);
 

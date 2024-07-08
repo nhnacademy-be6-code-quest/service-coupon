@@ -18,6 +18,11 @@ Content-Type: application/json
   "typeName": "상품"
 }
 
+###GET
+GET localhost:8006/api/coupon/policy/type/22
+
+
+
 
 ###POST
 POST localhost:8006/api/coupon/policy/register
@@ -39,6 +44,3 @@ Content-Type: application/json
     "count" : "2"
   }
 }
-
-page : contents : id
-page : contents : password
