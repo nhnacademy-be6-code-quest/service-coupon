@@ -1,6 +1,6 @@
 ### GET request to example server
 GET localhost:8006/api/coupon
-X-User-Id:26
+X-User-Id:181
 
 ### GET mypage
 GET localhost:8006/api/coupon/myPage?page=0&size=1

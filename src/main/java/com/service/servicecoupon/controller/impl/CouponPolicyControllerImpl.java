@@ -36,8 +36,8 @@ public class CouponPolicyControllerImpl implements CouponPolicyController {
         return ResponseEntity.status(HttpStatus.CREATED).body(couponPolicyRegisterRequestDto);
     }
 
-    @GetMapping("/api/coupon/policy/type")
-    public CouponProvideTypeResponseDto findCouponType(long couponPolicyId){
+    @GetMapping("/api/coupon/policy/type/{couponPolicyId}")
+    public CouponProvideTypeResponseDto findCouponType(@PathVariable long couponPolicyId){
         return couponPolicyService.findType(couponPolicyId);
     }
 }
