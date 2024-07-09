@@ -169,7 +169,6 @@ Assertions.assertThat(response).isNotNull();
         List<CouponOrderResponseDto> response = couponService.findClientCoupon(headers);
 
         // Then
-        Assertions.assertThat(response).isNotNull();
         Assertions.assertThat(response).hasSize(2);
     }
     @Test

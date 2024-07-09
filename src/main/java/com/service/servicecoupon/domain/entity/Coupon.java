@@ -2,7 +2,6 @@ package com.service.servicecoupon.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.service.servicecoupon.domain.Status;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

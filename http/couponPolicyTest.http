@@ -18,6 +18,13 @@ Content-Type: application/json
   "typeName": "상품"
 }
 
+
+###GET
+# @no-cookie-jar
+PUT localhost:8006/api/coupon/payment
+Content-Type: application/json
+
+{"couponId": null}
 ###GET
 GET localhost:8006/api/coupon/policy/type/22
 

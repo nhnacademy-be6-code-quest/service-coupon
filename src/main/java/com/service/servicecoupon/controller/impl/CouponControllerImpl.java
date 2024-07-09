@@ -58,7 +58,7 @@ public class CouponControllerImpl implements CouponController {
             couponService.paymentCompletedCoupon(paymentCompletedCouponResponseDto);
             return new ResponseEntity<>("success", HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>("fail", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("fail", HttpStatus.ACCEPTED);
         }
     }
 
@@ -77,7 +77,7 @@ public class CouponControllerImpl implements CouponController {
             couponService.refundCoupon(refundCouponResponseDto);
             return new ResponseEntity<>("success", HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>("fail", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("fail", HttpStatus.ACCEPTED);
         }
     }
 
