@@ -211,7 +211,6 @@ public class CouponServiceImpl implements CouponService {
     @Override
     @RabbitListener(queues = "${rabbit.login.queue.name}")
     public void payWelcomeCoupon(String message) {
-        log.error("message{}", message);
         SignUpClientMessageDto signUpClientMessageDto;
         try {
             signUpClientMessageDto = objectMapper.readValue(message, SignUpClientMessageDto.class);
