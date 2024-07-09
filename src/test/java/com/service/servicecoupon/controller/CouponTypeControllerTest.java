@@ -46,7 +46,7 @@ class CouponTypeControllerTest {
         // Then
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         List<CouponTypeResponseDto> actualTypes = responseEntity.getBody();
-        assertThat(actualTypes).isNotNull();
+
         assertThat(actualTypes).hasSize(expectedTypes.size());
         assertThat(actualTypes).containsExactlyElementsOf(expectedTypes);
     }
