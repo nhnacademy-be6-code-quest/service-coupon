@@ -29,7 +29,8 @@ Content-Type: application/json
 GET localhost:8006/api/coupon/policy/type/22
 
 
-
+###GET
+localhost:8006/api/coupon/adminPage?page=0&size=5
 
 ###POST
 POST localhost:8006/api/coupon/policy/register

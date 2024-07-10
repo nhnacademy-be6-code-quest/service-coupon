@@ -17,6 +17,4 @@ public interface CouponRepository extends JpaRepository<Coupon, Long> {
     List<Coupon> findByExpirationDateBefore(LocalDate expirationDate);
 
     Page<Coupon> findByClientId(long clientId, Pageable pageable);
-
-    Page<Coupon> findAll(Pageable pageable);
 }

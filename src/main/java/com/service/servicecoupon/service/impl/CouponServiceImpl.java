@@ -133,6 +133,7 @@ public class CouponServiceImpl implements CouponService {
             couponPolicyDto.setMaxDiscountAmount(couponPolicy.getMaxDiscountAmount());
             couponPolicyDto.setDiscountType(couponPolicy.getDiscountType().getValue());
 
+            couponAdminPageCouponResponseDto.setClientId(coupon.getClientId());
             couponAdminPageCouponResponseDto.setUsedDate(String.valueOf(coupon.getUsedDate()));
             couponAdminPageCouponResponseDto.setStatus(coupon.getStatus().getValue());
             couponAdminPageCouponResponseDto.setIssuedDate(
