@@ -6,6 +6,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @FeignClient(name = "birthdayUser", url ="http://localhost:8001")
 public interface BirthDayUserClient {
-    @GetMapping("/api/client/birth-coupon")
+    @GetMapping("/api/coupon/birth-coupon")
     List<Long> getThisMonthBirthClient();
 }

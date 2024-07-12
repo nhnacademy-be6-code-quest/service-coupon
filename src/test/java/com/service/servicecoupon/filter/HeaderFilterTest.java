@@ -1,23 +1,25 @@
 package com.service.servicecoupon.filter;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.net.URI;
+import java.util.Arrays;
+import java.util.Collections;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
-import java.io.IOException;
-import java.net.URI;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
-
 class HeaderFilterTest {
-    private final URI clientPath = URI.create("/api/coupon");
-
     private HeaderFilter headerFilter;
     private FilterChain filterChain;
     private MockHttpServletRequest request;
@@ -34,8 +36,10 @@ class HeaderFilterTest {
     @Test
     void testDoFilterInternal_ValidIdHeader() throws ServletException, IOException {
         // Given
-        headerFilter = new HeaderFilter(clientPath, "GET");
-        request.setRequestURI("/api/coupon/policy");
+        headerFilter = new HeaderFilter(Collections.singletonList(
+                new HeaderFilter.RouteConfig(URI.create("/api/coupon"), "GET", Collections.emptyList())
+        ));
+        request.setRequestURI("/api/client");
         request.setMethod("GET");
         request.addHeader("X-User-Id", "1");
 
@@ -49,7 +53,9 @@ class HeaderFilterTest {
     @Test
     void testDoFilterInternal_InvalidIdHeader() throws ServletException, IOException {
         // Given
-        headerFilter = new HeaderFilter(clientPath, "GET");
+        headerFilter = new HeaderFilter(Collections.singletonList(
+                new HeaderFilter.RouteConfig(URI.create("/api/coupon"), "GET", Collections.emptyList())
+        ));
         request.setRequestURI("/api/coupon");
         request.setMethod("GET");
         request.addHeader("X-User-Id", "invalid");
@@ -65,7 +71,9 @@ class HeaderFilterTest {
     @Test
     void testDoFilterInternal_MissingIdHeader() throws ServletException, IOException {
         // Given
-        headerFilter = new HeaderFilter(clientPath, "GET");
+        headerFilter = new HeaderFilter(Collections.singletonList(
+                new HeaderFilter.RouteConfig(URI.create("/api/coupon"), "GET", Collections.emptyList())
+        ));
         request.setRequestURI("/api/coupon");
         request.setMethod("GET");
 
@@ -80,8 +88,10 @@ class HeaderFilterTest {
     @Test
     void testDoFilterInternal_ValidRoleHeader() throws ServletException, IOException {
         // Given
-        headerFilter = new HeaderFilter(URI.create("/api/client/coupon-payment"), "GET", "ROLE_ADMIN");
-        request.setRequestURI("/api/client/coupon-payment");
+        headerFilter = new HeaderFilter(Collections.singletonList(
+                new HeaderFilter.RouteConfig(URI.create("/api/coupon"), "GET", Arrays.asList("ROLE_ADMIN"))
+        ));
+        request.setRequestURI("/api/coupon");
         request.setMethod("GET");
         request.addHeader("X-User-Id", "1");
         request.addHeader("X-User-Role", "ROLE_ADMIN");
@@ -96,8 +106,10 @@ class HeaderFilterTest {
     @Test
     void testDoFilterInternal_InvalidRoleHeader() throws ServletException, IOException {
         // Given
-        headerFilter = new HeaderFilter(URI.create("/api/client/coupon-payment"), "GET", "ROLE_ADMIN");
-        request.setRequestURI("/api/client/coupon-payment");
+        headerFilter = new HeaderFilter(Collections.singletonList(
+                new HeaderFilter.RouteConfig(URI.create("/api/coupon"), "GET", Arrays.asList("ROLE_ADMIN"))
+        ));
+        request.setRequestURI("/api/coupon");
         request.setMethod("GET");
         request.addHeader("X-User-Id", "1");
         request.addHeader("X-User-Role", "ROLE_USER");
@@ -113,8 +125,10 @@ class HeaderFilterTest {
     @Test
     void testDoFilterInternal_MissingRoleHeader() throws ServletException, IOException {
         // Given
-        headerFilter = new HeaderFilter(URI.create("/api/client/coupon-payment"), "GET", "ROLE_ADMIN");
-        request.setRequestURI("/api/client/coupon-payment");
+        headerFilter = new HeaderFilter(Collections.singletonList(
+                new HeaderFilter.RouteConfig(URI.create("/api/coupon"), "GET", Arrays.asList("ROLE_ADMIN"))
+        ));
+        request.setRequestURI("/api/coupon");
         request.setMethod("GET");
         request.addHeader("X-User-Id", "1");
 
