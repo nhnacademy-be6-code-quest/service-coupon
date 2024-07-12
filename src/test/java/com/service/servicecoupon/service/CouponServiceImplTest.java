@@ -115,7 +115,7 @@ class CouponServiceImplTest {
                 LocalDate.now().plusDays(10), Status.AVAILABLE);
 setField(coupon1,"couponId",1L);
         Page<Coupon> clientPage = new PageImpl<>(Collections.singletonList(coupon1));
-        when(couponRepository.findAll(any(PageRequest.class))).thenReturn(clientPage);
+        when(couponRepository.findAllByStatus(any(PageRequest.class),eq(status))).thenReturn(clientPage);
 
 
         // When
@@ -141,7 +141,7 @@ Assertions.assertThat(response).isNotNull();
             LocalDate.now().plusDays(10), Status.AVAILABLE);
         coupon1.setUsedDate(LocalDate.now());
         Page<Coupon> clientPage = new PageImpl<>(List.of(coupon1));
-        when(couponRepository.findByClientIdAndStatus(eq(clientId), any(PageRequest.class), status)).thenReturn(clientPage);
+        when(couponRepository.findByClientIdAndStatus(eq(clientId), any(PageRequest.class), eq(status))).thenReturn(clientPage);
 
         // When
         Page<CouponMyPageCouponResponseDto> response = couponService.findByClientId(headers, page, size, status);
