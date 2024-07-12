@@ -3,6 +3,7 @@ package com.service.servicecoupon.controller.impl;
 
 import com.service.servicecoupon.controller.CouponController;
 import com.service.servicecoupon.domain.Status;
+import com.service.servicecoupon.dto.request.CouponPaymentRewardRequestDto;
 import com.service.servicecoupon.dto.request.CouponRegisterRequestDto;
 import com.service.servicecoupon.dto.response.CouponAdminPageCouponResponseDto;
 import com.service.servicecoupon.dto.response.CouponMyPageCouponResponseDto;
@@ -59,7 +60,7 @@ public class CouponControllerImpl implements CouponController {
             couponService.paymentCompletedCoupon(paymentCompletedCouponResponseDto);
             return new ResponseEntity<>("success", HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>("fail", HttpStatus.ACCEPTED);
+            return new ResponseEntity<>("fail", HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -78,7 +79,17 @@ public class CouponControllerImpl implements CouponController {
             couponService.refundCoupon(refundCouponResponseDto);
             return new ResponseEntity<>("success", HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>("fail", HttpStatus.ACCEPTED);
+            return new ResponseEntity<>("fail", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/api/coupon/payment/reward")
+    public ResponseEntity<String> getUserPaymentValue(@RequestBody CouponPaymentRewardRequestDto couponPaymentRewardRequestDto){
+        try {
+            couponService.paymentRewardCoupon(couponPaymentRewardRequestDto);
+            return new ResponseEntity<>("success", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("fail", HttpStatus.BAD_REQUEST);
         }
     }
 

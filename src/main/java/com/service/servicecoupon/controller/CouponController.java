@@ -1,6 +1,7 @@
 package com.service.servicecoupon.controller;
 
 import com.service.servicecoupon.domain.Status;
+import com.service.servicecoupon.dto.request.CouponPaymentRewardRequestDto;
 import com.service.servicecoupon.dto.request.CouponRegisterRequestDto;
 import com.service.servicecoupon.dto.response.CouponAdminPageCouponResponseDto;
 import com.service.servicecoupon.dto.response.CouponMyPageCouponResponseDto;
@@ -138,6 +139,10 @@ public interface CouponController {
         @RequestParam int size,
         @Parameter(description = "쿠폰 상태")
         @RequestParam Status status);
+
+    @GetMapping("/api/coupon/payment/reward")
+    ResponseEntity<String> getUserPaymentValue(@RequestBody CouponPaymentRewardRequestDto couponPaymentRewardRequestDto);
+
     @ExceptionHandler(ClientNotFoundException.class)
     ResponseEntity<String> handleExceptionClientNotFoundException(ClientNotFoundException e);
 

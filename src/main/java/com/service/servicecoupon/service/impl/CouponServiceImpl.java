@@ -9,6 +9,7 @@ import com.service.servicecoupon.domain.entity.CouponPolicy;
 import com.service.servicecoupon.domain.entity.CouponType;
 import com.service.servicecoupon.domain.entity.ProductCategoryCoupon;
 import com.service.servicecoupon.domain.entity.ProductCoupon;
+import com.service.servicecoupon.dto.request.CouponPaymentRewardRequestDto;
 import com.service.servicecoupon.dto.request.CouponRegisterRequestDto;
 import com.service.servicecoupon.dto.response.CouponAdminPageCouponResponseDto;
 import com.service.servicecoupon.dto.response.CouponMyPageCouponResponseDto;
@@ -243,6 +244,15 @@ public class CouponServiceImpl implements CouponService {
         coupon.setStatus(Status.AVAILABLE);
 
         couponRepository.save(coupon);
+    }
+    @Override
+    public void paymentRewardCoupon(CouponPaymentRewardRequestDto couponPaymentRewardRequestDto){
+
+        CouponPolicy couponPolicy = couponPolicyRepository.findTop1ByCouponPolicyDescriptionContainingAndMaxDiscountAmountOrderByMaxDiscountAmountDesc("구매",couponPaymentRewardRequestDto.getPaymentValue());
+        CouponType couponType = couponTypeRepository.findByCouponKind(CouponKind.DISCOUNT);
+        Coupon coupon = new Coupon(couponPaymentRewardRequestDto.getClientId(), couponType, couponPolicy, LocalDate.now().plusDays(30),Status.AVAILABLE);
+        couponRepository.save(coupon);
+
     }
 
 

@@ -7,5 +7,5 @@ public interface CouponPolicyRepository extends JpaRepository<CouponPolicy,Long>
 
     CouponPolicy findTop1ByCouponPolicyDescriptionContainingOrderByCouponPolicyIdDesc(String couponPolicyDescription);
 
-    CouponPolicy findTop1ByCouponPolicyDescriptionContainingAndMaxDiscountAmountOrderByCouponPolicyIdDesc(String couponPolicyDescription,long maxDiscountAmount);
+    CouponPolicy findTop1ByCouponPolicyDescriptionContainingAndMaxDiscountAmountOrderByMaxDiscountAmountDesc(String couponPolicyDescription,long maxDiscountAmount);
 }
