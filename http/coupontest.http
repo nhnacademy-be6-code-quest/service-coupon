@@ -3,7 +3,7 @@ GET localhost:8006/api/coupon
 X-User-Id:181
 
 ### GET mypage
-GET localhost:8006/api/coupon/myPage?page=0&size=1
+GET localhost:8006/api/coupon/myPage?page=0&size=1&status=USED
 X-User-Id:181
 ### Post request
 POST localhost:8006/api/coupon/register/3

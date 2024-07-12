@@ -1,5 +1,6 @@
 package com.service.servicecoupon.controller;
 
+import com.service.servicecoupon.domain.Status;
 import com.service.servicecoupon.dto.request.CouponRegisterRequestDto;
 import com.service.servicecoupon.dto.response.CouponAdminPageCouponResponseDto;
 import com.service.servicecoupon.dto.response.CouponMyPageCouponResponseDto;
@@ -57,7 +58,9 @@ public interface CouponController {
         @Parameter(description = "페이지")
         @RequestParam(name = "page") int page,
         @Parameter(description = "페이지에 보여줄 개수")
-        @RequestParam(name = "size") int size);
+        @RequestParam(name = "size") int size,
+        @Parameter(description = "쿠폰 상태")
+        @RequestParam Status status);
 
     @Operation(
         summary = "쿠폰 지급",
@@ -132,7 +135,9 @@ public interface CouponController {
         @Parameter(description = "페이지")
         @RequestParam int page,
         @Parameter(description = "페이지에 보여줄 개수")
-        @RequestParam int size);
+        @RequestParam int size,
+        @Parameter(description = "쿠폰 상태")
+        @RequestParam Status status);
     @ExceptionHandler(ClientNotFoundException.class)
     ResponseEntity<String> handleExceptionClientNotFoundException(ClientNotFoundException e);
 

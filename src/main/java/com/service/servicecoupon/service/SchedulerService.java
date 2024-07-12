@@ -28,7 +28,8 @@ public class SchedulerService {
 
 
 
-    @Scheduled(cron = "0 0 15 * * *")
+    @Scheduled(cron = "0 0 15 * * *") // 매 5초마다 실행
+
     public void birthCoupon() {
         CouponType couponType = couponTypeRepository.findByCouponKind(CouponKind.BIRTHDAY);
         CouponPolicy couponPolicy = couponPolicyRepository.findTop1ByCouponPolicyDescriptionContainingOrderByCouponPolicyIdDesc(

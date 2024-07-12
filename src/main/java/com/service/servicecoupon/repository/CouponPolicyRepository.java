@@ -6,4 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface CouponPolicyRepository extends JpaRepository<CouponPolicy,Long> {
 
     CouponPolicy findTop1ByCouponPolicyDescriptionContainingOrderByCouponPolicyIdDesc(String couponPolicyDescription);
+
+    CouponPolicy findTop1ByCouponPolicyDescriptionContainingAndMaxDiscountAmountOrderByCouponPolicyIdDesc(String couponPolicyDescription,long maxDiscountAmount);
 }

@@ -77,11 +77,11 @@ public class CouponServiceImpl implements CouponService {
     @Override
     public Page<CouponMyPageCouponResponseDto> findByClientId(HttpHeaders httpHeaders,
         int page,
-        int size) {
+        int size, Status status) {
         PageRequest pageRequest = PageRequest.of(page, size,
             Sort.by(Sort.Direction.DESC, "couponId"));
         long clientId = NumberUtils.toLong(httpHeaders.getFirst(ID_HEADER), -1L);
-        Page<Coupon> coupons = couponRepository.findByClientId(clientId, pageRequest);
+        Page<Coupon> coupons = couponRepository.findByClientIdAndStatus(clientId, pageRequest, status);
 
         return coupons.map(coupon -> {
             CouponMyPageCouponResponseDto couponMyPageCouponResponseDto = new CouponMyPageCouponResponseDto();
@@ -114,10 +114,10 @@ public class CouponServiceImpl implements CouponService {
 
     @Transactional(readOnly = true)
     @Override
-    public Page<CouponAdminPageCouponResponseDto> findByAllCoupon(int page, int size) {
+    public Page<CouponAdminPageCouponResponseDto> findByAllCoupon(int page, int size, Status status) {
         PageRequest pageRequest = PageRequest.of(page, size,
-            Sort.by(Sort.Direction.DESC, "couponId"));
-        Page<Coupon> coupons = couponRepository.findAll(pageRequest);
+            Sort.by(Sort.Direction.DESC, "clientId"));
+        Page<Coupon> coupons = couponRepository.findAllByStatus(pageRequest, status);
 
         return coupons.map(coupon -> {
             CouponAdminPageCouponResponseDto couponAdminPageCouponResponseDto = new CouponAdminPageCouponResponseDto();
@@ -219,7 +219,7 @@ public class CouponServiceImpl implements CouponService {
             throw new RabbitMessageConvertException("회원가입 유저의 메세지 변환에 실패했습니다.");
         }
         CouponPolicy couponPolicy = couponPolicyRepository.findTop1ByCouponPolicyDescriptionContainingOrderByCouponPolicyIdDesc(
-            "생일");
+            "회원");
         if (couponPolicy == null) {
             throw new CouponPolicyNotFoundException("쿠폰정책을 찾을수 없습니다.");
         }
