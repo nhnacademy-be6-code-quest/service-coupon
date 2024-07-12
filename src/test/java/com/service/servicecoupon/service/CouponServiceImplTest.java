@@ -182,12 +182,12 @@ Assertions.assertThat(response).isNotNull();
         Field clientIdField = SignUpClientMessageDto.class.getDeclaredField("clientId");
         clientIdField.setAccessible(true);
         clientIdField.set(signUpClientMessageDto, 1L);
-        CouponPolicy couponPolicy = new CouponPolicy( "생일",DiscountType.PERCENTAGEDISCOUNT,0, 10000,10000);
+        CouponPolicy couponPolicy = new CouponPolicy( "회원",DiscountType.PERCENTAGEDISCOUNT,0, 10000,10000);
         CouponType couponType = new CouponType(1L, CouponKind.WELCOME);
         Coupon coupon = new Coupon(123L, couponType, couponPolicy, LocalDate.now().plusDays(30), Status.AVAILABLE);
 
         when(objectMapper.readValue(message, SignUpClientMessageDto.class)).thenReturn(signUpClientMessageDto);
-        when(couponPolicyRepository.findTop1ByCouponPolicyDescriptionContainingOrderByCouponPolicyIdDesc("생일")).thenReturn(couponPolicy);
+        when(couponPolicyRepository.findTop1ByCouponPolicyDescriptionContainingOrderByCouponPolicyIdDesc("회원")).thenReturn(couponPolicy);
         when(couponTypeRepository.findByCouponKind(CouponKind.WELCOME)).thenReturn(couponType);
         when(couponRepository.save(any(Coupon.class))).thenReturn(coupon);
 
