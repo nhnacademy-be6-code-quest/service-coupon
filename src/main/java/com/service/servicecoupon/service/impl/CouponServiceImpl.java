@@ -248,7 +248,7 @@ public class CouponServiceImpl implements CouponService {
     @Override
     public void paymentRewardCoupon(CouponPaymentRewardRequestDto couponPaymentRewardRequestDto){
         if (couponPaymentRewardRequestDto.getPaymentValue()>=50000){
-            CouponPolicy couponPolicy = couponPolicyRepository.findTop1ByCouponPolicyDescriptionContainingAndMaxDiscountAmountOrderByMaxDiscountAmountDesc("구매",(couponPaymentRewardRequestDto.getPaymentValue()/5));
+            CouponPolicy couponPolicy = couponPolicyRepository.findTop1ByCouponPolicyDescriptionContainingAndMaxDiscountAmountLessThanEqualOrderByMaxDiscountAmountDesc("구매",(couponPaymentRewardRequestDto.getPaymentValue()/5));
             CouponType couponType = couponTypeRepository.findByCouponKind(CouponKind.DISCOUNT);
             Coupon coupon = new Coupon(couponPaymentRewardRequestDto.getClientId(), couponType, couponPolicy, LocalDate.now().plusDays(30),Status.AVAILABLE);
             couponRepository.save(coupon);
