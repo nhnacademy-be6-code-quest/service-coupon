@@ -17,6 +17,7 @@ import com.service.servicecoupon.domain.entity.CouponType;
 import com.service.servicecoupon.repository.CouponPolicyRepository;
 import com.service.servicecoupon.repository.CouponRepository;
 import com.service.servicecoupon.repository.CouponTypeRepository;
+import com.service.servicecoupon.service.impl.SchedulerServiceImpl;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -42,7 +43,7 @@ class SchedulerServiceTest {
     private CouponRepository couponRepository;
 
     @InjectMocks
-    private SchedulerService schedulerService;
+    private SchedulerServiceImpl schedulerServiceImpl;
 
     @BeforeEach
     void setUp() {
@@ -66,7 +67,7 @@ class SchedulerServiceTest {
         when(birthDayUserClient.getThisMonthBirthClient()).thenReturn(userIds);
 
         // Act
-        schedulerService.birthCoupon();
+        schedulerServiceImpl.birthCoupon();
 
         // Assert
         verify(couponRepository, times(3)).save(any(Coupon.class));
@@ -94,7 +95,7 @@ class SchedulerServiceTest {
             .thenReturn(Optional.of(usedCoupon));
 
         // Execute the scheduled task
-        schedulerService.run();
+        schedulerServiceImpl.run();
 
         // Verify the coupon statuses
         assertEquals(Status.UNAVAILABLE, expiredCoupon.getStatus(), "Expired coupon should be UNAVAILABLE");

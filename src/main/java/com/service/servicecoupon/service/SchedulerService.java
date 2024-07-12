@@ -1,75 +1,18 @@
 package com.service.servicecoupon.service;
 
-import com.service.servicecoupon.client.BirthDayUserClient;
-import com.service.servicecoupon.domain.CouponKind;
-import com.service.servicecoupon.domain.Status;
-import com.service.servicecoupon.domain.entity.Coupon;
-import com.service.servicecoupon.domain.entity.CouponPolicy;
-import com.service.servicecoupon.domain.entity.CouponType;
-import com.service.servicecoupon.exception.CouponPolicyNotFoundException;
-import com.service.servicecoupon.repository.CouponPolicyRepository;
-import com.service.servicecoupon.repository.CouponRepository;
-import com.service.servicecoupon.repository.CouponTypeRepository;
-import java.time.LocalDate;
-import java.time.YearMonth;
-import java.util.List;
-import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
+public interface SchedulerService {
 
-@RequiredArgsConstructor
-@Service
-public class SchedulerService {
+    /**
+     * 매월 1일 0시에 해당월에 생일자인 회원아이디를 받아 생일 쿠폰을 지급
+     *
+     * @author jjeonmin
+     */
+    void birthCoupon();
 
-    private final CouponRepository couponRepository;
-    private final BirthDayUserClient birthDayUserClient;
-    private final CouponTypeRepository couponTypeRepository;
-    private final CouponPolicyRepository couponPolicyRepository;
-
-
-
-    @Scheduled(cron = "0 0 15 * * *") // 매 5초마다 실행
-
-    public void birthCoupon() {
-        CouponType couponType = couponTypeRepository.findByCouponKind(CouponKind.BIRTHDAY);
-        CouponPolicy couponPolicy = couponPolicyRepository.findTop1ByCouponPolicyDescriptionContainingOrderByCouponPolicyIdDesc(
-            "생일");
-        if (couponPolicy == null) {
-            throw new CouponPolicyNotFoundException("쿠폰 정책을 찾을수 없습니다.");
-        }
-
-        LocalDate currentDate = LocalDate.now();                // 현재 날짜 구하기
-
-        YearMonth currentYearMonth = YearMonth.from(currentDate);   // 현재 달의 YearMonth 객체 생성
-
-        LocalDate lastDayOfMonth = currentYearMonth.atEndOfMonth(); // 마지막 날
-
-        List<Long> users = birthDayUserClient.getThisMonthBirthClient();
-        users.forEach((userId -> {
-            Coupon coupon = Coupon.builder()
-                .clientId(userId)
-                .couponPolicy(couponPolicy)
-                .couponType(couponType)
-                .status(Status.AVAILABLE)
-                .expirationDate(lastDayOfMonth)
-                .build();
-            couponRepository.save(coupon);
-        }));
-
-    }
-
-
-    @Scheduled(cron = " 0 0 0 * * * ")
-    public void run() {
-        LocalDate now = LocalDate.now();
-        List<Coupon> coupons = couponRepository.findByExpirationDateBefore(now);
-        coupons.forEach((coupon -> {
-            if (coupon.getStatus() != Status.USED) {
-                coupon.setStatus(Status.UNAVAILABLE);
-            }
-        }));
-
-        couponRepository.saveAll(coupons);
-    }
+    /**
+     * 매일 12시 쿠폰의 만료시간이 현재일보다 작으면 상태를 변경
+     *
+     * @author jjeonmin
+     */
+    void run();
 }
-

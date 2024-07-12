@@ -14,6 +14,7 @@ import com.service.servicecoupon.dto.request.CouponRegisterRequestDto;
 import com.service.servicecoupon.dto.response.CouponAdminPageCouponResponseDto;
 import com.service.servicecoupon.dto.response.CouponMyPageCouponResponseDto;
 import com.service.servicecoupon.dto.response.CouponOrderResponseDto;
+import com.service.servicecoupon.dto.response.CouponOrderResponseDto.CouponPolicyDto;
 import com.service.servicecoupon.dto.response.PaymentCompletedCouponResponseDto;
 import com.service.servicecoupon.dto.response.RefundCouponResponseDto;
 import com.service.servicecoupon.exception.ClientNotFoundException;
@@ -163,7 +164,7 @@ public class CouponServiceImpl implements CouponService {
 
         return coupons.stream().map(coupon -> {
             CouponOrderResponseDto couponOrderResponseDto = new CouponOrderResponseDto();
-            CouponOrderResponseDto.CouponPolicy couponPolicyDto = new CouponOrderResponseDto.CouponPolicy();
+            CouponPolicyDto couponPolicyDto = new CouponPolicyDto();
             CouponPolicy couponPolicy = coupon.getCouponPolicy();
 
             couponOrderResponseDto.setCouponId(coupon.getCouponId());
@@ -172,7 +173,7 @@ public class CouponServiceImpl implements CouponService {
             couponPolicyDto.setDiscountValue(couponPolicy.getDiscountValue());
             couponPolicyDto.setMinPurchaseAmount(couponPolicy.getMinPurchaseAmount());
             couponPolicyDto.setMaxDiscountAmount(couponPolicy.getMaxDiscountAmount());
-            couponOrderResponseDto.setCouponPolicy(couponPolicyDto);
+            couponOrderResponseDto.setCouponPolicyDto(couponPolicyDto);
 
             // 상품 쿠폰 정보 설정
             ProductCoupon productCoupon = productCouponRepository.findByProductPolicy_CouponPolicyId(
@@ -229,6 +230,7 @@ public class CouponServiceImpl implements CouponService {
         Coupon coupon = new Coupon(signUpClientMessageDto.getClientId(), couponType, couponPolicy,
             LocalDate.now().plusDays(30), Status.AVAILABLE);
         couponRepository.save(coupon);
+        log.info("{}{}",signUpClientMessageDto.getClientId(),coupon.getCouponId());
     }
 
     @Transactional(rollbackFor = {CouponNotFoundException.class})
