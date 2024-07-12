@@ -36,7 +36,7 @@ public class SecurityConfig {
                     Collections.emptyList()),
                 new HeaderFilter.RouteConfig(URI.create("/api/coupon/myPage"),
                     HttpMethod.GET.name(), Collections.emptyList()),
-                new HeaderFilter.RouteConfig(URI.create("/api/coupon/register/{couponPolicyId}"),
+                new HeaderFilter.RouteConfig(URI.create("/api/coupon/register/**"),
                     HttpMethod.GET.name(), List.of(ADMIN_ROLE)),
                 new HeaderFilter.RouteConfig(URI.create("/api/coupon/payment"),
                     HttpMethod.PUT.name(), Collections.emptyList()),
@@ -50,7 +50,7 @@ public class SecurityConfig {
                     HttpMethod.GET.name(), List.of(ADMIN_ROLE)),
                 new HeaderFilter.RouteConfig(URI.create("/api/coupon/policy/register"),
                     HttpMethod.POST.name(), List.of(ADMIN_ROLE)),
-                new HeaderFilter.RouteConfig(URI.create("/api/coupon/policy/type/{couponPolicyId}"),
+                new HeaderFilter.RouteConfig(URI.create("/api/coupon/policy/type/**"),
                     HttpMethod.GET.name(), List.of(ADMIN_ROLE)),
                 new HeaderFilter.RouteConfig(URI.create("/api/coupon/type"), HttpMethod.GET.name(),
                     List.of(ADMIN_ROLE))
