@@ -108,17 +108,18 @@ class CouponServiceImplTest {
         // Given
         int page = 0;
         int size = 10;
+        Status status = Status.AVAILABLE;
        Coupon coupon1 = new Coupon(1L, new CouponType(1L, CouponKind.WELCOME),
                 new CouponPolicy("Policy description", DiscountType.PERCENTAGEDISCOUNT, 10, 0,
                     1000),
                 LocalDate.now().plusDays(10), Status.AVAILABLE);
 setField(coupon1,"couponId",1L);
         Page<Coupon> clientPage = new PageImpl<>(Collections.singletonList(coupon1));
-        when(couponRepository.findAll(any(PageRequest.class))).thenReturn(clientPage);
+        when(couponRepository.findAllByStatus(any(PageRequest.class),eq(status))).thenReturn(clientPage);
 
 
         // When
-        Page<CouponAdminPageCouponResponseDto> response = couponService.findByAllCoupon(page, size);
+        Page<CouponAdminPageCouponResponseDto> response = couponService.findByAllCoupon(page, size, status);
 
         // Then
 Assertions.assertThat(response).isNotNull();
@@ -134,15 +135,16 @@ Assertions.assertThat(response).isNotNull();
         headers.set("X-User-Id", String.valueOf(clientId));
         int page = 0;
         int size = 10;
+        Status status = Status.AVAILABLE;
         Coupon coupon1 = new Coupon(1L, new CouponType(1L, CouponKind.WELCOME),
             new CouponPolicy("Policy description", DiscountType.AMOUNTDISCOUNT, 10, 0, 1000),
             LocalDate.now().plusDays(10), Status.AVAILABLE);
         coupon1.setUsedDate(LocalDate.now());
         Page<Coupon> clientPage = new PageImpl<>(List.of(coupon1));
-        when(couponRepository.findByClientId(eq(clientId), any(PageRequest.class))).thenReturn(clientPage);
+        when(couponRepository.findByClientIdAndStatus(eq(clientId), any(PageRequest.class), eq(status))).thenReturn(clientPage);
 
         // When
-        Page<CouponMyPageCouponResponseDto> response = couponService.findByClientId(headers, page, size);
+        Page<CouponMyPageCouponResponseDto> response = couponService.findByClientId(headers, page, size, status);
 
         // Then
         Assertions.assertThat(response).isNotNull();
@@ -180,12 +182,12 @@ Assertions.assertThat(response).isNotNull();
         Field clientIdField = SignUpClientMessageDto.class.getDeclaredField("clientId");
         clientIdField.setAccessible(true);
         clientIdField.set(signUpClientMessageDto, 1L);
-        CouponPolicy couponPolicy = new CouponPolicy( "생일",DiscountType.PERCENTAGEDISCOUNT,0, 10000,10000);
+        CouponPolicy couponPolicy = new CouponPolicy( "회원",DiscountType.PERCENTAGEDISCOUNT,0, 10000,10000);
         CouponType couponType = new CouponType(1L, CouponKind.WELCOME);
         Coupon coupon = new Coupon(123L, couponType, couponPolicy, LocalDate.now().plusDays(30), Status.AVAILABLE);
 
         when(objectMapper.readValue(message, SignUpClientMessageDto.class)).thenReturn(signUpClientMessageDto);
-        when(couponPolicyRepository.findTop1ByCouponPolicyDescriptionContainingOrderByCouponPolicyIdDesc("생일")).thenReturn(couponPolicy);
+        when(couponPolicyRepository.findTop1ByCouponPolicyDescriptionContainingOrderByCouponPolicyIdDesc("회원")).thenReturn(couponPolicy);
         when(couponTypeRepository.findByCouponKind(CouponKind.WELCOME)).thenReturn(couponType);
         when(couponRepository.save(any(Coupon.class))).thenReturn(coupon);
 

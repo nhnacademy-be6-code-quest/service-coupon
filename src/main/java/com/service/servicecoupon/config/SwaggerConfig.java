@@ -20,8 +20,6 @@ public class SwaggerConfig {
                 .version("1.0")
                 .description("coupon-api"))
             .components(new Components());
-
-
     }
 
 }

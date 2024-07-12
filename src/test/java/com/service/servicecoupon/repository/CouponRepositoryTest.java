@@ -1,5 +1,6 @@
 package com.service.servicecoupon.repository;
 
+import com.service.servicecoupon.domain.Status;
 import com.service.servicecoupon.domain.entity.Coupon;
 import org.springframework.data.domain.Page;
 
@@ -51,9 +52,10 @@ class CouponRepositoryTest {
         // Given
         long clientId = 1L;
         PageRequest pageRequest = PageRequest.of(0, 10);
+        Status status = Status.AVAILABLE;
 
         // When
-        Page<Coupon> couponPage = couponRepository.findByClientId(clientId, pageRequest);
+        Page<Coupon> couponPage = couponRepository.findByClientIdAndStatus(clientId, pageRequest,status);
 
         // Then
         Assertions.assertNotNull(couponPage);

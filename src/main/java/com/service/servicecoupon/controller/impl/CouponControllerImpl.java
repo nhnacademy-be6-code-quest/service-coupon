@@ -2,6 +2,8 @@ package com.service.servicecoupon.controller.impl;
 
 
 import com.service.servicecoupon.controller.CouponController;
+import com.service.servicecoupon.domain.Status;
+import com.service.servicecoupon.dto.request.CouponPaymentRewardRequestDto;
 import com.service.servicecoupon.dto.request.CouponRegisterRequestDto;
 import com.service.servicecoupon.dto.response.CouponAdminPageCouponResponseDto;
 import com.service.servicecoupon.dto.response.CouponMyPageCouponResponseDto;
@@ -38,8 +40,8 @@ public class CouponControllerImpl implements CouponController {
     @Override
     @GetMapping("/api/coupon/myPage")
     public ResponseEntity<Page<CouponMyPageCouponResponseDto>> findMyPageCoupons(
-        @RequestHeader HttpHeaders httpHeaders, @RequestParam int page, @RequestParam int size) {
-        return ResponseEntity.ok(couponService.findByClientId(httpHeaders, page, size));
+        @RequestHeader HttpHeaders httpHeaders, @RequestParam int page, @RequestParam int size, @RequestParam Status status) {
+        return ResponseEntity.ok(couponService.findByClientId(httpHeaders, page, size, status));
     }
 
     @Override
@@ -58,14 +60,14 @@ public class CouponControllerImpl implements CouponController {
             couponService.paymentCompletedCoupon(paymentCompletedCouponResponseDto);
             return new ResponseEntity<>("success", HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>("fail", HttpStatus.ACCEPTED);
+            return new ResponseEntity<>("fail", HttpStatus.BAD_REQUEST);
         }
     }
 
     @Override
     @GetMapping("/api/coupon/adminPage")
-    public ResponseEntity<Page<CouponAdminPageCouponResponseDto>> findUserCoupons (@RequestParam int page, @RequestParam int size){
-        return ResponseEntity.ok(couponService.findByAllCoupon(page,size));
+    public ResponseEntity<Page<CouponAdminPageCouponResponseDto>> findUserCoupons (@RequestParam int page, @RequestParam int size, @RequestParam Status status){
+        return ResponseEntity.ok(couponService.findByAllCoupon(page,size,status));
     }
 
 
@@ -77,7 +79,17 @@ public class CouponControllerImpl implements CouponController {
             couponService.refundCoupon(refundCouponResponseDto);
             return new ResponseEntity<>("success", HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>("fail", HttpStatus.ACCEPTED);
+            return new ResponseEntity<>("fail", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/api/coupon/payment/reward")
+    public ResponseEntity<String> getUserPaymentValue(@RequestBody CouponPaymentRewardRequestDto couponPaymentRewardRequestDto){
+        try {
+            couponService.paymentRewardCoupon(couponPaymentRewardRequestDto);
+            return new ResponseEntity<>("success", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("fail", HttpStatus.BAD_REQUEST);
         }
     }
 

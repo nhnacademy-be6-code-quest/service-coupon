@@ -9,6 +9,7 @@ import com.service.servicecoupon.domain.entity.CouponPolicy;
 import com.service.servicecoupon.domain.entity.CouponType;
 import com.service.servicecoupon.domain.entity.ProductCategoryCoupon;
 import com.service.servicecoupon.domain.entity.ProductCoupon;
+import com.service.servicecoupon.dto.request.CouponPaymentRewardRequestDto;
 import com.service.servicecoupon.dto.request.CouponRegisterRequestDto;
 import com.service.servicecoupon.dto.response.CouponAdminPageCouponResponseDto;
 import com.service.servicecoupon.dto.response.CouponMyPageCouponResponseDto;
@@ -77,11 +78,11 @@ public class CouponServiceImpl implements CouponService {
     @Override
     public Page<CouponMyPageCouponResponseDto> findByClientId(HttpHeaders httpHeaders,
         int page,
-        int size) {
+        int size, Status status) {
         PageRequest pageRequest = PageRequest.of(page, size,
             Sort.by(Sort.Direction.DESC, "couponId"));
         long clientId = NumberUtils.toLong(httpHeaders.getFirst(ID_HEADER), -1L);
-        Page<Coupon> coupons = couponRepository.findByClientId(clientId, pageRequest);
+        Page<Coupon> coupons = couponRepository.findByClientIdAndStatus(clientId, pageRequest, status);
 
         return coupons.map(coupon -> {
             CouponMyPageCouponResponseDto couponMyPageCouponResponseDto = new CouponMyPageCouponResponseDto();
@@ -114,10 +115,10 @@ public class CouponServiceImpl implements CouponService {
 
     @Transactional(readOnly = true)
     @Override
-    public Page<CouponAdminPageCouponResponseDto> findByAllCoupon(int page, int size) {
+    public Page<CouponAdminPageCouponResponseDto> findByAllCoupon(int page, int size, Status status) {
         PageRequest pageRequest = PageRequest.of(page, size,
-            Sort.by(Sort.Direction.DESC, "couponId"));
-        Page<Coupon> coupons = couponRepository.findAll(pageRequest);
+            Sort.by(Sort.Direction.DESC, "clientId"));
+        Page<Coupon> coupons = couponRepository.findAllByStatus(pageRequest, status);
 
         return coupons.map(coupon -> {
             CouponAdminPageCouponResponseDto couponAdminPageCouponResponseDto = new CouponAdminPageCouponResponseDto();
@@ -133,6 +134,7 @@ public class CouponServiceImpl implements CouponService {
             couponPolicyDto.setMaxDiscountAmount(couponPolicy.getMaxDiscountAmount());
             couponPolicyDto.setDiscountType(couponPolicy.getDiscountType().getValue());
 
+            couponAdminPageCouponResponseDto.setClientId(coupon.getClientId());
             couponAdminPageCouponResponseDto.setUsedDate(String.valueOf(coupon.getUsedDate()));
             couponAdminPageCouponResponseDto.setStatus(coupon.getStatus().getValue());
             couponAdminPageCouponResponseDto.setIssuedDate(
@@ -211,7 +213,6 @@ public class CouponServiceImpl implements CouponService {
     @Override
     @RabbitListener(queues = "${rabbit.login.queue.name}")
     public void payWelcomeCoupon(String message) {
-        log.error("message{}", message);
         SignUpClientMessageDto signUpClientMessageDto;
         try {
             signUpClientMessageDto = objectMapper.readValue(message, SignUpClientMessageDto.class);
@@ -219,7 +220,7 @@ public class CouponServiceImpl implements CouponService {
             throw new RabbitMessageConvertException("회원가입 유저의 메세지 변환에 실패했습니다.");
         }
         CouponPolicy couponPolicy = couponPolicyRepository.findTop1ByCouponPolicyDescriptionContainingOrderByCouponPolicyIdDesc(
-            "생일");
+            "회원");
         if (couponPolicy == null) {
             throw new CouponPolicyNotFoundException("쿠폰정책을 찾을수 없습니다.");
         }
@@ -243,6 +244,16 @@ public class CouponServiceImpl implements CouponService {
         coupon.setStatus(Status.AVAILABLE);
 
         couponRepository.save(coupon);
+    }
+    @Override
+    public void paymentRewardCoupon(CouponPaymentRewardRequestDto couponPaymentRewardRequestDto){
+        if (couponPaymentRewardRequestDto.getPaymentValue()>=50000){
+            CouponPolicy couponPolicy = couponPolicyRepository.findTop1ByCouponPolicyDescriptionContainingAndMaxDiscountAmountOrderByMaxDiscountAmountDesc("구매",(couponPaymentRewardRequestDto.getPaymentValue()/5));
+            CouponType couponType = couponTypeRepository.findByCouponKind(CouponKind.DISCOUNT);
+            Coupon coupon = new Coupon(couponPaymentRewardRequestDto.getClientId(), couponType, couponPolicy, LocalDate.now().plusDays(30),Status.AVAILABLE);
+            couponRepository.save(coupon);
+        }
+
     }
 
 

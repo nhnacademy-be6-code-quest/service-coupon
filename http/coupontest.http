@@ -3,7 +3,7 @@ GET localhost:8006/api/coupon
 X-User-Id:181
 
 ### GET mypage
-GET localhost:8006/api/coupon/myPage?page=0&size=1
+GET localhost:8006/api/coupon/myPage?page=0&size=1&status=USED
 X-User-Id:181
 ### Post request
 POST localhost:8006/api/coupon/register/3
@@ -25,15 +25,28 @@ Content-Type: application/json
   "couponId": 2
 }
 
+###GET
+PUT localhost:8006/api/coupon/payment
+Content-Type: application/json
 
+{
+
+"couponId": 0}
 
 ###POST
 POST localhost:8006/api/client/welcome/1
 
 ###put
-PUT localhost:8006/api/coupon/refund?couponId=27
+PUT localhost:8006/api/coupon/refund
 
 ### get
 GET localhost:8006/api/coupon/policy
 
+###POST
+POST localhost:8006/api/coupon/payment/reward
+Content-Type: application/json
 
+{
+  "clientId": 190,
+  "paymentValue": 40000
+}

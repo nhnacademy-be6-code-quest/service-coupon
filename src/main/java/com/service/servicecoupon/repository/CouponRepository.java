@@ -1,5 +1,6 @@
 package com.service.servicecoupon.repository;
 
+import com.service.servicecoupon.domain.Status;
 import com.service.servicecoupon.domain.entity.Coupon;
 import java.time.LocalDate;
 import java.util.List;
@@ -16,7 +17,7 @@ public interface CouponRepository extends JpaRepository<Coupon, Long> {
 
     List<Coupon> findByExpirationDateBefore(LocalDate expirationDate);
 
-    Page<Coupon> findByClientId(long clientId, Pageable pageable);
+    Page<Coupon> findByClientIdAndStatus(long clientId, Pageable pageable, Status status);
 
-    Page<Coupon> findAll(Pageable pageable);
+    Page<Coupon> findAllByStatus (Pageable pageable, Status status);
 }

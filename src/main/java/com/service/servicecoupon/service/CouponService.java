@@ -1,5 +1,7 @@
 package com.service.servicecoupon.service;
 
+import com.service.servicecoupon.domain.Status;
+import com.service.servicecoupon.dto.request.CouponPaymentRewardRequestDto;
 import com.service.servicecoupon.dto.request.CouponRegisterRequestDto;
 import com.service.servicecoupon.dto.response.CouponAdminPageCouponResponseDto;
 import com.service.servicecoupon.dto.response.CouponOrderResponseDto;
@@ -17,14 +19,18 @@ public interface CouponService {
 
     List<CouponOrderResponseDto> findClientCoupon(HttpHeaders httpHeaders);
 
-    Page<CouponMyPageCouponResponseDto> findByClientId(HttpHeaders httpHeaders, int page, int size);
+    Page<CouponMyPageCouponResponseDto> findByClientId(HttpHeaders httpHeaders,
+        int page,
+        int size, Status status);
 
-    Page<CouponAdminPageCouponResponseDto> findByAllCoupon(int page, int size);
+    Page<CouponAdminPageCouponResponseDto> findByAllCoupon(int page, int size, Status status);
 
     void paymentCompletedCoupon(
         PaymentCompletedCouponResponseDto paymentCompletedCouponResponseDto);
 
     void payWelcomeCoupon(String message);
+
+    void paymentRewardCoupon(CouponPaymentRewardRequestDto couponPaymentRewardRequestDto);
 
     void refundCoupon(RefundCouponResponseDto refundCouponResponseDto);
 
