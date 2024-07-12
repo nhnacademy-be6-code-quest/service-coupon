@@ -83,7 +83,7 @@ public class CouponControllerImpl implements CouponController {
         }
     }
 
-    @GetMapping("/api/coupon/payment/reward")
+    @PostMapping("/api/coupon/payment/reward")
     public ResponseEntity<String> getUserPaymentValue(@RequestBody CouponPaymentRewardRequestDto couponPaymentRewardRequestDto){
         try {
             couponService.paymentRewardCoupon(couponPaymentRewardRequestDto);

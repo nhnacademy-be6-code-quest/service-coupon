@@ -42,4 +42,11 @@ PUT localhost:8006/api/coupon/refund
 ### get
 GET localhost:8006/api/coupon/policy
 
+###POST
+POST localhost:8006/api/coupon/payment/reward
+Content-Type: application/json
 
+{
+  "clientId": 190,
+  "paymentValue": 40000
+}
