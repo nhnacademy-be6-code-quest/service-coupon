@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 public class RabbitConfig {
 
+
     @Value("${rabbit.login.exchange.name}")
     private String signupCouponExchangeName;
 
@@ -34,7 +35,6 @@ public class RabbitConfig {
 
     @Value("${rabbit.login.routing.dlq.key}")
     private String signupCouponDlqRoutingKey;
-
     // DLX 설정
     @Bean
     DirectExchange dlxExchange() {
@@ -48,22 +48,21 @@ public class RabbitConfig {
     }
 
     @Bean
+    DirectExchange signupCouponExchange() {
+        return new DirectExchange(signupCouponExchangeName);
+    }
+
+    @Bean
     Binding dlqBinding() {
         return BindingBuilder.bind(dlqQueue()).to(dlxExchange()).with(signupCouponDlqRoutingKey);
     }
 
-    // 메인 큐 설정
     @Bean
     Queue signupCouponQueue() {
         return QueueBuilder.durable(signupCouponQueueName)
             .withArgument("x-dead-letter-exchange", signupCouponDlxExchangeName)
             .withArgument("x-dead-letter-routing-key", signupCouponDlqRoutingKey)
             .build();
-    }
-
-    @Bean
-    DirectExchange signupCouponExchange() {
-        return new DirectExchange(signupCouponExchangeName);
     }
 
     @Bean
