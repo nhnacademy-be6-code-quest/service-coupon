@@ -1,11 +1,11 @@
 package com.service.servicecoupon.config;
 
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.QueueBuilder;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
@@ -19,10 +19,47 @@ public class RabbitConfig {
 
     @Value("${rabbit.login.exchange.name}")
     private String signupCouponExchangeName;
+
     @Value("${rabbit.login.queue.name}")
     private String signupCouponQueueName;
+
     @Value("${rabbit.login.routing.key}")
     private String signupCouponRoutingKey;
+
+    @Value("${rabbit.login.exchange.dlq.name}")
+    private String signupCouponDlxExchangeName;
+
+    @Value("${rabbit.login.queue.dlq.name}")
+    private String signupCouponDlqQueueName;
+
+    @Value("${rabbit.login.routing.dlq.key}")
+    private String signupCouponDlqRoutingKey;
+
+    // DLX 설정
+    @Bean
+    DirectExchange dlxExchange() {
+        return new DirectExchange(signupCouponDlxExchangeName);
+    }
+
+    // DLQ 설정
+    @Bean
+    Queue dlqQueue() {
+        return QueueBuilder.durable(signupCouponDlqQueueName).build();
+    }
+
+    @Bean
+    Binding dlqBinding() {
+        return BindingBuilder.bind(dlqQueue()).to(dlxExchange()).with(signupCouponDlqRoutingKey);
+    }
+
+    // 메인 큐 설정
+    @Bean
+    Queue signupCouponQueue() {
+        return QueueBuilder.durable(signupCouponQueueName)
+            .withArgument("x-dead-letter-exchange", signupCouponDlxExchangeName)
+            .withArgument("x-dead-letter-routing-key", signupCouponDlqRoutingKey)
+            .build();
+    }
 
     @Bean
     DirectExchange signupCouponExchange() {
@@ -30,13 +67,8 @@ public class RabbitConfig {
     }
 
     @Bean
-    Queue signupCouponQueue() {
-        return new Queue(signupCouponQueueName);
-    }
-
-    @Bean
-    Binding signupCouponBinding(Queue queue, DirectExchange exchange) {
-        return BindingBuilder.bind(queue).to(exchange).with(signupCouponRoutingKey);
+    Binding signupCouponBinding() {
+        return BindingBuilder.bind(signupCouponQueue()).to(signupCouponExchange()).with(signupCouponRoutingKey);
     }
 
     @Bean
@@ -45,6 +77,4 @@ public class RabbitConfig {
         rabbitTemplate.setMessageConverter(new Jackson2JsonMessageConverter());
         return rabbitTemplate;
     }
-
-
 }

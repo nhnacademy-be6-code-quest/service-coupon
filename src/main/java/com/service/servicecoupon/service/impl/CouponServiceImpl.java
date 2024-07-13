@@ -233,6 +233,12 @@ public class CouponServiceImpl implements CouponService {
         log.info("{}{}",signUpClientMessageDto.getClientId(),coupon.getCouponId());
     }
 
+    @RabbitListener(queues = "${rabbit.login.queue.dlq.name}")
+    public void handleDlqMessage(String message) {
+        log.error("Received message in DLQ: {}", message);
+        // DLQ 메시지를 처리하는 로직을 추가합니다.
+    }
+
     @Transactional(rollbackFor = {CouponNotFoundException.class})
     @Override
     public void refundCoupon(RefundCouponResponseDto refundCouponResponseDto) {
