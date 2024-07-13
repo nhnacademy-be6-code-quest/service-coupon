@@ -25,7 +25,6 @@ public class CouponPolicyControllerImpl implements CouponPolicyController {
         @RequestParam(name = "page") int page,
         @RequestParam(name = "size") int size) {
         return ResponseEntity.ok(couponPolicyService.getPolicies(page, size));
-
     }
 
     @Override

@@ -2,6 +2,9 @@ package com.service.servicecoupon.config;
 
 
 import com.service.servicecoupon.filter.HeaderFilter;
+import java.net.URI;
+import java.util.Collections;
+import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -12,15 +15,11 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-
-import java.net.URI;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 public class SecurityConfig {
-    private final URI clientPath = URI.create("/api/client");
-    private final URI clientAddressPath = URI.create("/api/client/address");
-    private final URI clientPhonePath = URI.create("/api/client/phone");
+
     private static final String ADMIN_ROLE = "ROLE_ADMIN";
 
     @Bean
@@ -30,9 +29,33 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable)
             .headers(h -> h.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
             .authorizeHttpRequests(req -> req.anyRequest().permitAll())
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-
-//            .addFilterBefore(new HeaderFilter(URI.create("/api/coupon/policy"), HttpMethod.GET.name(), ADMIN_ROLE), UsernamePasswordAuthenticationFilter.class);
+            .sessionManagement(
+                session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .addFilterBefore(new HeaderFilter(List.of(
+                new HeaderFilter.RouteConfig(URI.create("/api/coupon"), HttpMethod.GET.name(),
+                    Collections.emptyList()),
+                new HeaderFilter.RouteConfig(URI.create("/api/coupon/myPage"),
+                    HttpMethod.GET.name(), Collections.emptyList()),
+                new HeaderFilter.RouteConfig(URI.create("/api/coupon/register/**"),
+                    HttpMethod.GET.name(), List.of(ADMIN_ROLE)),
+                new HeaderFilter.RouteConfig(URI.create("/api/coupon/payment"),
+                    HttpMethod.PUT.name(), Collections.emptyList()),
+                new HeaderFilter.RouteConfig(URI.create("/api/coupon/adminPage"),
+                    HttpMethod.GET.name(), List.of(ADMIN_ROLE)),
+                new HeaderFilter.RouteConfig(URI.create("/api/coupon/refund"),
+                    HttpMethod.PUT.name(), Collections.emptyList()),
+                new HeaderFilter.RouteConfig(URI.create("/api/coupon/payment/reward"),
+                    HttpMethod.POST.name(), Collections.emptyList()),
+                new HeaderFilter.RouteConfig(URI.create("/api/coupon/policy"),
+                    HttpMethod.GET.name(), List.of(ADMIN_ROLE)),
+                new HeaderFilter.RouteConfig(URI.create("/api/coupon/policy/register"),
+                    HttpMethod.POST.name(), List.of(ADMIN_ROLE)),
+                new HeaderFilter.RouteConfig(URI.create("/api/coupon/policy/type/**"),
+                    HttpMethod.GET.name(), List.of(ADMIN_ROLE)),
+                new HeaderFilter.RouteConfig(URI.create("/api/coupon/type"), HttpMethod.GET.name(),
+                    List.of(ADMIN_ROLE))
+            )
+            ), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

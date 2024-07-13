@@ -14,6 +14,7 @@ import com.service.servicecoupon.dto.request.CouponRegisterRequestDto;
 import com.service.servicecoupon.dto.response.CouponAdminPageCouponResponseDto;
 import com.service.servicecoupon.dto.response.CouponMyPageCouponResponseDto;
 import com.service.servicecoupon.dto.response.CouponOrderResponseDto;
+import com.service.servicecoupon.dto.response.CouponOrderResponseDto.CouponPolicyDto;
 import com.service.servicecoupon.dto.response.PaymentCompletedCouponResponseDto;
 import com.service.servicecoupon.dto.response.RefundCouponResponseDto;
 import com.service.servicecoupon.exception.ClientNotFoundException;
@@ -163,7 +164,7 @@ public class CouponServiceImpl implements CouponService {
 
         return coupons.stream().map(coupon -> {
             CouponOrderResponseDto couponOrderResponseDto = new CouponOrderResponseDto();
-            CouponOrderResponseDto.CouponPolicy couponPolicyDto = new CouponOrderResponseDto.CouponPolicy();
+            CouponPolicyDto couponPolicyDto = new CouponPolicyDto();
             CouponPolicy couponPolicy = coupon.getCouponPolicy();
 
             couponOrderResponseDto.setCouponId(coupon.getCouponId());
@@ -172,7 +173,7 @@ public class CouponServiceImpl implements CouponService {
             couponPolicyDto.setDiscountValue(couponPolicy.getDiscountValue());
             couponPolicyDto.setMinPurchaseAmount(couponPolicy.getMinPurchaseAmount());
             couponPolicyDto.setMaxDiscountAmount(couponPolicy.getMaxDiscountAmount());
-            couponOrderResponseDto.setCouponPolicy(couponPolicyDto);
+            couponOrderResponseDto.setCouponPolicyDto(couponPolicyDto);
 
             // 상품 쿠폰 정보 설정
             ProductCoupon productCoupon = productCouponRepository.findByProductPolicy_CouponPolicyId(
@@ -229,6 +230,13 @@ public class CouponServiceImpl implements CouponService {
         Coupon coupon = new Coupon(signUpClientMessageDto.getClientId(), couponType, couponPolicy,
             LocalDate.now().plusDays(30), Status.AVAILABLE);
         couponRepository.save(coupon);
+        log.info("{}{}",signUpClientMessageDto.getClientId(),coupon.getCouponId());
+    }
+
+    @RabbitListener(queues = "${rabbit.login.queue.dlq.name}")
+    public void handleDlqMessage(String message) {
+        log.error("Received message in DLQ: {}", message);
+        // DLQ 메시지를 처리하는 로직을 추가합니다.
     }
 
     @Transactional(rollbackFor = {CouponNotFoundException.class})
@@ -248,7 +256,7 @@ public class CouponServiceImpl implements CouponService {
     @Override
     public void paymentRewardCoupon(CouponPaymentRewardRequestDto couponPaymentRewardRequestDto){
         if (couponPaymentRewardRequestDto.getPaymentValue()>=50000){
-            CouponPolicy couponPolicy = couponPolicyRepository.findTop1ByCouponPolicyDescriptionContainingAndMaxDiscountAmountOrderByMaxDiscountAmountDesc("구매",(couponPaymentRewardRequestDto.getPaymentValue()/5));
+            CouponPolicy couponPolicy = couponPolicyRepository.findTop1ByCouponPolicyDescriptionContainingAndMaxDiscountAmountLessThanEqualOrderByMaxDiscountAmountDesc("구매",(couponPaymentRewardRequestDto.getPaymentValue()/5));
             CouponType couponType = couponTypeRepository.findByCouponKind(CouponKind.DISCOUNT);
             Coupon coupon = new Coupon(couponPaymentRewardRequestDto.getClientId(), couponType, couponPolicy, LocalDate.now().plusDays(30),Status.AVAILABLE);
             couponRepository.save(coupon);

@@ -3,6 +3,7 @@ package com.service.servicecoupon.dto.response;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import com.service.servicecoupon.dto.response.CouponOrderResponseDto.CouponPolicyDto;
 import org.junit.jupiter.api.Test;
 
 class CouponOrderResponseDtoTest {
@@ -14,14 +15,14 @@ class CouponOrderResponseDtoTest {
 
         dto.setCouponId(1L);
 
-        CouponOrderResponseDto.CouponPolicy policy = new CouponOrderResponseDto.CouponPolicy();
+        CouponPolicyDto policy = new CouponPolicyDto();
         policy.setCouponPolicyDescription("Birthday Discount");
         policy.setDiscountType("AMOUNTDISCOUNT");
         policy.setDiscountValue(1000L);
         policy.setMinPurchaseAmount(5000L);
         policy.setMaxDiscountAmount(2000L);
 
-        dto.setCouponPolicy(policy);
+        dto.setCouponPolicyDto(policy);
 
         CouponOrderResponseDto.ProductCoupon productCoupon = new CouponOrderResponseDto.ProductCoupon();
         productCoupon.setProductId(123L);
@@ -35,7 +36,7 @@ class CouponOrderResponseDtoTest {
 
         assertEquals(1L, dto.getCouponId());
 
-        CouponOrderResponseDto.CouponPolicy retrievedPolicy = dto.getCouponPolicy();
+        CouponPolicyDto retrievedPolicy = dto.getCouponPolicyDto();
         assertNotNull(retrievedPolicy);
         assertEquals("Birthday Discount", retrievedPolicy.getCouponPolicyDescription());
         assertEquals("AMOUNTDISCOUNT", retrievedPolicy.getDiscountType());

@@ -34,7 +34,7 @@ Content-Type: application/json
 "couponId": 0}
 
 ###POST
-POST localhost:8006/api/client/welcome/1
+POST localhost:8006/api/coupon/welcome/1
 
 ###put
 PUT localhost:8006/api/coupon/refund
