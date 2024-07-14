@@ -27,8 +27,6 @@ public class RabbitConfig {
     @Value("${rabbit.login.routing.key}")
     private String signupCouponRoutingKey;
 
-    @Value("${rabbit.login.exchange.dlq.name}")
-    private String signupCouponDlxExchangeName;
 
     @Value("${rabbit.login.queue.dlq.name}")
     private String signupCouponDlqQueueName;
@@ -36,10 +34,6 @@ public class RabbitConfig {
     @Value("${rabbit.login.routing.dlq.key}")
     private String signupCouponDlqRoutingKey;
     // DLX 설정
-    @Bean
-    DirectExchange dlxExchange() {
-        return new DirectExchange(signupCouponDlxExchangeName);
-    }
 
     // DLQ 설정
     @Bean
@@ -54,20 +48,22 @@ public class RabbitConfig {
 
     @Bean
     Binding dlqBinding() {
-        return BindingBuilder.bind(dlqQueue()).to(dlxExchange()).with(signupCouponDlqRoutingKey);
+        return BindingBuilder.bind(dlqQueue()).to(signupCouponExchange())
+            .with(signupCouponDlqRoutingKey);
     }
 
     @Bean
     Queue signupCouponQueue() {
         return QueueBuilder.durable(signupCouponQueueName)
-            .withArgument("x-dead-letter-exchange", signupCouponDlxExchangeName)
+            .withArgument("x-dead-letter-exchange", signupCouponExchangeName)
             .withArgument("x-dead-letter-routing-key", signupCouponDlqRoutingKey)
             .build();
     }
 
     @Bean
     Binding signupCouponBinding() {
-        return BindingBuilder.bind(signupCouponQueue()).to(signupCouponExchange()).with(signupCouponRoutingKey);
+        return BindingBuilder.bind(signupCouponQueue()).to(signupCouponExchange())
+            .with(signupCouponRoutingKey);
     }
 
     @Bean
