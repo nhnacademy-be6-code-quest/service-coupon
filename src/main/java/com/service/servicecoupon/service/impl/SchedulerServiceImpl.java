@@ -58,19 +58,5 @@ public class SchedulerServiceImpl implements SchedulerService {
         }));
 
     }
-
-
-    @Scheduled(cron = " 0 0 0 * * * ")
-    public void run() {
-        LocalDate now = LocalDate.now();
-        List<Coupon> coupons = couponRepository.findByExpirationDateBefore(now);
-        coupons.forEach((coupon -> {
-            if (coupon.getStatus() != Status.USED) {
-                coupon.setStatus(Status.UNAVAILABLE);
-            }
-        }));
-
-        couponRepository.saveAll(coupons);
-    }
 }
 
