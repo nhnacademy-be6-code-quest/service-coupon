@@ -141,7 +141,7 @@ public interface CouponController {
         @RequestParam Status status);
 
     @GetMapping("/api/coupon/payment/reward")
-    ResponseEntity<String> getUserPaymentValue(@RequestBody CouponPaymentRewardRequestDto couponPaymentRewardRequestDto);
+    ResponseEntity<String> getUserPaymentValue(@RequestHeader HttpHeaders headers ,@RequestBody CouponPaymentRewardRequestDto couponPaymentRewardRequestDto);
 
     @ExceptionHandler(ClientNotFoundException.class)
     ResponseEntity<String> handleExceptionClientNotFoundException(ClientNotFoundException e);

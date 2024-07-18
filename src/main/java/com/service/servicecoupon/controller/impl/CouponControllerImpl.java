@@ -84,9 +84,9 @@ public class CouponControllerImpl implements CouponController {
     }
 
     @PostMapping("/api/coupon/payment/reward")
-    public ResponseEntity<String> getUserPaymentValue(@RequestBody CouponPaymentRewardRequestDto couponPaymentRewardRequestDto){
+    public ResponseEntity<String> getUserPaymentValue(@RequestHeader HttpHeaders headers, @RequestBody CouponPaymentRewardRequestDto couponPaymentRewardRequestDto){
         try {
-            couponService.paymentRewardCoupon(couponPaymentRewardRequestDto);
+            couponService.paymentRewardCoupon(headers, couponPaymentRewardRequestDto);
             return new ResponseEntity<>("success", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("fail", HttpStatus.BAD_REQUEST);

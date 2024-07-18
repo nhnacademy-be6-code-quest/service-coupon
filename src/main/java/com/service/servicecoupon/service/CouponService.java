@@ -81,7 +81,7 @@ public interface CouponService {
      * @author jjeonmin
      * @param couponPaymentRewardRequestDto 결제정보 Dto
      */
-    void paymentRewardCoupon(CouponPaymentRewardRequestDto couponPaymentRewardRequestDto);
+    void paymentRewardCoupon(HttpHeaders headers, CouponPaymentRewardRequestDto couponPaymentRewardRequestDto);
 
     /**
      * 환불시 쿠폰을 사용가능 상태로 변경하는 함수
