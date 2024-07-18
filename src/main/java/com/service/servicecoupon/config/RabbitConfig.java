@@ -10,6 +10,7 @@ import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,6 +39,23 @@ public class RabbitConfig {
 
     @Value("${rabbit.login.routing.dlq.key}")
     private String signupCouponDlqRoutingKey;
+
+    @Value("${rabbit.use.coupon.exchange.name}")
+    private String useCouponExchangeName;
+
+    @Value("${rabbit.use.coupon.queue.name}")
+    private String useCouponQueueName;
+
+    @Value("${rabbit.use.coupon.routing.key}")
+    private String useCouponRoutingKey;
+
+    @Value("${rabbit.use.coupon.dlq.queue.name}")
+    private String useCouponDlqQueueName;
+
+    @Value("${rabbit.use.coupon.dlq.routing.key}")
+    private String useCouponDlqRoutingKey;
+
+
     // DLX 설정
 
     // DLQ 설정
@@ -82,5 +100,39 @@ public class RabbitConfig {
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
         rabbitTemplate.setMessageConverter(new Jackson2JsonMessageConverter());
         return rabbitTemplate;
+    }
+
+    @Bean
+    DirectExchange useCouponExchange() {
+        return new DirectExchange(useCouponExchangeName);
+    }
+
+    @Bean
+    Queue useCouponQueue() {
+        return QueueBuilder.durable(useCouponQueueName)
+            .withArgument("x-dead-letter-exchange", useCouponExchangeName)
+            .withArgument("x-dead-letter-routing-key", useCouponDlqRoutingKey).build();
+    }
+
+    @Bean
+    Queue useCouponDlqQueue() {
+        return QueueBuilder.durable(useCouponDlqQueueName).build();
+    }
+
+    @Bean
+    Binding useCouponBinding() {
+        return BindingBuilder.bind(useCouponQueue()).to(useCouponExchange())
+            .with(useCouponRoutingKey);
+    }
+
+    @Bean
+    Binding useCouponDlqBinding() {
+        return BindingBuilder.bind(useCouponDlqQueue()).to(useCouponExchange())
+            .with(useCouponDlqRoutingKey);
+    }
+
+    @Bean
+    MessageConverter messageConverter() {
+        return new Jackson2JsonMessageConverter();
     }
 }
