@@ -12,7 +12,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.service.servicecoupon.domain.CouponKind;
 import com.service.servicecoupon.domain.DiscountType;
@@ -20,26 +19,20 @@ import com.service.servicecoupon.domain.Status;
 import com.service.servicecoupon.domain.entity.Coupon;
 import com.service.servicecoupon.domain.entity.CouponPolicy;
 import com.service.servicecoupon.domain.entity.CouponType;
-import com.service.servicecoupon.dto.message.SignUpClientMessageDto;
 import com.service.servicecoupon.dto.request.CouponRegisterRequestDto;
 import com.service.servicecoupon.dto.response.CouponAdminPageCouponResponseDto;
 import com.service.servicecoupon.dto.response.CouponMyPageCouponResponseDto;
 import com.service.servicecoupon.dto.response.CouponOrderResponseDto;
-import com.service.servicecoupon.dto.response.RefundCouponResponseDto;
-import com.service.servicecoupon.exception.CouponPolicyNotFoundException;
 import com.service.servicecoupon.repository.CouponPolicyRepository;
 import com.service.servicecoupon.repository.CouponRepository;
 import com.service.servicecoupon.repository.CouponTypeRepository;
 import com.service.servicecoupon.repository.ProductCategoryCouponRepository;
 import com.service.servicecoupon.repository.ProductCouponRepository;
 import com.service.servicecoupon.service.impl.CouponServiceImpl;
-import java.io.IOException;
-import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -173,70 +166,12 @@ Assertions.assertThat(response).isNotNull();
         // Then
         Assertions.assertThat(response).hasSize(2);
     }
-    @Test
-    void testPayWelcomeCoupon_Success()
-        throws IOException, NoSuchFieldException, IllegalAccessException {
-        // Arrange
-        String message = "{\"clientId\":\"123\"}";
-        SignUpClientMessageDto signUpClientMessageDto = new SignUpClientMessageDto();
-        Field clientIdField = SignUpClientMessageDto.class.getDeclaredField("clientId");
-        clientIdField.setAccessible(true);
-        clientIdField.set(signUpClientMessageDto, 1L);
-        CouponPolicy couponPolicy = new CouponPolicy( "회원",DiscountType.PERCENTAGEDISCOUNT,0, 10000,10000);
-        CouponType couponType = new CouponType(1L, CouponKind.WELCOME);
-        Coupon coupon = new Coupon(123L, couponType, couponPolicy, LocalDate.now().plusDays(30), Status.AVAILABLE);
-
-        when(objectMapper.readValue(message, SignUpClientMessageDto.class)).thenReturn(signUpClientMessageDto);
-        when(couponPolicyRepository.findTop1ByCouponPolicyDescriptionContainingOrderByCouponPolicyIdDesc("회원")).thenReturn(couponPolicy);
-        when(couponTypeRepository.findByCouponKind(CouponKind.WELCOME)).thenReturn(couponType);
-        when(couponRepository.save(any(Coupon.class))).thenReturn(coupon);
-
-        // Act
-        couponService.payWelcomeCoupon(message);
-
-        // Assert
-        verify(couponRepository, times(1)).save(any(Coupon.class));
-    }
-
-    @Test
-    void testPayWelcomeCoupon_CouponPolicyNotFound() throws JsonProcessingException {
-        // Arrange
-        String message = "{\"clientId\":\"123\"}";
-        when(objectMapper.readValue(message, SignUpClientMessageDto.class)).thenReturn(new SignUpClientMessageDto());
-        when(couponPolicyRepository.findTop1ByCouponPolicyDescriptionContainingOrderByCouponPolicyIdDesc("생일")).thenReturn(null);
-
-        // Act and Assert
-        assertThrows(CouponPolicyNotFoundException.class, () -> couponService.payWelcomeCoupon(message));
-    }
 
 
 
-    @Test
-    void testRefundCoupon_CouponExistsAndIsUnused() {
-        // Mock data
-        Long couponId = 1L;
-        RefundCouponResponseDto refundDto = new RefundCouponResponseDto();
-        setField(refundDto,"couponId",1L);
 
-        Coupon coupon = new Coupon();
-        setField(coupon,"couponId",1L);
-        coupon.setStatus(Status.USED);
 
-        // Mock couponRepository.findById
-        when(couponRepository.findById(couponId)).thenReturn(Optional.of(coupon));
 
-        // Call the method
-        assertDoesNotThrow(() -> couponService.refundCoupon(refundDto));
 
-        // Verify couponRepository.findById is called once with argument 1L
-        verify(couponRepository, times(1)).findById(couponId);
-
-        // Verify couponRepository.save is called once with the same coupon object
-        verify(couponRepository, times(1)).save(coupon);
-
-        // Additional assertions if needed
-        assertEquals(Status.AVAILABLE, coupon.getStatus());
-        assertNull(coupon.getUsedDate());
-    }
 
 }

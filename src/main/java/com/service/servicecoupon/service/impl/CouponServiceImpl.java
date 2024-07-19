@@ -9,14 +9,13 @@ import com.service.servicecoupon.domain.entity.CouponPolicy;
 import com.service.servicecoupon.domain.entity.CouponType;
 import com.service.servicecoupon.domain.entity.ProductCategoryCoupon;
 import com.service.servicecoupon.domain.entity.ProductCoupon;
-import com.service.servicecoupon.dto.request.CouponPaymentRewardRequestDto;
 import com.service.servicecoupon.dto.request.CouponRegisterRequestDto;
 import com.service.servicecoupon.dto.response.CouponAdminPageCouponResponseDto;
 import com.service.servicecoupon.dto.response.CouponMyPageCouponResponseDto;
 import com.service.servicecoupon.dto.response.CouponOrderResponseDto;
 import com.service.servicecoupon.dto.response.CouponOrderResponseDto.CouponPolicyDto;
 import com.service.servicecoupon.dto.response.PaymentCompletedCouponResponseDto;
-import com.service.servicecoupon.dto.response.RefundCouponResponseDto;
+import com.service.servicecoupon.dto.message.RefundCouponMessageDto;
 import com.service.servicecoupon.exception.ClientNotFoundException;
 import com.service.servicecoupon.exception.CouponNotFoundException;
 import com.service.servicecoupon.exception.CouponPolicyNotFoundException;
@@ -60,7 +59,8 @@ public class CouponServiceImpl implements CouponService {
     private final ProductCategoryCouponRepository productCategoryCouponRepository;
     private static final String ID_HEADER = "X-User-Id";
 
-    @Transactional(rollbackFor = {CouponTypeNotFoundException.class, CouponPolicyNotFoundException.class})
+    @Transactional(rollbackFor = {CouponTypeNotFoundException.class,
+        CouponPolicyNotFoundException.class})
     @Override
     public void save(CouponRegisterRequestDto couponRequest, long couponPolicyId) {
         CouponType couponType = couponTypeRepository.findById(couponRequest.couponTypeId()
@@ -83,7 +83,8 @@ public class CouponServiceImpl implements CouponService {
         PageRequest pageRequest = PageRequest.of(page, size,
             Sort.by(Sort.Direction.DESC, "couponId"));
         long clientId = NumberUtils.toLong(httpHeaders.getFirst(ID_HEADER), -1L);
-        Page<Coupon> coupons = couponRepository.findByClientIdAndStatus(clientId, pageRequest, status);
+        Page<Coupon> coupons = couponRepository.findByClientIdAndStatus(clientId, pageRequest,
+            status);
 
         return coupons.map(coupon -> {
             CouponMyPageCouponResponseDto couponMyPageCouponResponseDto = new CouponMyPageCouponResponseDto();
@@ -116,7 +117,8 @@ public class CouponServiceImpl implements CouponService {
 
     @Transactional(readOnly = true)
     @Override
-    public Page<CouponAdminPageCouponResponseDto> findByAllCoupon(int page, int size, Status status) {
+    public Page<CouponAdminPageCouponResponseDto> findByAllCoupon(int page, int size,
+        Status status) {
         PageRequest pageRequest = PageRequest.of(page, size,
             Sort.by(Sort.Direction.DESC, "clientId"));
         Page<Coupon> coupons = couponRepository.findAllByStatus(pageRequest, status);
@@ -208,30 +210,28 @@ public class CouponServiceImpl implements CouponService {
         Coupon coupon = couponRepository.findById(paymentCompletedCouponResponseDto.getCouponId())
             .orElseThrow(() -> new CouponNotFoundException("쿠폰이 존재하지 않습니다.'"));
         Objects.requireNonNull(coupon).setUsedDate(LocalDate.now());
-        coupon.setStatus(Status.USED);
+        coupon.UpdateCouponStatus(Status.USED);
         couponRepository.save(coupon);
     }
 
-    @Override
     @RabbitListener(queues = "${rabbit.login.queue.name}")
     public void payWelcomeCoupon(String message) {
         SignUpClientMessageDto signUpClientMessageDto;
-        try {
+        try{
             signUpClientMessageDto = objectMapper.readValue(message, SignUpClientMessageDto.class);
-        } catch (IOException e) {
-            throw new RabbitMessageConvertException("회원가입 유저의 메세지 변환에 실패했습니다.");
+        } catch(IOException e){
+            throw new RabbitMessageConvertException("회원가입 쿠폰 메세지 변환에 실패하였습니다.");
         }
         CouponPolicy couponPolicy = couponPolicyRepository.findTop1ByCouponPolicyDescriptionContainingOrderByCouponPolicyIdDesc(
             "회원");
         if (couponPolicy == null) {
             throw new CouponPolicyNotFoundException("쿠폰정책을 찾을수 없습니다.");
         }
-
         CouponType couponType = couponTypeRepository.findByCouponKind(CouponKind.WELCOME);
         Coupon coupon = new Coupon(signUpClientMessageDto.getClientId(), couponType, couponPolicy,
             LocalDate.now().plusDays(30), Status.AVAILABLE);
         couponRepository.save(coupon);
-        log.info("{}{}",signUpClientMessageDto.getClientId(),coupon.getCouponId());
+        log.info("{} 회원가입쿠폰 지급", signUpClientMessageDto.getClientId());
     }
 
     @RabbitListener(queues = "${rabbit.login.queue.dlq.name}")
@@ -241,30 +241,30 @@ public class CouponServiceImpl implements CouponService {
     }
 
     @Transactional(rollbackFor = {CouponNotFoundException.class})
-    @Override
-    public void refundCoupon(RefundCouponResponseDto refundCouponResponseDto) {
-
-        Coupon coupon = couponRepository.findById(refundCouponResponseDto.getCouponId())
+    @RabbitListener(queues = "${rabbit.refund.coupon.queue.name}")
+    public void refundCoupon(String message) {
+        RefundCouponMessageDto refundCouponMessageDto;
+        try {
+            refundCouponMessageDto = objectMapper.readValue(message,
+                RefundCouponMessageDto.class);
+        } catch (IOException e) {
+            throw new RabbitMessageConvertException("쿠폰환불 메세지 변환에 실패하였습니다.");
+        }
+        Coupon coupon = couponRepository.findById(refundCouponMessageDto.getCouponId())
             .orElseThrow(() -> new CouponNotFoundException("쿠폰이 존재하지 않습니다."));
         if (coupon.getStatus().equals(Status.UNAVAILABLE)) {
+            log.info("{} 쿠폰이 만료되었습니다.",message);
             return;
         }
-        Objects.requireNonNull(coupon).setUsedDate(null);
-        coupon.setStatus(Status.AVAILABLE);
-
+        coupon.changeUsedDate(null);
+        coupon.UpdateCouponStatus(Status.AVAILABLE);
         couponRepository.save(coupon);
+        log.info("{} 쿠폰이 지급되었습니다.", coupon.getCouponId());
     }
-    @Override
-    public void paymentRewardCoupon(HttpHeaders headers, CouponPaymentRewardRequestDto couponPaymentRewardRequestDto){
-        long clientId = NumberUtils.toLong(headers.getFirst(ID_HEADER), -1L);
 
-        if (couponPaymentRewardRequestDto.getPaymentValue()>=50000){
-            CouponPolicy couponPolicy = couponPolicyRepository.findTop1ByCouponPolicyDescriptionContainingAndMaxDiscountAmountLessThanEqualOrderByMaxDiscountAmountDesc("구매",(couponPaymentRewardRequestDto.getPaymentValue()/5));
-            CouponType couponType = couponTypeRepository.findByCouponKind(CouponKind.DISCOUNT);
-            Coupon coupon = new Coupon(clientId, couponType, couponPolicy, LocalDate.now().plusDays(30),Status.AVAILABLE);
-            couponRepository.save(coupon);
-        }
-
+    @RabbitListener(queues = "${rabbit.refund.coupon.dlq.queue.name}")
+    public void dlqRefundCoupon(String message) {
+        log.error("{} 반품/취소 쿠폰 상태 변경에 실패하였습니다.", message);
     }
 
 

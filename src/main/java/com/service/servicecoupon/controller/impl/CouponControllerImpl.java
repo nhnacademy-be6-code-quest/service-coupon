@@ -3,13 +3,11 @@ package com.service.servicecoupon.controller.impl;
 
 import com.service.servicecoupon.controller.CouponController;
 import com.service.servicecoupon.domain.Status;
-import com.service.servicecoupon.dto.request.CouponPaymentRewardRequestDto;
 import com.service.servicecoupon.dto.request.CouponRegisterRequestDto;
 import com.service.servicecoupon.dto.response.CouponAdminPageCouponResponseDto;
 import com.service.servicecoupon.dto.response.CouponMyPageCouponResponseDto;
 import com.service.servicecoupon.dto.response.CouponOrderResponseDto;
 import com.service.servicecoupon.dto.response.PaymentCompletedCouponResponseDto;
-import com.service.servicecoupon.dto.response.RefundCouponResponseDto;
 import com.service.servicecoupon.exception.ClientNotFoundException;
 import com.service.servicecoupon.exception.CouponNotFoundException;
 import com.service.servicecoupon.exception.CouponPolicyNotFoundException;
@@ -70,28 +68,6 @@ public class CouponControllerImpl implements CouponController {
         return ResponseEntity.ok(couponService.findByAllCoupon(page,size,status));
     }
 
-
-    @Override
-    @PutMapping("/api/coupon/refund")
-    public ResponseEntity<String> refundCoupon(
-        @RequestBody RefundCouponResponseDto refundCouponResponseDto) {
-        try {
-            couponService.refundCoupon(refundCouponResponseDto);
-            return new ResponseEntity<>("success", HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>("fail", HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @PostMapping("/api/coupon/payment/reward")
-    public ResponseEntity<String> getUserPaymentValue(@RequestHeader HttpHeaders headers, @RequestBody CouponPaymentRewardRequestDto couponPaymentRewardRequestDto){
-        try {
-            couponService.paymentRewardCoupon(headers, couponPaymentRewardRequestDto);
-            return new ResponseEntity<>("success", HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>("fail", HttpStatus.BAD_REQUEST);
-        }
-    }
 
     @Override
     @ExceptionHandler(ClientNotFoundException.class)

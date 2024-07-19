@@ -55,10 +55,48 @@ public class RabbitConfig {
     @Value("${rabbit.use.coupon.dlq.routing.key}")
     private String useCouponDlqRoutingKey;
 
+    @Value("${rabbit.refund.coupon.exchange.name}")
+    private String refundCouponExchangeName;
 
-    // DLX 설정
+    @Value("${rabbit.refund.coupon.queue.name}")
+    private String refundCouponQueueName;
 
-    // DLQ 설정
+    @Value("${rabbit.refund.coupon.routing.key}")
+    private String refundCouponRoutingKey;
+
+    @Value("${rabbit.refund.coupon.dlq.queue.name}")
+    private String refundCouponDlqQueueName;
+
+    @Value("${rabbit.refund.coupon.dlq.routing.key}")
+    private String refundCouponDlqRoutingKey;
+
+    private static final String DLQ_EXCHANGE = "x-dead-letter-exchange";
+    private static final String DLQ_ROUTING = "x-dead-letter-routing-key";
+    @Bean
+    Queue refundCouponQueue(){
+        return QueueBuilder.durable(refundCouponQueueName)
+            .withArgument(DLQ_EXCHANGE, refundCouponExchangeName)
+            .withArgument(DLQ_ROUTING, refundCouponDlqRoutingKey)
+            .build();
+    }
+    @Bean
+    DirectExchange refundCouponExchange(){
+        return new DirectExchange(refundCouponExchangeName);
+    }
+    @Bean
+    Binding refundCouponBinding(){
+        return BindingBuilder.bind(refundCouponQueue()).to(refundCouponExchange()).with(refundCouponRoutingKey);
+    }
+    @Bean
+    Queue dlqRefundCouponQueue(){
+        return QueueBuilder.durable(refundCouponDlqQueueName).build();
+    }
+    @Bean
+    Binding refundCouponDlqBinding(){
+        return BindingBuilder.bind(dlqRefundCouponQueue()).to(refundCouponExchange()).with(refundCouponDlqRoutingKey);
+    }
+
+
     @Bean
     Queue dlqQueue() {
         return QueueBuilder.durable(signupCouponDlqQueueName).build();
@@ -78,8 +116,8 @@ public class RabbitConfig {
     @Bean
     Queue signupCouponQueue() {
         return QueueBuilder.durable(signupCouponQueueName)
-            .withArgument("x-dead-letter-exchange", signupCouponExchangeName)
-            .withArgument("x-dead-letter-routing-key", signupCouponDlqRoutingKey)
+            .withArgument(DLQ_EXCHANGE, signupCouponExchangeName)
+            .withArgument(DLQ_ROUTING, signupCouponDlqRoutingKey)
             .build();
     }
 
@@ -110,8 +148,8 @@ public class RabbitConfig {
     @Bean
     Queue useCouponQueue() {
         return QueueBuilder.durable(useCouponQueueName)
-            .withArgument("x-dead-letter-exchange", useCouponExchangeName)
-            .withArgument("x-dead-letter-routing-key", useCouponDlqRoutingKey).build();
+            .withArgument(DLQ_EXCHANGE, useCouponExchangeName)
+            .withArgument(DLQ_ROUTING, useCouponDlqRoutingKey).build();
     }
 
     @Bean
@@ -131,8 +169,4 @@ public class RabbitConfig {
             .with(useCouponDlqRoutingKey);
     }
 
-    @Bean
-    MessageConverter messageConverter() {
-        return new Jackson2JsonMessageConverter();
-    }
 }

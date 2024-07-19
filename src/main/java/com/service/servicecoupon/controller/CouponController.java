@@ -1,13 +1,11 @@
 package com.service.servicecoupon.controller;
 
 import com.service.servicecoupon.domain.Status;
-import com.service.servicecoupon.dto.request.CouponPaymentRewardRequestDto;
 import com.service.servicecoupon.dto.request.CouponRegisterRequestDto;
 import com.service.servicecoupon.dto.response.CouponAdminPageCouponResponseDto;
 import com.service.servicecoupon.dto.response.CouponMyPageCouponResponseDto;
 import com.service.servicecoupon.dto.response.CouponOrderResponseDto;
 import com.service.servicecoupon.dto.response.PaymentCompletedCouponResponseDto;
-import com.service.servicecoupon.dto.response.RefundCouponResponseDto;
 import com.service.servicecoupon.exception.ClientNotFoundException;
 import com.service.servicecoupon.exception.CouponNotFoundException;
 import com.service.servicecoupon.exception.CouponPolicyNotFoundException;
@@ -99,23 +97,6 @@ public interface CouponController {
         @Parameter(description = "쿠폰 아이디")
         PaymentCompletedCouponResponseDto paymentCompletedCouponResponseDto);
 
-    @Operation(
-        summary = "쿠폰 상태 변경",
-        description = "refund - 환불시 쿠폰 사용일,상태 변경",
-        responses = {
-            @ApiResponse(
-                responseCode = "200",
-                description = "성공 여부 반환"
-            ),
-            @ApiResponse(
-                responseCode = "400",
-                description = "실패 여부 반환"
-            )
-        }
-    )
-    ResponseEntity<String> refundCoupon(
-        @Parameter(description = "쿠폰 아이디")
-        @RequestBody RefundCouponResponseDto refundCouponResponseDto);
 
     @Operation(
         summary = "쿠폰 상태 변경",
@@ -139,9 +120,6 @@ public interface CouponController {
         @RequestParam int size,
         @Parameter(description = "쿠폰 상태")
         @RequestParam Status status);
-
-    @GetMapping("/api/coupon/payment/reward")
-    ResponseEntity<String> getUserPaymentValue(@RequestHeader HttpHeaders headers ,@RequestBody CouponPaymentRewardRequestDto couponPaymentRewardRequestDto);
 
     @ExceptionHandler(ClientNotFoundException.class)
     ResponseEntity<String> handleExceptionClientNotFoundException(ClientNotFoundException e);
