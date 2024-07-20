@@ -28,7 +28,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-class CouponControllerImplTest {
+class CouponControllerTest {
 
     @InjectMocks
     private CouponControllerImpl couponController;
@@ -36,7 +36,7 @@ class CouponControllerImplTest {
     @Mock
     private CouponService couponService;
 
-    public CouponControllerImplTest() {
+    public CouponControllerTest() {
         MockitoAnnotations.openMocks(this);
     }
 
@@ -48,8 +48,7 @@ class CouponControllerImplTest {
 
         List<CouponOrderResponseDto> response = couponController.findClientCoupon(headers);
 
-        assertThat(response).isNotNull();
-        assertThat(response).hasSize(1);
+        assertThat(response).isNotNull().hasSize(1);
     }
 
     @Test

@@ -12,7 +12,7 @@ class CouponTypeResponseDtoTest {
         // Test that the no-args constructor initializes the object
         CouponTypeResponseDto dto = new CouponTypeResponseDto();
         assertThat(dto).isNotNull();
-        assertThat(dto.getCouponTypeId()).isEqualTo(0L);
+        assertThat(dto.getCouponTypeId()).isZero();
         assertThat(dto.getCouponKind()).isNull();
     }
 
