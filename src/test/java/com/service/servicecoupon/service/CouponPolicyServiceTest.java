@@ -1,14 +1,19 @@
 package com.service.servicecoupon.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import com.service.servicecoupon.domain.DiscountType;
 import com.service.servicecoupon.domain.entity.CouponPolicy;
 import com.service.servicecoupon.domain.entity.ProductCategoryCoupon;
 import com.service.servicecoupon.domain.entity.ProductCoupon;
 import com.service.servicecoupon.dto.request.CouponPolicyRegisterRequestDto;
 import com.service.servicecoupon.dto.response.CouponPolicyListResponseDto;
+import com.service.servicecoupon.dto.response.CouponProvideTypeResponseDto;
 import com.service.servicecoupon.repository.CouponPolicyRepository;
 import com.service.servicecoupon.repository.ProductCategoryCouponRepository;
-
 import com.service.servicecoupon.repository.ProductCouponRepository;
 import com.service.servicecoupon.service.impl.CouponPolicyServiceImpl;
 import java.util.Collections;
@@ -23,11 +28,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 class CouponPolicyServiceTest {
 
     @Mock
@@ -41,6 +41,7 @@ class CouponPolicyServiceTest {
 
     @InjectMocks
     private CouponPolicyServiceImpl couponPolicyService;
+
 
     @BeforeEach
     public void setUp() {
@@ -109,6 +110,41 @@ class CouponPolicyServiceTest {
             resultPage.getContent().getFirst().getDiscountType());
         assertEquals(couponPolicy.getDiscountValue(),
             resultPage.getContent().getFirst().getDiscountValue());
+    }
 
+    @Test
+    void testFindTypeWithProductCoupon() {
+        long couponPolicyId = 1L;
+        ProductCoupon productCoupon = new ProductCoupon(); // Replace with actual productCoupon initialization
+        when(productCouponRepository.findByProductPolicy_CouponPolicyId(couponPolicyId)).thenReturn(productCoupon);
+        when(productCategoryCouponRepository.findByCategoryPolicy_CouponPolicyId(couponPolicyId)).thenReturn(null);
+
+        CouponProvideTypeResponseDto response = couponPolicyService.findType(couponPolicyId);
+
+        assertEquals("상품", response.getName());
+    }
+
+    @Test
+    void testFindTypeWithCategoryCoupon() {
+        long couponPolicyId = 2L;
+        ProductCoupon productCoupon = null;
+        ProductCategoryCoupon categoryCoupon = new ProductCategoryCoupon(); // Replace with actual categoryCoupon initialization
+        when(productCouponRepository.findByProductPolicy_CouponPolicyId(couponPolicyId)).thenReturn(productCoupon);
+        when(productCategoryCouponRepository.findByCategoryPolicy_CouponPolicyId(couponPolicyId)).thenReturn(categoryCoupon);
+
+        CouponProvideTypeResponseDto response = couponPolicyService.findType(couponPolicyId);
+
+        assertEquals("카테고리", response.getName());
+    }
+
+    @Test
+    void testFindTypeWithNoCoupon() {
+        long couponPolicyId = 3L;
+        when(productCouponRepository.findByProductPolicy_CouponPolicyId(couponPolicyId)).thenReturn(null);
+        when(productCategoryCouponRepository.findByCategoryPolicy_CouponPolicyId(couponPolicyId)).thenReturn(null);
+
+        CouponProvideTypeResponseDto response = couponPolicyService.findType(couponPolicyId);
+
+        assertEquals("전체", response.getName());
     }
 }

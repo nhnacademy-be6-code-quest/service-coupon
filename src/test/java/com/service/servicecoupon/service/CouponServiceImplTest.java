@@ -1,11 +1,14 @@
 package com.service.servicecoupon.service;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.anyLong;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -19,20 +22,28 @@ import com.service.servicecoupon.domain.Status;
 import com.service.servicecoupon.domain.entity.Coupon;
 import com.service.servicecoupon.domain.entity.CouponPolicy;
 import com.service.servicecoupon.domain.entity.CouponType;
+import com.service.servicecoupon.dto.message.RefundCouponMessageDto;
+import com.service.servicecoupon.dto.message.SignUpClientMessageDto;
 import com.service.servicecoupon.dto.request.CouponRegisterRequestDto;
 import com.service.servicecoupon.dto.response.CouponAdminPageCouponResponseDto;
 import com.service.servicecoupon.dto.response.CouponMyPageCouponResponseDto;
 import com.service.servicecoupon.dto.response.CouponOrderResponseDto;
+import com.service.servicecoupon.dto.response.PaymentCompletedCouponResponseDto;
+import com.service.servicecoupon.exception.CouponNotFoundException;
+import com.service.servicecoupon.exception.CouponPolicyNotFoundException;
+import com.service.servicecoupon.exception.RabbitMessageConvertException;
 import com.service.servicecoupon.repository.CouponPolicyRepository;
 import com.service.servicecoupon.repository.CouponRepository;
 import com.service.servicecoupon.repository.CouponTypeRepository;
 import com.service.servicecoupon.repository.ProductCategoryCouponRepository;
 import com.service.servicecoupon.repository.ProductCouponRepository;
 import com.service.servicecoupon.service.impl.CouponServiceImpl;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -167,10 +178,136 @@ Assertions.assertThat(response).isNotNull();
         Assertions.assertThat(response).hasSize(2);
     }
 
+    @Test
+    void testPaymentCompletedCoupon_Success() throws IOException {
+        // Given
+        String message = "{\"couponId\": 1}";
+        PaymentCompletedCouponResponseDto dto = new PaymentCompletedCouponResponseDto();
+        dto.setCouponId(1L);
+
+        Coupon coupon = new Coupon();
+        coupon.setUsedDate(null);
+        coupon.setStatus(Status.AVAILABLE);
+
+        when(objectMapper.readValue(eq(message), any(Class.class))).thenReturn(dto);
+        when(couponRepository.findById(dto.getCouponId())).thenReturn(Optional.of(coupon));
+
+        // When
+        couponService.paymentCompletedCoupon(message);
+
+        // Then
+        verify(couponRepository).findById(dto.getCouponId());
+        verify(couponRepository).save(coupon);
+        assertThat(coupon.getUsedDate()).isEqualTo(LocalDate.now());
+        assertThat(coupon.getStatus()).isEqualTo(Status.USED);
+    }
 
 
+    @Test
+    void testPaymentCompletedCoupon_CouponNotFound() throws IOException {
+        // Given
+        String message = "{\"couponId\": 1}";
+        PaymentCompletedCouponResponseDto dto = new PaymentCompletedCouponResponseDto();
+        dto.setCouponId(1L);
+
+        when(objectMapper.readValue(eq(message), any(Class.class))).thenReturn(dto);
+        when(couponRepository.findById(dto.getCouponId())).thenReturn(Optional.empty());
+
+        // When
+        // Then
+        assertThrows(CouponNotFoundException.class, () -> couponService.paymentCompletedCoupon(message));
+    }
 
 
+    @Test
+    void testPayWelcomeCoupon_Success() throws IOException {
+        // Given
+        String message = "{\"clientId\": 1}";
+        SignUpClientMessageDto dto = new SignUpClientMessageDto();
+        dto.setClientId(1L);
+
+        CouponPolicy couponPolicy = new CouponPolicy();
+        CouponType couponType = new CouponType();
+
+        when(objectMapper.readValue(eq(message), any(Class.class))).thenReturn(dto);
+        when(couponPolicyRepository.findTop1ByCouponPolicyDescriptionContainingOrderByCouponPolicyIdDesc("회원"))
+            .thenReturn(couponPolicy);
+        when(couponTypeRepository.findByCouponKind(CouponKind.WELCOME)).thenReturn(couponType);
+
+        // When
+        couponService.payWelcomeCoupon(message);
+
+        // Then
+        verify(couponRepository).save(any(Coupon.class));
+        // Additional assertions can be made if necessary
+    }
+
+
+    @Test
+    void testPayWelcomeCoupon_CouponPolicyNotFound() throws IOException {
+        // Given
+        String message = "{\"clientId\": 1}";
+        SignUpClientMessageDto dto = new SignUpClientMessageDto();
+        dto.setClientId(1L);
+
+        when(objectMapper.readValue(eq(message), any(Class.class))).thenReturn(dto);
+        when(couponPolicyRepository.findTop1ByCouponPolicyDescriptionContainingOrderByCouponPolicyIdDesc("회원"))
+            .thenReturn(null);
+
+        // When
+        // Then
+        assertThrows(CouponPolicyNotFoundException.class, () -> couponService.payWelcomeCoupon(message));
+    }
+
+    @Test
+    void testRefundCoupon_Success() throws IOException {
+        // Given
+        String message = "{\"couponId\": 1}";
+        RefundCouponMessageDto dto = new RefundCouponMessageDto();
+        dto.setCouponId(1L);
+
+        Coupon coupon = new Coupon();
+        coupon.setStatus(Status.USED);
+
+        when(objectMapper.readValue(eq(message), eq(RefundCouponMessageDto.class))).thenReturn(dto);
+        when(couponRepository.findById(dto.getCouponId())).thenReturn(Optional.of(coupon));
+
+        // When
+        couponService.refundCoupon(message);
+
+        // Then
+        verify(couponRepository).save(coupon); // Ensure save is called
+        assertThat(coupon.getStatus()).isEqualTo(Status.AVAILABLE); // Ensure the coupon status is updated
+    }
+
+    @Test
+    void testRefundCoupon_CouponNotFound() throws IOException {
+        // Given
+        String message = "{\"couponId\": 1}";
+        RefundCouponMessageDto dto = new RefundCouponMessageDto();
+        dto.setCouponId(1L);
+
+        when(objectMapper.readValue(eq(message), any(Class.class))).thenReturn(dto);
+        when(couponRepository.findById(dto.getCouponId())).thenReturn(Optional.empty());
+
+        // When
+        // Then
+        assertThrows(CouponNotFoundException.class, () -> couponService.refundCoupon(message));
+    }
+
+    @Test
+    void testDlqRefundCoupon() {
+        // Given
+        String message = "Sample DLQ message";
+
+        // When
+        couponService.dlqRefundCoupon(message);
+
+        // Then
+        // Verify that log message is correct
+        // Since logging isn't directly testable with standard assertions,
+        // use a logging framework or logger spy to verify if necessary
+    }
 
 
 
