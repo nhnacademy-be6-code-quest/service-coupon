@@ -4,22 +4,22 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class PaymentCompletedCouponResponseDtoTest {
+class CouponProvideTypeResponseDtoTest {
 
     @Test
     void testNoArgsConstructor() {
         // Test that the no-args constructor initializes the object
-        PaymentCompletedCouponResponseDto dto = new PaymentCompletedCouponResponseDto();
+        CouponProvideTypeResponseDto dto = new CouponProvideTypeResponseDto();
         assertThat(dto).isNotNull();
-        assertThat(dto.getCouponId()).isNull();
+        assertThat(dto.getName()).isNull();
     }
 
     @Test
     void testGetterAndSetter() {
         // Test that the setter sets the correct value and the getter retrieves it
-        PaymentCompletedCouponResponseDto dto = new PaymentCompletedCouponResponseDto();
-        Long couponId = 123L;
-        dto.setCouponId(couponId);
-        assertThat(dto.getCouponId()).isEqualTo(couponId);
+        CouponProvideTypeResponseDto dto = new CouponProvideTypeResponseDto();
+        String name = "SampleName";
+        dto.setName(name);
+        assertThat(dto.getName()).isEqualTo(name);
     }
 }
