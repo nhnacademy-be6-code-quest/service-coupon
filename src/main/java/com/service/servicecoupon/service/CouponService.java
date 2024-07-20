@@ -1,13 +1,11 @@
 package com.service.servicecoupon.service;
 
 import com.service.servicecoupon.domain.Status;
-import com.service.servicecoupon.dto.request.CouponPaymentRewardRequestDto;
 import com.service.servicecoupon.dto.request.CouponRegisterRequestDto;
 import com.service.servicecoupon.dto.response.CouponAdminPageCouponResponseDto;
 import com.service.servicecoupon.dto.response.CouponOrderResponseDto;
 import com.service.servicecoupon.dto.response.CouponMyPageCouponResponseDto;
 import com.service.servicecoupon.dto.response.PaymentCompletedCouponResponseDto;
-import com.service.servicecoupon.dto.response.RefundCouponResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 
@@ -62,34 +60,27 @@ public interface CouponService {
      * 결제시 사용한 쿠폰의 상태를 사용완료로 변경하는 함수
      *
      * @author jjeonmin
-     * @param paymentCompletedCouponResponseDto 쿠폰정보 Dto
+     * @param message 쿠폰정보 Dto
      */
     void paymentCompletedCoupon(
-        PaymentCompletedCouponResponseDto paymentCompletedCouponResponseDto);
+        String message);
 
     /**
      * 회원가입시 회원아이디를 받아 쿠폰지급을 위한 메시지큐
      *
      * @author jjeonmin
-     * @param message 회원가입 유저 아이디
+     * @param message 회원가입 유저 정보 Dto
      */
     void payWelcomeCoupon(String message);
 
-    /**
-     * 50,000원 이상 결제 시 회원 아이디와 결제 금액을 인자로 받아 회원에게 쿠폰을 지급하는 함수
-     *
-     * @author jjeonmin
-     * @param couponPaymentRewardRequestDto 결제정보 Dto
-     */
-    void paymentRewardCoupon(CouponPaymentRewardRequestDto couponPaymentRewardRequestDto);
 
     /**
      * 환불시 쿠폰을 사용가능 상태로 변경하는 함수
      *
      * @author jjeonmin
-     * @param refundCouponResponseDto 결제시 사용한 쿠폰정보 Dto
+     * @param message 결제시 사용한 쿠폰정보 Dto
      */
-    void refundCoupon(RefundCouponResponseDto refundCouponResponseDto);
+    void refundCoupon(String message);
 
 
 }

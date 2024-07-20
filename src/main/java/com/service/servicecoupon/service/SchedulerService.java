@@ -9,10 +9,4 @@ public interface SchedulerService {
      */
     void birthCoupon();
 
-    /**
-     * 매일 12시 쿠폰의 만료시간이 현재일보다 작으면 상태를 변경
-     *
-     * @author jjeonmin
-     */
-    void run();
 }

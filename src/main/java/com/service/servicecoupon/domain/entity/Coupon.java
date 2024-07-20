@@ -21,14 +21,15 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 public class Coupon {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long couponId;
     @ManyToOne
-    @JoinColumn(name="couponTypeId")
+    @JoinColumn(name = "couponTypeId")
     private CouponType couponType;
     @ManyToOne
-    @JoinColumn(name="couponPolicyId")
+    @JoinColumn(name = "couponPolicyId")
     private CouponPolicy couponPolicy;
     private long clientId;
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -41,13 +42,20 @@ public class Coupon {
     private Status status;
 
     @Builder
-    public Coupon(Long clientId,CouponType couponType,CouponPolicy couponPolicy,LocalDate expirationDate,Status status){
-        this.couponType=couponType;
-        this.couponPolicy=couponPolicy;
-        this.clientId=clientId;
-        this.issuedDate=LocalDate.now();
-        this.expirationDate=expirationDate;
-        this.status=status;
+    public Coupon(Long clientId, CouponType couponType, CouponPolicy couponPolicy,
+        LocalDate expirationDate, Status status) {
+        this.couponType = couponType;
+        this.couponPolicy = couponPolicy;
+        this.clientId = clientId;
+        this.issuedDate = LocalDate.now();
+        this.expirationDate = expirationDate;
+        this.status = status;
     }
 
+    public void UpdateCouponStatus(Status status) {
+        this.status = status;
+    }
+    public void changeUsedDate(LocalDate localDate){
+        this.usedDate = localDate;
+    }
 }

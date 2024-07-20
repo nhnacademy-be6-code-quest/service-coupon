@@ -1,10 +1,10 @@
-package com.service.servicecoupon.dto.response;
+package com.service.servicecoupon.dto.message;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Getter
-public class RefundCouponResponseDto {
+public class RefundCouponMessageDto {
     long couponId;
 }
