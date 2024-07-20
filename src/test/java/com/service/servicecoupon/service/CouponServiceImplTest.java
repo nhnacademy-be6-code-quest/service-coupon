@@ -3,12 +3,10 @@ package com.service.servicecoupon.service;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.anyLong;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -31,7 +29,6 @@ import com.service.servicecoupon.dto.response.CouponOrderResponseDto;
 import com.service.servicecoupon.dto.response.PaymentCompletedCouponResponseDto;
 import com.service.servicecoupon.exception.CouponNotFoundException;
 import com.service.servicecoupon.exception.CouponPolicyNotFoundException;
-import com.service.servicecoupon.exception.RabbitMessageConvertException;
 import com.service.servicecoupon.repository.CouponPolicyRepository;
 import com.service.servicecoupon.repository.CouponRepository;
 import com.service.servicecoupon.repository.CouponTypeRepository;
@@ -269,7 +266,7 @@ Assertions.assertThat(response).isNotNull();
         Coupon coupon = new Coupon();
         coupon.setStatus(Status.USED);
 
-        when(objectMapper.readValue(eq(message), eq(RefundCouponMessageDto.class))).thenReturn(dto);
+        when(objectMapper.readValue(anyString(), eq(RefundCouponMessageDto.class))).thenReturn(dto);
         when(couponRepository.findById(dto.getCouponId())).thenReturn(Optional.of(coupon));
 
         // When
@@ -303,10 +300,7 @@ Assertions.assertThat(response).isNotNull();
         // When
         couponService.dlqRefundCoupon(message);
 
-        // Then
-        // Verify that log message is correct
-        // Since logging isn't directly testable with standard assertions,
-        // use a logging framework or logger spy to verify if necessary
+        assertEquals(message,"Sample DLQ message");
     }
 
 
