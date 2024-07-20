@@ -203,7 +203,6 @@ public class CouponServiceImpl implements CouponService {
     }
 
     @Transactional(rollbackFor = {CouponPolicyNotFoundException.class})
-
     @RabbitListener(queues = "${rabbit.use.coupon.queue.name}")
     public void paymentCompletedCoupon(String message) {
         PaymentCompletedCouponResponseDto paymentCompletedCouponResponseDto;
