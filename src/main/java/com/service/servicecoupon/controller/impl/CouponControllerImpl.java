@@ -50,17 +50,7 @@ public class CouponControllerImpl implements CouponController {
         return ResponseEntity.status(HttpStatus.CREATED).body(couponRequest);
     }
 
-    @Override
-    @PutMapping("/api/coupon/payment")
-    public ResponseEntity<String> paymentUsedCoupon(
-        @RequestBody PaymentCompletedCouponResponseDto paymentCompletedCouponResponseDto) {
-        try {
-            couponService.paymentCompletedCoupon(paymentCompletedCouponResponseDto);
-            return new ResponseEntity<>("success", HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>("fail", HttpStatus.BAD_REQUEST);
-        }
-    }
+
 
     @Override
     @GetMapping("/api/coupon/adminPage")

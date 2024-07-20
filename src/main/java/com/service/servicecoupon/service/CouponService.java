@@ -60,10 +60,10 @@ public interface CouponService {
      * 결제시 사용한 쿠폰의 상태를 사용완료로 변경하는 함수
      *
      * @author jjeonmin
-     * @param paymentCompletedCouponResponseDto 쿠폰정보 Dto
+     * @param message 쿠폰정보 Dto
      */
     void paymentCompletedCoupon(
-        PaymentCompletedCouponResponseDto paymentCompletedCouponResponseDto);
+        String message);
 
     /**
      * 회원가입시 회원아이디를 받아 쿠폰지급을 위한 메시지큐

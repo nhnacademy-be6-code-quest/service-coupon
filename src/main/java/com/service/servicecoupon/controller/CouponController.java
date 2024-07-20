@@ -78,24 +78,7 @@ public interface CouponController {
         @Parameter(description = "쿠폰 정보")
         @RequestBody CouponRegisterRequestDto couponRequest);
 
-    @Operation(
-        summary = "쿠폰 상태 변경",
-        description = "Payment - 결제시 쿠폰 사용일,상태 변경",
-        responses = {
-            @ApiResponse(
-                responseCode = "200",
-                description = "성공 여부 반환"
-            ),
-            @ApiResponse(
-                responseCode = "400",
-                description = "실패 여부 반환"
-            )
-        }
-    )
-    @PutMapping("/api/coupon/refund")
-    ResponseEntity<String> paymentUsedCoupon(
-        @Parameter(description = "쿠폰 아이디")
-        PaymentCompletedCouponResponseDto paymentCompletedCouponResponseDto);
+
 
 
     @Operation(

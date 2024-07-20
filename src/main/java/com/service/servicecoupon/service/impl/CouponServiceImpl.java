@@ -203,10 +203,15 @@ public class CouponServiceImpl implements CouponService {
     }
 
     @Transactional(rollbackFor = {CouponPolicyNotFoundException.class})
-    @Override
+
     @RabbitListener(queues = "${rabbit.use.coupon.queue.name}")
-    public void paymentCompletedCoupon(
-        PaymentCompletedCouponResponseDto paymentCompletedCouponResponseDto) {
+    public void paymentCompletedCoupon(String message) {
+        PaymentCompletedCouponResponseDto paymentCompletedCouponResponseDto;
+        try{
+            paymentCompletedCouponResponseDto = objectMapper.readValue(message, PaymentCompletedCouponResponseDto.class);
+        } catch(IOException e){
+            throw new RabbitMessageConvertException("메세지 변환 불가능");
+        }
         Coupon coupon = couponRepository.findById(paymentCompletedCouponResponseDto.getCouponId())
             .orElseThrow(() -> new CouponNotFoundException("쿠폰이 존재하지 않습니다.'"));
         Objects.requireNonNull(coupon).setUsedDate(LocalDate.now());
