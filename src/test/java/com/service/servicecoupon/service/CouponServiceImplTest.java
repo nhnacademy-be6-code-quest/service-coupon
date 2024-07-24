@@ -298,7 +298,7 @@ Assertions.assertThat(response).isNotNull();
         String message = "Sample DLQ message";
 
         // When
-        couponService.dlqRefundCoupon(message);
+       couponService.dlqRefundCoupon(message);
 
         assertEquals("Sample DLQ message", message);
     }
