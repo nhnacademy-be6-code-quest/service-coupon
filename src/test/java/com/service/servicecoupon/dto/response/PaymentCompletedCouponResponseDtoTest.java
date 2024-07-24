@@ -1,17 +1,25 @@
 package com.service.servicecoupon.dto.response;
 
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.test.util.ReflectionTestUtils.setField;
-
 import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class PaymentCompletedCouponResponseDtoTest {
 
     @Test
-    void testRefundCouponResponseDto() {
+    void testNoArgsConstructor() {
+        // Test that the no-args constructor initializes the object
         PaymentCompletedCouponResponseDto dto = new PaymentCompletedCouponResponseDto();
-        setField(dto,"couponId",1L);
-        assertEquals(1L, dto.getCouponId());
+        assertThat(dto).isNotNull();
+        assertThat(dto.getCouponId()).isNull();
+    }
+
+    @Test
+    void testGetterAndSetter() {
+        // Test that the setter sets the correct value and the getter retrieves it
+        PaymentCompletedCouponResponseDto dto = new PaymentCompletedCouponResponseDto();
+        Long couponId = 123L;
+        dto.setCouponId(couponId);
+        assertThat(dto.getCouponId()).isEqualTo(couponId);
     }
 }

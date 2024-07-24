@@ -32,12 +32,10 @@ public class SecurityConfig {
             .sessionManagement(
                 session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .addFilterBefore(new HeaderFilter(List.of(
-                new HeaderFilter.RouteConfig(URI.create("/api/coupon"), HttpMethod.GET.name(),
-                    Collections.emptyList()),
+                new HeaderFilter.RouteConfig(URI.create("/api/coupon"), HttpMethod.GET.name(), Collections.emptyList()),
                 new HeaderFilter.RouteConfig(URI.create("/api/coupon/myPage"),
                     HttpMethod.GET.name(), Collections.emptyList()),
-                new HeaderFilter.RouteConfig(URI.create("/api/coupon/register/**"),
-                    HttpMethod.GET.name(), List.of(ADMIN_ROLE)),
+                new HeaderFilter.RouteConfig(URI.create("/api/coupon/register/**"), HttpMethod.GET.name(), List.of(ADMIN_ROLE)),
                 new HeaderFilter.RouteConfig(URI.create("/api/coupon/payment"),
                     HttpMethod.PUT.name(), Collections.emptyList()),
                 new HeaderFilter.RouteConfig(URI.create("/api/coupon/adminPage"),

@@ -52,7 +52,7 @@ public class Coupon {
         this.status = status;
     }
 
-    public void UpdateCouponStatus(Status status) {
+    public void updateStatus(Status status) {
         this.status = status;
     }
     public void changeUsedDate(LocalDate localDate){

@@ -214,7 +214,7 @@ public class CouponServiceImpl implements CouponService {
         Coupon coupon = couponRepository.findById(paymentCompletedCouponResponseDto.getCouponId())
             .orElseThrow(() -> new CouponNotFoundException("쿠폰이 존재하지 않습니다.'"));
         Objects.requireNonNull(coupon).setUsedDate(LocalDate.now());
-        coupon.UpdateCouponStatus(Status.USED);
+        coupon.updateStatus(Status.USED);
         couponRepository.save(coupon);
     }
 
@@ -261,7 +261,7 @@ public class CouponServiceImpl implements CouponService {
             return;
         }
         coupon.changeUsedDate(null);
-        coupon.UpdateCouponStatus(Status.AVAILABLE);
+        coupon.updateStatus(Status.AVAILABLE);
         couponRepository.save(coupon);
         log.info("{} 쿠폰이 지급되었습니다.", coupon.getCouponId());
     }
