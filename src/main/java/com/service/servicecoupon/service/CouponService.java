@@ -80,5 +80,5 @@ public interface CouponService {
      */
     void refundCoupon(String message);
 
-
+    String rewardUserCoupon(HttpHeaders headers, String methodName);
 }
