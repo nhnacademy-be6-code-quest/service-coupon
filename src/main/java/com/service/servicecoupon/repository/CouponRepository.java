@@ -20,4 +20,6 @@ public interface CouponRepository extends JpaRepository<Coupon, Long> {
     Page<Coupon> findByClientIdAndStatus(long clientId, Pageable pageable, Status status);
 
     Page<Coupon> findAllByStatus (Pageable pageable, Status status);
+
+    Coupon findByClientIdAndCouponPolicy_CouponPolicyId(Long clientId, Long couponPolicyId);
 }

@@ -63,6 +63,12 @@ public class CouponControllerImpl implements CouponController {
         return ResponseEntity.ok(couponService.findByAllCoupon(page,size,status));
     }
 
+    @Override
+    @PostMapping("/api/coupon/client/reward")
+    public ResponseEntity<String> rewardUserCoupon (@RequestHeader HttpHeaders httpHeaders, @RequestParam String methodName){
+        return ResponseEntity.ok(couponService.rewardUserCoupon(httpHeaders, methodName));
+    }
+
 
     @Override
     @ExceptionHandler(ClientNotFoundException.class)
