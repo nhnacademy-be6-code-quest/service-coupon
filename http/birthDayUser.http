@@ -1,0 +1,5 @@
+### GET request to example server
+GET localhost:8003/api/coupon/birth-coupon
+
+
+###

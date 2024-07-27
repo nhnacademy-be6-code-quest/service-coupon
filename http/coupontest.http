@@ -1,0 +1,55 @@
+### GET request to example server
+GET localhost:8006/api/coupon
+X-User-Id:181
+
+### GET mypage
+GET localhost:8006/api/coupon/myPage?page=0&size=1&status=USED
+X-User-Id:181
+### Post request
+POST localhost:8006/api/coupon/register/3
+Content-Type: application/json
+
+{
+  "clientId": 1,
+  "expirationDate": "2024-06-05T15:55:08",
+  "couponTypeId": 1,
+  "status": "AVAILABLE"
+
+}
+
+### put Test
+PUT localhost:8006/api/coupon/update
+Content-Type: application/json
+
+{
+  "couponId": 2
+}
+
+###GET
+PUT localhost:8006/api/coupon/payment
+Content-Type: application/json
+
+{
+
+"couponId": 0}
+
+###POST
+POST localhost:8006/api/coupon/welcome/1
+
+###put
+PUT localhost:8006/api/coupon/refund
+
+### get
+GET localhost:8006/api/coupon/policy
+
+###POST
+POST localhost:8006/api/coupon/payment/reward
+Content-Type: application/json
+
+{
+  "clientId": 190,
+  "paymentValue": 40000
+}
+###POST
+POST localhost:8006/api/coupon/client/reward?methodName=new
+X-User-Id:26

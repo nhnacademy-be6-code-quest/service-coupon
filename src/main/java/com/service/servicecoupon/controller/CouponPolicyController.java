@@ -1,34 +1,50 @@
 package com.service.servicecoupon.controller;
 
-import com.service.servicecoupon.domain.request.CouponPolicyRequestDto;
-import com.service.servicecoupon.domain.response.CouponPolicyResponseDto;
-import com.service.servicecoupon.service.CouponPolicyService;
-import lombok.RequiredArgsConstructor;
+import com.service.servicecoupon.dto.request.CouponPolicyRegisterRequestDto;
+import com.service.servicecoupon.dto.response.CouponPolicyListResponseDto;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
-@RequiredArgsConstructor
-@RestController
-public class CouponPolicyController {
-    private final CouponPolicyService couponPolicyService;
+@Tag(name = "CouponPolicy", description = "쿠폰 정책 API")
+public interface CouponPolicyController {
 
-    @GetMapping("/admin/coupon/policy/{couponPolicyId}")
-    public CouponPolicyResponseDto findCouponPolicy(@PathVariable long couponPolicyId){
-        return couponPolicyService.getPolicy(couponPolicyId);
-    }
+    @Operation(
+        summary = "쿠폰 정책 조회",
+        description = "Admin - 쿠폰 정책 조회",
+        responses = {
+            @ApiResponse(
+                responseCode = "200",
+                description = "쿠폰 정책 정보 반환"
+            )
+        }
+    )
 
-    @GetMapping("/admin/coupon/policy")
-    public Page<CouponPolicyResponseDto> findAllCouponPolicy(Pageable pageable){
-        return couponPolicyService.getPolicies(pageable);
-    }
+    @GetMapping("/api/coupon/policy")
+    ResponseEntity<Page<CouponPolicyListResponseDto>> findAllCouponPolicy(
+        @RequestParam int page,
+        @RequestParam int size
+    );
 
-    @PostMapping("/admin/coupon/policy/register")
-    public ResponseEntity<CouponPolicyRequestDto> saveCouponPolicy(@RequestBody CouponPolicyRequestDto couponPolicyRequestDto){
-       couponPolicyService.save(couponPolicyRequestDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(couponPolicyRequestDto);
-    }
+    @Operation(
+        summary = "쿠폰 정책 등록",
+        description = "Admin - 쿠폰 정책 등록",
+        responses = {
+            @ApiResponse(
+                responseCode = "200",
+                description = "쿠폰 정책 정보 반환"
+            )
+        }
+    )
+    @PostMapping("/api/coupon/policy/register")
+    ResponseEntity<CouponPolicyRegisterRequestDto> saveCouponPolicy(
+        @Parameter(description = "쿠폰 정책 정보")
+        @RequestBody CouponPolicyRegisterRequestDto couponPolicyRegisterRequestDto);
 }
-

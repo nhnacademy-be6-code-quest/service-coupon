@@ -1,21 +1,26 @@
 package com.service.servicecoupon.controller;
 
-import com.service.servicecoupon.domain.entity.CouponType;
-import com.service.servicecoupon.service.CouponTypeService;
-import com.service.servicecoupon.service.impl.CouponTypeServiceImpl;
-import lombok.RequiredArgsConstructor;
+import com.service.servicecoupon.dto.response.CouponTypeResponseDto;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+@Tag(name = "CouponType", description = "쿠폰 타입 API")
 
-@RequiredArgsConstructor
-@RestController
-public class CouponTypeController {
-    private final CouponTypeService couponTypeService;
+public interface CouponTypeController {
 
-    @GetMapping("/admin/coupon/type")
-    public List<CouponType> findAllType(){
-        return couponTypeService.findAllCouponType();
-    }
+    @Operation(
+            summary = "쿠폰 타입 조회",
+            description = "Admin - 쿠폰 타입 조회",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "쿠폰 타입 정보 반환"
+                    )
+            }
+    )
+    @GetMapping("/api/coupon/type")
+    List<CouponTypeResponseDto> findAllType();
 }

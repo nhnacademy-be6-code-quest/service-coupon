@@ -1,92 +1,131 @@
 package com.service.servicecoupon.controller;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
+
+import com.service.servicecoupon.controller.impl.CouponControllerImpl;
 import com.service.servicecoupon.domain.Status;
-import com.service.servicecoupon.domain.entity.CouponPolicy;
-import com.service.servicecoupon.domain.entity.CouponType;
-import com.service.servicecoupon.domain.request.CouponRequestDto;
-import com.service.servicecoupon.domain.response.CouponResponseDto;
-import com.service.servicecoupon.service.impl.CouponServiceImpl;
-import org.junit.jupiter.api.BeforeEach;
+import com.service.servicecoupon.dto.request.CouponRegisterRequestDto;
+import com.service.servicecoupon.dto.response.CouponAdminPageCouponResponseDto;
+import com.service.servicecoupon.dto.response.CouponMyPageCouponResponseDto;
+import com.service.servicecoupon.dto.response.CouponOrderResponseDto;
+import com.service.servicecoupon.exception.ClientNotFoundException;
+import com.service.servicecoupon.exception.CouponPolicyNotFoundException;
+import com.service.servicecoupon.exception.CouponTypeNotFoundException;
+import com.service.servicecoupon.service.CouponService;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
-import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-@WebMvcTest(CouponController.class)
-public class CouponControllerTest {
-
-    @MockBean
-    private CouponServiceImpl couponService;
+class CouponControllerTest {
 
     @InjectMocks
-    private CouponController couponController;
+    private CouponControllerImpl couponController;
 
-    private MockMvc mockMvc;
-    @Autowired
-    private ObjectMapper objectMapper;
+    @Mock
+    private CouponService couponService;
 
-    @BeforeEach
-    public void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(couponController).build();
-        objectMapper = new ObjectMapper();
+    public CouponControllerTest() {
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
-    public void testCouponFind() throws Exception {
-        long clientId = 1L;
+    void testFindClientCoupon() {
+        HttpHeaders headers = new HttpHeaders();
+        CouponOrderResponseDto dto = new CouponOrderResponseDto();
+        when(couponService.findClientCoupon(headers)).thenReturn(Collections.singletonList(dto));
 
-        CouponResponseDto coupon1 =  CouponResponseDto.builder()
-                .couponId(1L)
-                .couponType(new CouponType())
-                .couponPolicy(new CouponPolicy())
-                .issuedDate(LocalDateTime.now())
-                .expirationDate(LocalDateTime.now())
-                .clientId(1L)
-                .status(Status.USED)
-                .build();
-        CouponResponseDto coupon2 = CouponResponseDto.builder()
-                .couponId(2L)
-                .couponType(new CouponType())
-                .couponPolicy(new CouponPolicy())
-                .clientId(1L)
-                .issuedDate(LocalDateTime.now())
-                .expirationDate(LocalDateTime.now())
-                .status(Status.AVAILABLE)
-                .build();
-        List<CouponResponseDto> coupons = Arrays.asList(coupon1, coupon2);
+        List<CouponOrderResponseDto> response = couponController.findClientCoupon(headers);
 
-        when(couponService.findByClientId(clientId)).thenReturn(coupons);
-
-        mockMvc.perform(get("/coupon/{clientId}", clientId))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json(objectMapper.writeValueAsString(coupons)));
+        assertThat(response).isNotNull().hasSize(1);
     }
 
     @Test
-    public void testSaveCoupon() throws Exception {
-        long couponPolicyId = 1L;
-        CouponRequestDto couponRequest = new CouponRequestDto(1L, 1L, 1L, LocalDateTime.now(), LocalDateTime.now(), Status.USED);
+    void testFindMyPageCoupons() {
+        HttpHeaders headers = new HttpHeaders();
+        Page<CouponMyPageCouponResponseDto> page = new PageImpl<>(Collections.singletonList(new CouponMyPageCouponResponseDto()), PageRequest.of(0, 1), 1);
+        when(couponService.findByClientId(headers, 0, 1, Status.AVAILABLE)).thenReturn(page);
 
-        mockMvc.perform(post("/admin/coupon/register/{couponPolicyId}", couponPolicyId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(couponRequest)))
-                .andExpect(status().isCreated());
+        ResponseEntity<Page<CouponMyPageCouponResponseDto>> response = couponController.findMyPageCoupons(headers, 0, 1, Status.AVAILABLE);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().getContent()).hasSize(1);
+    }
+
+    @Test
+    void testSaveCoupon() {
+        List<Long> clients = new ArrayList<>();
+        clients.add(1L);
+        CouponRegisterRequestDto dto = new CouponRegisterRequestDto(1L,1L,clients, LocalDate.now(), Status.AVAILABLE);
+
+
+        ResponseEntity<CouponRegisterRequestDto> response = couponController.saveCoupon(1L, dto);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(response.getBody()).isEqualTo(dto);
+    }
+
+    @Test
+    void testFindUserCoupons() {
+        Page<CouponAdminPageCouponResponseDto> page = new PageImpl<>(Collections.singletonList(new CouponAdminPageCouponResponseDto()), PageRequest.of(0, 1), 1);
+        when(couponService.findByAllCoupon(0, 1, Status.AVAILABLE)).thenReturn(page);
+
+        ResponseEntity<Page<CouponAdminPageCouponResponseDto>> response = couponController.findUserCoupons(0, 1, Status.AVAILABLE);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().getContent()).hasSize(1);
+    }
+
+    @Test
+    void testHandleClientNotFoundException() {
+        ClientNotFoundException ex = new ClientNotFoundException("Client not found");
+
+        ResponseEntity<String> response = couponController.handleExceptionClientNotFoundException(ex);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        assertThat(response.getBody()).isEqualTo("Client not found");
+    }
+
+    @Test
+    void testHandleCouponNotFoundException() {
+        ClientNotFoundException ex = new ClientNotFoundException("Client not found");
+
+        ResponseEntity<String> response = couponController.handleCouponNotFoundException(ex);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        assertThat(response.getBody()).isEqualTo("Client not found");
+    }
+
+    @Test
+    void testHandleCouponPolicyNotFoundException() {
+        CouponPolicyNotFoundException ex = new CouponPolicyNotFoundException("Coupon policy not found");
+
+        ResponseEntity<String> response = couponController.handleCouponPolicyNotFoundException(ex);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        assertThat(response.getBody()).isEqualTo("Coupon policy not found");
+    }
+
+    @Test
+    void testHandleCouponTypeNotFound() {
+        CouponTypeNotFoundException ex = new CouponTypeNotFoundException("Coupon type not found");
+
+        ResponseEntity<String> response = couponController.handleCouponTypeNotFound(ex);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        assertThat(response.getBody()).isEqualTo("Coupon type not found");
     }
 }

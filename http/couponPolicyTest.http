@@ -1,0 +1,54 @@
+
+###GET
+GET localhost:8006/api/coupon/policy?page=0&size=3
+
+###GET
+GET https://localhost:8080/api/coupon/policy
+###POST
+POST localhost:8006/api/coupon/policy/register
+Content-Type: application/json
+
+{
+  "couponPolicyDescription": "상품",
+  "discountType": "PERCENTAGEDISCOUNT",
+  "discountValue": 10000,
+  "minPurchaseAmount": 0,
+  "maxDiscountAmount": 10000,
+  "id": 3,
+  "typeName": "상품"
+}
+
+
+###GET
+# @no-cookie-jar
+PUT localhost:8006/api/coupon/payment
+Content-Type: application/json
+
+{"couponId": null}
+###GET
+GET localhost:8006/api/coupon/policy/type/22
+
+
+###GET
+localhost:8006/api/coupon/adminPage?page=0&size=5
+
+###POST
+POST localhost:8006/api/coupon/policy/register
+Content-Type: application/json
+
+{
+  "page": {
+    "contents": [
+      {
+        "id" : "1",
+        "password" : "pa"
+      },
+      {
+        "id" : "2",
+        "password" : "pa"
+      }
+    ],
+    "size" : "5",
+    "count" : "2"
+  }
+}
