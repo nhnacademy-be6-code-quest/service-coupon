@@ -1,7 +1,6 @@
 package com.service.servicecoupon.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.service.servicecoupon.dto.message.SignUpClientMessageDto;
 import com.service.servicecoupon.domain.CouponKind;
 import com.service.servicecoupon.domain.Status;
 import com.service.servicecoupon.domain.entity.Coupon;
@@ -9,26 +8,28 @@ import com.service.servicecoupon.domain.entity.CouponPolicy;
 import com.service.servicecoupon.domain.entity.CouponType;
 import com.service.servicecoupon.domain.entity.ProductCategoryCoupon;
 import com.service.servicecoupon.domain.entity.ProductCoupon;
+import com.service.servicecoupon.dto.message.RefundCouponMessageDto;
+import com.service.servicecoupon.dto.message.SignUpClientMessageDto;
 import com.service.servicecoupon.dto.request.CouponRegisterRequestDto;
 import com.service.servicecoupon.dto.response.CouponAdminPageCouponResponseDto;
 import com.service.servicecoupon.dto.response.CouponMyPageCouponResponseDto;
 import com.service.servicecoupon.dto.response.CouponOrderResponseDto;
 import com.service.servicecoupon.dto.response.CouponOrderResponseDto.CouponPolicyDto;
 import com.service.servicecoupon.dto.response.PaymentCompletedCouponResponseDto;
-import com.service.servicecoupon.dto.message.RefundCouponMessageDto;
 import com.service.servicecoupon.exception.ClientNotFoundException;
 import com.service.servicecoupon.exception.CouponNotFoundException;
 import com.service.servicecoupon.exception.CouponPolicyNotFoundException;
-
 import com.service.servicecoupon.exception.CouponTypeNotFoundException;
+import com.service.servicecoupon.exception.CouponsExistException;
 import com.service.servicecoupon.exception.RabbitMessageConvertException;
 import com.service.servicecoupon.repository.CouponPolicyRepository;
 import com.service.servicecoupon.repository.CouponRepository;
 import com.service.servicecoupon.repository.CouponTypeRepository;
 import com.service.servicecoupon.repository.ProductCategoryCouponRepository;
 import com.service.servicecoupon.repository.ProductCouponRepository;
+import com.service.servicecoupon.service.CouponGetService;
 import com.service.servicecoupon.service.CouponService;
-
+import jakarta.xml.bind.DatatypeConverterInterface;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
@@ -58,6 +59,7 @@ public class CouponServiceImpl implements CouponService {
     private final ProductCouponRepository productCouponRepository;
     private final ProductCategoryCouponRepository productCategoryCouponRepository;
     private static final String ID_HEADER = "X-User-Id";
+    private final CouponGetService couponGetService;
 
     @Transactional(rollbackFor = {CouponTypeNotFoundException.class,
         CouponPolicyNotFoundException.class})
@@ -270,7 +272,21 @@ public class CouponServiceImpl implements CouponService {
     public void dlqRefundCoupon(String message) {
         log.error("{} 반품/취소 쿠폰 상태 변경에 실패하였습니다.", message);
     }
-
+    @Override
+    public String rewardUserCoupon(HttpHeaders headers, String methodName){
+        Long clientId = NumberUtils.toLong(headers.getFirst(ID_HEADER));
+        CouponPolicy couponPolicy = couponGetService.getCouponRewardContext(methodName);
+        CouponType couponType = couponTypeRepository.findByCouponKind(CouponKind.DISCOUNT);
+        if( headers.getFirst(ID_HEADER)==null ){
+            throw new ClientNotFoundException("회원만 쿠폰을 받을수 있습니다.");
+        }
+        if (couponRepository.findByClientIdAndCouponPolicy_CouponPolicyId(clientId, couponPolicy.getCouponPolicyId())!= null){
+            throw new CouponsExistException("이미 존재하는 쿠폰입니다.");
+        }
+        Coupon coupon = new Coupon(clientId, couponType, couponPolicy, LocalDate.now().plusDays(couponGetService.getCouponTImeContext(methodName)),Status.AVAILABLE);
+            couponRepository.save(coupon);
+            return couponPolicy.getCouponPolicyDescription() + " 지급이 완료되었습니다.";
+    }
 
 }
 

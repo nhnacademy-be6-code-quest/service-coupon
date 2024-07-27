@@ -108,6 +108,9 @@ public interface CouponController {
         @Parameter(description = "쿠폰 상태")
         @RequestParam Status status);
 
+    @PostMapping("/api/coupon/client/reward")
+    ResponseEntity<String> rewardUserCoupon (@RequestHeader HttpHeaders httpHeaders, String methodName);
+
     @ExceptionHandler(ClientNotFoundException.class)
     ResponseEntity<String> handleExceptionClientNotFoundException(ClientNotFoundException e);
 
