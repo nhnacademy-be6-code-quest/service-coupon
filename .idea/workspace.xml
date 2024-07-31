@@ -4,7 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="99b8fa19-bdbb-4ae6-b713-bfff8d34e9c2" name="변경" comment="" />
+    <list default="true" id="99b8fa19-bdbb-4ae6-b713-bfff8d34e9c2" name="변경" comment="">
+      <change beforePath="$PROJECT_DIR$/.github/workflows/maven.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/maven.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/http/coupontest.http" beforeDir="false" afterPath="$PROJECT_DIR$/http/coupontest.http" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/service/servicecoupon/service/CouponRewardContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/service/servicecoupon/service/CouponRewardContext.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/service/servicecoupon/service/impl/CouponServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/service/servicecoupon/service/impl/CouponServiceImpl.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -25,9 +31,9 @@
       </MavenGeneralSettings>
     </option>
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 5
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
   <component name="ProjectId" id="2iEbNlyVEW1124BGpDOrb2WR9zL" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
@@ -36,9 +42,14 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "HTTP 요청.coupontest | GET#2.executor": "Run",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "Spring Boot.ServiceCouponApplication.executor": "Run",
-    "git-widget-placeholder": "Feature",
+    "Spring Boot.ServiceCouponApplication.executor": "Debug",
+    "git-widget-placeholder": "develop",
     "kotlin-language-version-configured": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -48,7 +59,13 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager">
+  <component name="ReactorSettings">
+    <option name="notificationShown" value="true" />
+  </component>
+  <component name="RunManager" selected="Spring Boot.ServiceCouponApplication">
+    <configuration name="coupontest | GET#2" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/http/coupontest.http" index="11" requestIdentifier="GET#2" runType="단일 요청 실행">
+      <method v="2" />
+    </configuration>
     <configuration default="true" type="JetRunConfigurationType">
       <module name="service-coupon1111" />
       <method v="2">
@@ -63,12 +80,18 @@
       </method>
     </configuration>
     <configuration name="ServiceCouponApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <option name="ACTIVE_PROFILES" value="prod" />
       <module name="servicecoupon" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.service.servicecoupon.ServiceCouponApplication" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="HTTP 요청.coupontest | GET#2" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -87,10 +110,47 @@
       <option name="presentableId" value="Default" />
       <updated>1719058645562</updated>
       <workItem from="1719058646693" duration="2884000" />
+      <workItem from="1722330999568" duration="5099000" />
+      <workItem from="1722385322725" duration="1586000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/main/java/com/service/servicecoupon/service/impl/CouponServiceImpl.java</url>
+          <line>275</line>
+          <properties class="com.service.servicecoupon.service.impl.CouponServiceImpl" method="rewardUserCoupon">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/service/servicecoupon/service/impl/CouponServiceImpl.java</url>
+          <line>276</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/service/servicecoupon/service/impl/CouponServiceImpl.java</url>
+          <line>280</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/service/servicecoupon/service/impl/CouponServiceImpl.java</url>
+          <line>283</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/service/servicecoupon/service/impl/CouponServiceImpl.java</url>
+          <line>287</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
