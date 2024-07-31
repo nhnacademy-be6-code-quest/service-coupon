@@ -47,7 +47,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script_stop: true
-          script: "./coupon_startup.sh"
+          script: "./CD/main.sh 8006 10006 Coupon-0.0.1-SNAPSHOT.jar coupon_log"
 
       - name: Run SonarQube
         run: mvn sonar:sonar -Dsonar.projectKey=codequest-service-coupon -Dsonar.projectName='codequest-service-coupon' -Dsonar.host.url=${{secrets.SONAR_HOST}} -Dsonar.token=${{secrets.SONAR_TOKEN}}
