@@ -275,9 +275,10 @@ public class CouponServiceImpl implements CouponService {
     @Override
     public String rewardUserCoupon(HttpHeaders headers, String methodName){
         Long clientId = NumberUtils.toLong(headers.getFirst(ID_HEADER));
+
         CouponPolicy couponPolicy = couponGetService.getCouponRewardContext(methodName);
         CouponType couponType = couponTypeRepository.findByCouponKind(CouponKind.DISCOUNT);
-        if( headers.getFirst(ID_HEADER)==null ){
+        if( headers.getFirst(ID_HEADER)==null || clientId==0 ){
             throw new ClientNotFoundException("회원만 쿠폰을 받을수 있습니다.");
         }
         if (couponRepository.findByClientIdAndCouponPolicy_CouponPolicyId(clientId, couponPolicy.getCouponPolicyId())!= null){

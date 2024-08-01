@@ -53,3 +53,8 @@ Content-Type: application/json
 ###POST
 POST localhost:8006/api/coupon/client/reward?methodName=new
 X-User-Id:26
+
+
+###GET
+POST localhost:8006/api/coupon/client/reward?methodName=summer
+X-User-Id:NULL
