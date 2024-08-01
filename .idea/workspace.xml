@@ -6,81 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="99b8fa19-bdbb-4ae6-b713-bfff8d34e9c2" name="변경" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/service/servicecoupon/ServiceCouponApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/service/servicecoupon/ServiceCouponApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/application.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/ServiceCouponApplication.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/client/BirthDayUserClient.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/config/DataSourceConfig.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/config/KeyManagerConfig.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/config/LogAndCrashAppender.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/config/RabbitConfig.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/config/RestTemplateConfig.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/config/SecurityConfig.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/config/SwaggerConfig.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/controller/CouponController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/controller/CouponPolicyController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/controller/CouponTypeController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/controller/impl/CouponControllerImpl.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/controller/impl/CouponPolicyControllerImpl.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/controller/impl/CouponTypeControllerImpl.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/domain/CouponKind.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/domain/DiscountType.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/domain/Status.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/domain/entity/Coupon$CouponBuilder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/domain/entity/Coupon.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/domain/entity/CouponPolicy$CouponPolicyBuilder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/domain/entity/CouponPolicy.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/domain/entity/CouponType.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/domain/entity/ProductCategoryCoupon.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/domain/entity/ProductCoupon.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/domain/request/CouponPolicyRequestDto.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/domain/request/CouponRequestDto.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/domain/response/CouponPolicyResponseDto$CouponPolicyResponseDtoBuilder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/domain/response/CouponPolicyResponseDto.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/domain/response/CouponResponseDto$CouponResponseDtoBuilder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/domain/response/CouponResponseDto.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/domain/response/CouponTypeResponseDto.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/dto/message/RefundCouponMessageDto.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/dto/message/SignUpClientMessageDto.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/dto/request/CouponPaymentRewardRequestDto.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/dto/request/CouponPolicyRegisterRequestDto.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/dto/request/CouponRegisterRequestDto.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/dto/response/CouponAdminPageCouponResponseDto$CouponPolicy.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/dto/response/CouponAdminPageCouponResponseDto.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/dto/response/CouponMyPageCouponResponseDto$CouponPolicy.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/dto/response/CouponMyPageCouponResponseDto.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/dto/response/CouponOrderResponseDto$CategoryCoupon.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/dto/response/CouponOrderResponseDto$CouponPolicyDto.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/dto/response/CouponOrderResponseDto$ProductCoupon.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/dto/response/CouponOrderResponseDto.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/dto/response/CouponPolicyListResponseDto.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/dto/response/CouponProvideTypeResponseDto.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/dto/response/CouponTypeResponseDto.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/dto/response/PaymentCompletedCouponResponseDto.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/exception/ClientNotFoundException.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/exception/CouponNotFoundException.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/exception/CouponPolicyNotFoundException.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/exception/CouponTypeNotFoundException.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/exception/CouponsExistException.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/exception/RabbitMessageConvertException.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/filter/HeaderFilter$RouteConfig.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/filter/HeaderFilter.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/repository/CouponPolicyRepository.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/repository/CouponRepository.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/repository/CouponTypeRepository.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/repository/ProductCategoryCouponRepository.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/repository/ProductCouponRepository.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/service/CouponGetService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/service/CouponPolicyService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/service/CouponRewardContext.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/service/CouponService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/service/CouponTimeContext.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/service/CouponTypeService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/service/SchedulerService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/service/impl/CouponPolicyServiceImpl.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/service/impl/CouponServiceImpl.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/service/impl/CouponTypeServiceImpl.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/service/servicecoupon/service/impl/SchedulerServiceImpl.class" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -186,7 +111,7 @@
       <workItem from="1722330999568" duration="5099000" />
       <workItem from="1722385322725" duration="3474000" />
       <workItem from="1722426050611" duration="84000" />
-      <workItem from="1722426535072" duration="3144000" />
+      <workItem from="1722426535072" duration="4307000" />
     </task>
     <servers />
   </component>
